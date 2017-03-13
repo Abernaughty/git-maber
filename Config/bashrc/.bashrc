@@ -1,4 +1,42 @@
-cd export LS_OPTIONS='--color=auto'
+#
+# ~/.bashrc
+#
+
+[[ $- != *i* ]] && return
+
+colors() {
+	local fgc bgc vals seq0
+
+	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
+	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
+	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
+	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
+
+	# foreground colors
+	for fgc in {30..37}; do
+		# background colors
+		for bgc in {40..47}; do
+			fgc=${fgc#37} # white
+			bgc=${bgc#40} # black
+
+			vals="${fgc:+$fgc;}${bgc}"
+			vals=${vals%%;}
+
+			seq0="${vals:+\e[${vals}m}"
+			printf "  %-9s" "${seq0:-(default)}"
+			printf " ${seq0}TEXT\e[m"
+			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
+		done
+		echo; echo
+	done
+}
+
+[[ -f ~/.extend.bashrc ]] && . ~/.extend.bashrc
+
+[ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
+
+export LS_OPTIONS='--color=auto'
+eval "`dircolors`"
 
 alias ls='ls $LS_OPTIONS'
 alias ll='ls $LS_OPTIONS -l'
@@ -41,7 +79,15 @@ alias ping='ping -c 5'
 alias fastping='ping -c 100 -s.2'
 alias ports='netstat -tulanp'
 alias disapprove='echo ಠ_ಠ'
+alias gitme='cd /home/maber/Git/git-maber/git-maber/'
+alias nyan='telnet nyancat.dakko.us'
+alias fishme='asciiquarium'
+alias lol='fortune | cowsay | lolcat'
+alias swiv='telnet towel.blinkenlights.nl'
+alias redpill='cmatrix'
+alias sf='screenfetch | lolcat'
 
-export PS1="\[$(tput bold)\]\[\033[38;5;68m\]*\[$(tput sgr0)\]\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;68m\]@\[$(tput
-sgr0)\]\[\033[38;5;11m\]\h\[$(tput sgr0)\]\[\033[38;5;68m\]*:[\[$(tput sgr0)\]\[\033[38;5;11m\]\w\[$(tput
-sgr0)\]\[\033[38;5;68m\]]:\[$(tput sgr0)\]\[\033[38;5;11m\]\\$\[$(tput sgr0)\]"
+
+export PS1="\[\033[38;5;68m\]*\[$(tput sgr0)\]\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;68m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]\H\[$(tput sgr0)\]\[\033[38;5;68m\]*:[\[$(tput sgr0)\]\[\033[38;5;11m\]\w\[$(tput sgr0)\]\[\033[38;5;68m\]]:\[$(tput sgr0)\]\[\033[38;5;11m\]\\$\[$(tput sgr0)\]"
+
+sf
