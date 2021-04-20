@@ -3,6 +3,7 @@ from time import sleep
 from random import shuffle
 
 
+
 card_vals = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6,'7': 7, 
              '8': 8, '9': 9,'10': 10, 'J': 10, 'Q': 10, 'K': 10}
 
@@ -38,9 +39,13 @@ class Blackjack:
         suits = ["Clubs", "Spades", "Hearts", "Diamonds"]
         values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
         self.deck = [Card(value, suit) for value in values for suit in suits]
+        self.loan_amt = 100.00
+        self.balance = 100.00
+        self.bet = 0
         self.dealer = []
         self.player = []
         self.playing = True
+        self.blackjack = False
         self.turn = None
         self.hand_over = False
 
@@ -67,7 +72,10 @@ class Blackjack:
 
 
     def play_again(self):
-        play = input('Play another hand? (y/n): ')
+        if self.balance <= 0:
+            self.get_loan()
+
+        play = input('\nPlay another hand? (y/n): ')
         if play == 'y':
             self.dealer = []
             self.player = []
@@ -80,10 +88,35 @@ class Blackjack:
             print('\nThanks for playing!\n')
 
 
+    def make_bet(self):
+        print(f'\nPlayer Balance: ${"%.2f" % self.balance}')
+        bet = int(input('\nHow much would you like to bet? '))
+        if bet > self.balance:
+            print('\nBet is greater than current balance.')
+            self.make_bet()
+        else:
+            self.bet = bet
+            self.balance -= self.bet
+
+
+    def get_loan(self):
+        loan = input("\nYou're bankrupt! Take out a loan? (y/n): ")
+        if loan == 'y':
+            self.balance = self.loan_amt
+            return self
+        else:
+            print('\nThanks for playing!')
+            exit
+
+
     def deal(self):
+        if self.balance <= 0:
+            self.get_loan()
         self.reset()
         self.shuffle()
         self.turn = 'Player'
+        print('\n' * 50)
+        self.make_bet()
         for _ in range(2):
             self.player.append(self.cards.pop(0))
             self.dealer.append(self.cards.pop(0))
@@ -96,7 +129,7 @@ class Blackjack:
         else:
             while not self.hand_over:
                 if self.turn == 'Player':
-                    hit_or_stand = input('Hit or Stand: ').lower()
+                    hit_or_stand = input('\nHit or Stand: ').lower()
                     if hit_or_stand == 'hit':
                         self.hit()
                     elif hit_or_stand == 'stand':
@@ -149,29 +182,33 @@ class Blackjack:
 
         if self.turn == 'Player':
             if p_val == 21 and len(self.player) == 2:
-                p_val = f'{p_val} Blackjack!'
-                winner = 'You Win!'
+                if d_val == 21:
+                    winner = 'Push'
+                else:
+                    p_val = f'{p_val} Blackjack!'
+                    winner = 'Player'
+                    self.blackjack = True
                 self.hand_over = True
             elif p_val == 21:
                 self.turn = 'Dealer'
             elif p_val > 21:
                 p_val = f'{p_val} (Bust)'
-                winner = 'You Lose'
+                winner = 'Dealer'
                 self.hand_over = True
         elif self.turn == 'Dealer':
             if d_val == 21 and len(self.dealer) == 2:
                 d_val = f'{d_val} Blackjack!'
-                winner = 'You Lose!'
+                winner = 'Dealer'
                 self.hand_over = True
             elif d_val > 21:
                 d_val = f'{d_val} (Bust)'
-                winner = 'You Win!'
+                winner = 'Player'
                 self.hand_over = True
             elif d_val > p_val:
-                winner = 'You Lose!'
+                winner = 'Dealer'
                 self.hand_over = True
             elif d_val == p_val and d_val >= 17:
-                winner = 'Push.'
+                winner = 'Push'
                 self.hand_over = True
         
         print('\n' * 10)
@@ -182,11 +219,29 @@ class Blackjack:
         print('\n')
         for i in range(5):
             print(*[card[i] for card in show_player])
-        print(f'\nPlayer Total: {p_val}\n')
+        print(f'\nPlayer Total: {p_val}')
+        print(f'\nPlayer Bet: ${"%.2f" % self.bet}')
+        print(f'Player Balance: ${"%.2f" % self.balance}')
 
         if winner:
-            print(winner)
+            sleep(1.5)
+            if winner == 'Player':
+                print('\nYou Win!')
+                if self.blackjack:
+                    self.balance += (self.bet + (self.bet * 1.5))
+                    self.blackjack = False
+                else:
+                    self.balance += self.bet * 2
+                self.bet = 0
+            elif winner == 'Dealer':
+                print('\nYou Lose.')
+            elif winner == 'Push':
+                print('\nPush.')
+                self.balance += self.bet
+                self.bet = 0
+            print(f'\nPlayer Balance: ${"%.2f" % self.balance}')
             self.hand_over == True
+            
 
 
 bj = Blackjack()
