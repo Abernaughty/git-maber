@@ -1,0 +1,193 @@
+import os
+from time import sleep
+from random import shuffle
+
+
+card_vals = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6,'7': 7, 
+             '8': 8, '9': 9,'10': 10, 'J': 10, 'Q': 10, 'K': 10}
+
+display_suits = [('Spades', '♠'), ('Diamonds', '♦'), ('Hearts', '♥'), ('Clubs', '♣')]
+
+display_values = [('A ', ' A'), ('2 ', ' 2'), ('3 ', ' 3'), ('4 ', ' 4'), ('5 ', ' 5'), ('6 ', ' 6'), ('7 ', ' 7'),
+                  ('8 ', ' 8'), ('9 ', ' 9'), ('10', '10'), ('J ', ' J'), ('Q ', ' Q'),('K ', ' K')]
+
+card_vals = {'2': 2, '3': 3, '4': 4, '5': 5,'6': 6, '7': 7, '8': 8, 
+             '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10}
+
+masked_card = '┌─────┐\n│xxxxx│\n│xxxxx│\n│xxxxx│\n└─────┘'
+
+display_deck = {}
+for suit in display_suits:
+    for value in display_values:
+        display_deck.update({f'{value[0].strip()} of {suit[0]}': f'┌─────┐\n│   {value[1]}│\n│  {suit[1]}  │\n│{value[0]}   │\n└─────┘'})
+
+
+class Card:
+
+    def __init__(self, value, suit):
+        self.suit = suit
+        self.value = value
+
+    def __repr__(self):
+        return f'{self.value} of {self.suit}'
+
+
+class Blackjack:
+
+    def __init__(self):
+        suits = ["Clubs", "Spades", "Hearts", "Diamonds"]
+        values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+        self.deck = [Card(value, suit) for value in values for suit in suits]
+        self.dealer = []
+        self.player = []
+        self.playing = True
+        self.turn = None
+        self.hand_over = False
+
+
+    def reset(self):
+        suits = ["Clubs", "Spades", "Hearts", "Diamonds"]
+        values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+        self.cards = [Card(value, suit) for value in values for suit in suits]
+        return self
+
+    
+    def shuffle(self):
+        self.reset()
+        shuffle(self.cards)
+        return self
+
+
+    def hit(self):
+        if self.turn == 'Player':
+            self.player.append(self.cards.pop(0))
+        elif self.turn == 'Dealer':
+            self.dealer.append(self.cards.pop(0))
+        return self
+
+
+    def play_again(self):
+        play = input('Play another hand? (y/n): ')
+        if play == 'y':
+            self.dealer = []
+            self.player = []
+            self.playing = True
+            self.turn = None
+            self.hand_over = False
+            self.deal()
+        else:
+            self.playing = False
+            print('\nThanks for playing!\n')
+
+
+    def deal(self):
+        self.reset()
+        self.shuffle()
+        self.turn = 'Player'
+        for _ in range(2):
+            self.player.append(self.cards.pop(0))
+            self.dealer.append(self.cards.pop(0))
+
+        d_val, p_val = self.get_hand_val()
+        self.show_table(d_val, p_val)
+
+        if self.hand_over:
+            self.play_again()
+        else:
+            while not self.hand_over:
+                if self.turn == 'Player':
+                    hit_or_stand = input('Hit or Stand: ').lower()
+                    if hit_or_stand == 'hit':
+                        self.hit()
+                    elif hit_or_stand == 'stand':
+                        self.turn = 'Dealer'
+                if self.turn == 'Dealer':
+                    if d_val <= p_val:
+                        self.hit()
+                d_val, p_val = self.get_hand_val()
+                self.show_table(d_val, p_val)
+                sleep(1.5)
+            self.play_again()
+
+
+    def get_hand_val(self):
+        dealer_total = 0
+        player_total = 0
+        player_vals = [card.value for card in self.player]
+        if self.turn == 'Player':
+            dealer_vals = [self.dealer[0].value]
+        elif self.turn == 'Dealer':
+            dealer_vals = [card.value for card in self.dealer]
+        sorted_dealer = sorted(dealer_vals, key=lambda x: x == 'A')
+        sorted_player = sorted(player_vals, key=lambda x: x == 'A')
+        for card in sorted_dealer:
+            if card == 'A':
+                if dealer_total > 10: dealer_total += 1
+                else: dealer_total += 11
+            else: dealer_total += card_vals[card]
+        for card in sorted_player:
+            if card == 'A':
+                if player_total > 10: player_total += 1
+                else: player_total += 11
+            else: player_total += card_vals[card]
+        return dealer_total, player_total
+
+    def show_table(self, d_val, p_val):
+        winner = None
+        show_dealer = []
+        show_player = []
+        
+        for card in self.player:
+            show_player.append(display_deck[f'{card.value} of {card.suit}'].split('\n'))
+
+        if self.turn == 'Player':
+            show_dealer.append(display_deck[f'{self.dealer[0].value} of {self.dealer[0].suit}'].split('\n'))
+            show_dealer.append(masked_card.split('\n'))
+        elif self.turn == 'Dealer':
+            for card in self.dealer:
+                show_dealer.append(display_deck[f'{card.value} of {card.suit}'].split('\n'))
+
+        if self.turn == 'Player':
+            if p_val == 21 and len(self.player) == 2:
+                p_val = f'{p_val} Blackjack!'
+                winner = 'You Win!'
+                self.hand_over = True
+            elif p_val == 21:
+                self.turn = 'Dealer'
+            elif p_val > 21:
+                p_val = f'{p_val} (Bust)'
+                winner = 'You Lose'
+                self.hand_over = True
+        elif self.turn == 'Dealer':
+            if d_val == 21 and len(self.dealer) == 2:
+                d_val = f'{d_val} Blackjack!'
+                winner = 'You Lose!'
+                self.hand_over = True
+            elif d_val > 21:
+                d_val = f'{d_val} (Bust)'
+                winner = 'You Win!'
+                self.hand_over = True
+            elif d_val > p_val:
+                winner = 'You Lose!'
+                self.hand_over = True
+            elif d_val == p_val and d_val >= 17:
+                winner = 'Push.'
+                self.hand_over = True
+        
+        print('\n' * 10)
+        for i in range(5):
+            print(*[card[i] for card in show_dealer])
+        print(f'Dealer showing: {d_val}\n')
+        print('│' + '─' * (7 * max(len(self.player), len(self.dealer))) + '│') 
+        print('\n')
+        for i in range(5):
+            print(*[card[i] for card in show_player])
+        print(f'\nPlayer Total: {p_val}\n')
+
+        if winner:
+            print(winner)
+            self.hand_over == True
+
+
+bj = Blackjack()
+bj.deal()
