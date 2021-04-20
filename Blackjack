@@ -44,6 +44,7 @@ class Blackjack:
         self.dealer = []
         self.player = []
         self.playing = True
+        self.split = False
         self.blackjack = False
         self.turn = None
         self.hand_over = False
@@ -128,14 +129,24 @@ class Blackjack:
         else:
             while not self.hand_over:
                 if self.turn == 'Player':
-                    hit_or_stand = input('\nHit or Stand: ').lower()
-                    if hit_or_stand == 'hit':
+                    action = input('\nWhat would you like to do? ').lower()
+
+                    if action == 'hit':
                         self.hit()
-                    elif hit_or_stand == 'stand':
+                    elif action == 'stand':
                         self.turn = 'Dealer'
+                    elif action == 'double':
+                        self.balance -= self.bet
+                        self.bet *= 2
+                        self.hit()
+                    elif action == 'surrender':
+                        self.balance += (self.bet / 2)
+                        self.hand_over = True
+
                 if self.turn == 'Dealer':
                     if d_val <= p_val:
                         self.hit()
+
                 d_val, p_val = self.get_hand_val()
                 self.show_table(d_val, p_val)
                 sleep(1.5)
@@ -163,6 +174,7 @@ class Blackjack:
                 else: player_total += 11
             else: player_total += card_vals[card]
         return dealer_total, player_total
+
 
     def show_table(self, d_val, p_val):
         winner = None
@@ -241,7 +253,6 @@ class Blackjack:
             print(f'\nPlayer Balance: ${"%.2f" % self.balance}')
             self.hand_over == True
             
-
 
 bj = Blackjack()
 bj.deal()
