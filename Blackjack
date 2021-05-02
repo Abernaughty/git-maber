@@ -1,6 +1,5 @@
-import os
-from time import sleep
 from random import shuffle
+from time import sleep
 
 
 card_vals = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6,'7': 7, 
@@ -11,7 +10,7 @@ display_suits = [('Spades', '♠'), ('Diamonds', '♦'), ('Hearts', '♥'), ('Cl
 display_values = [('A ', ' A'), ('2 ', ' 2'), ('3 ', ' 3'), ('4 ', ' 4'), ('5 ', ' 5'), ('6 ', ' 6'), ('7 ', ' 7'),
                   ('8 ', ' 8'), ('9 ', ' 9'), ('10', '10'), ('J ', ' J'), ('Q ', ' Q'),('K ', ' K')]
 
-card_vals = {'2': 2, '3': 3, '4': 4, '5': 5,'6': 6, '7': 7, '8': 8, 
+card_vals = {'A': 11, '2': 2, '3': 3, '4': 4, '5': 5,'6': 6, '7': 7, '8': 8, 
              '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10}
 
 masked_card = '┌─────┐\n│xxxxx│\n│xxxxx│\n│xxxxx│\n└─────┘'
@@ -39,12 +38,28 @@ class Blackjack:
         values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
         self.deck = [Card(value, suit) for value in values for suit in suits]
         self.loan_amt = 100.00
-        self.balance = 100.00
-        self.bet = 0
+        self.balance = float(open("bj_balance.txt", "r").readlines()[0])
+        self.bet_1 = 0
+        self.bet_2 = 0
         self.dealer = []
         self.player = []
         self.playing = True
-        self.blackjack = False
+        self.split = False
+        self.active_hand = 0
+        self.d_mask_val = 0
+        self.d_val = 0
+        self.h1_val = 0
+        self.h2_val = 0
+        self.h1_win = ''
+        self.h2_win = ''
+        self.h1_bust = False
+        self.h2_bust = False
+        self.h1_surrender = False
+        self.h2_surrender = False
+        self.d_bust = False
+        self.h1_bj = False
+        self.h2_bj = False
+        self.d_bj = False
         self.turn = None
         self.hand_over = False
 
@@ -53,124 +68,422 @@ class Blackjack:
         suits = ["Clubs", "Spades", "Hearts", "Diamonds"]
         values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
         self.cards = [Card(value, suit) for value in values for suit in suits]
-        return self
+        self.shuffle()
+        self.bet_1 = 0
+        self.bet_2 = 0
+        self.dealer = []
+        self.player = []
+        self.playing = True
+        self.split = False
+        self.active_hand = 0
+        self.d_mask_val = 0
+        self.d_val = 0
+        self.h1_val = 0
+        self.h2_val = 0
+        self.h1_win = ''
+        self.h2_win = ''
+        self.h1_bust = False
+        self.h2_bust = False
+        self.h1_surrender = False
+        self.h2_surrender = False
+        self.d_bust = False
+        self.h1_bj = False
+        self.h2_bj = False
+        self.d_bj = False
+        self.turn = 'Player'
+        self.hand_over = False
 
     
     def shuffle(self):
-        self.reset()
         shuffle(self.cards)
-        return self
+
+
+    def take_action(self):
+        if self.split:
+            print(f'Hand {self.active_hand + 1}:')
+            action = input('What would you like to do? ').lower()
+        else:
+            action = input('What would you like to do? ').lower()
+        return action
 
 
     def hit(self):
         if self.turn == 'Player':
-            self.player.append(self.cards.pop(0))
+            if self.split:
+                self.player[self.active_hand].append(self.cards.pop(0))
+            else:
+                self.player.append(self.cards.pop(0))
         elif self.turn == 'Dealer':
             self.dealer.append(self.cards.pop(0))
-        return self
+
+
+    def can_split(self):
+        if self.split:
+            return (False, "\nHand can only be split once.")
+        elif card_vals[self.player[0].value] != card_vals[self.player[1].value]:
+            return (False, "\nCard values must be equal in order to split.")
+        elif len(self.player) > 2:
+            return (False, "\nHand can only be split as first action.")
+        else:
+            return True
+
+
+    def split_hand(self):
+        self.player = [[card] for card in self.player]
+        self.player[0].append(self.cards.pop(0))
+        self.player[1].append(self.cards.pop(0))
+        self.bet_2 = self.bet_1
+        self.split = True
+
+
+    def can_double(self):
+        if self.split:
+            if len(self.player[self.active_hand]) == 2:
+                if self.active_hand == 0:
+                    if self.balance >= self.bet_1:
+                        return True
+                elif self.active_hand == 1:
+                    if self.balance >= self.bet_2:
+                        return True
+        else:
+            if len(self.player) == 2 and self.balance >= self.bet_1:
+                return True
+        return False
+
+
+    def double(self):
+        if self.active_hand == 0:
+            self.balance -= self.bet_1
+            self.bet_1 *= 2
+            self.hit()
+            if self.split:
+                self.active_hand = 1
+            else :
+                self.turn = 'Dealer'
+        else:
+            self.balance -= self.bet_2
+            self.bet_2 *= 2
+            self.hit()
+            self.turn = 'Dealer'
 
 
     def play_again(self):
         if self.balance <= 0:
             self.get_loan()
 
-        play = input('\nPlay another hand? (y/n): ')
-        if play == 'y':
-            self.dealer = []
-            self.player = []
-            self.playing = True
-            self.turn = None
-            self.hand_over = False
-            self.deal()
+        if self.balance > 0:
+            play = input('\nPlay another hand? (y/n): ')
+            if play == 'y':
+                self.deal()
+            else:
+                balance = open("bj_balance.txt", "w")
+                balance.write(str(self.balance))
+                balance.close()
         else:
             self.playing = False
+            balance = open("bj_balance.txt", "w")
+            balance.write(str(self.balance))
+            balance.close()
             print('\nThanks for playing!\n')
-
+    
 
     def make_bet(self):
         print(f'\nPlayer Balance: ${"%.2f" % self.balance}')
-        bet = int(input('\nHow much would you like to bet? '))
-        if bet > self.balance:
-            print('\nBet is greater than current balance.')
+        bet = input('\nHow much would you like to bet? ')
+        try:
+            bet = int(bet)
+            if bet > self.balance:
+                print('\nBet is greater than current balance.')
+                self.make_bet()
+            else:
+                self.bet_1 = bet
+                self.balance -= self.bet_1
+        except ValueError:
+            print('Invalid bet.')
             self.make_bet()
-        else:
-            self.bet = bet
-            self.balance -= self.bet
-
+    
 
     def get_loan(self):
         loan = input("\nYou're bankrupt! Take out a loan? (y/n): ")
         if loan == 'y':
             self.balance = self.loan_amt
-            return self
         else:
             print('\nThanks for playing!')
             exit
+    
+
+    def get_hand_vals(self):
+        d_val = 0
+        h1_val = 0
+        h2_val = 0
+    
+        self.d_mask_val = card_vals[self.dealer[0].value]
+        dealer_vals = [card.value for card in self.dealer]
+        sorted_dealer = sorted(dealer_vals, key=lambda x: x == 'A')
+
+        aces = 0
+        for card in sorted_dealer:
+            if card == 'A':
+                aces += 1
+            else: 
+                d_val += card_vals[card]
+
+        ones = 0
+        elevens = aces
+        while elevens >= 0:
+            total = d_val + (elevens * 11) + (ones * 1)
+            if total > 21:
+                elevens -= 1
+                ones += 1
+            else:
+                break
+        
+        self.d_val = total
+        
+        if self.split:
+            player_vals = [[card.value for card in hand] for hand in self.player]
+            hand_1_sorted = sorted(player_vals[0], key=lambda x: x == 'A')
+        else:
+            player_vals = [card.value for card in self.player]
+            hand_1_sorted = sorted(player_vals, key=lambda x: x == 'A')
+
+        aces = 0
+        for card in hand_1_sorted:
+                if card == 'A':
+                    aces += 1
+                else: 
+                    h1_val += card_vals[card]
+        
+        ones = 0
+        elevens = aces
+        while elevens >= 0:
+            total = h1_val + (elevens * 11) + (ones * 1)
+            if total > 21:
+                elevens -= 1
+                ones += 1
+            else:
+                break
+
+        self.h1_val = total
+
+        if self.split:
+            hand_2_sorted = sorted(player_vals[1], key=lambda x: x == 'A')
+
+            aces = 0
+            for card in hand_2_sorted:
+                if card == 'A':
+                    aces += 1
+                else: 
+                    h2_val += card_vals[card]
+
+        ones = 0
+        elevens = aces
+        while elevens >= 0:
+            total = h2_val + (elevens * 11) + (ones * 1)
+            if total > 21:
+                elevens -= 1
+                ones += 1
+            else:
+                break
+
+        self.h2_val = total
+
+        self.check_for_winner()
+
+
+    def check_for_winner(self):
+        if self.turn == 'Player':
+            if self.h1_val == 21:
+                if self.split:
+                    if len(self.player[0]) == 2:
+                        self.h1_bj = True
+                    if self.active_hand == 0:
+                        self.active_hand = 1
+                else:
+                    if len(self.player) == 2:
+                        self.h1_bj = True
+                    self.turn = 'Dealer'
+            if self.h2_val == 21:
+                if len(self.player[1]) == 2:
+                    self.h2_bj = True
+                if self.active_hand == 1:
+                    self.turn = 'Dealer'
+            if self.h1_val > 21:
+                self.h1_bust = True
+                if self.split:
+                    if self.active_hand == 0:
+                        self.active_hand = 1
+                else:
+                    self.h1_win = 'Dealer'
+            if self.h2_val > 21:
+                self.h2_bust = True
+                self.turn = 'Dealer'
+        if self.turn == 'Dealer':
+            if self.d_val == 21 and len(self.dealer) == 2:
+                self.d_bj = True
+                if self.h1_bj:
+                    self.h1_win = 'Push.'
+                else:
+                    if self.h1_surrender:
+                        self.h1_win = 'Surrender.'
+                    else:
+                        self.h1_win = 'Dealer Wins.'
+                if self.h2_bj:
+                    self.h2_win = 'Push.'
+                else:
+                    if self.h2_surrender:
+                        self.h2_win = 'Surrender.'
+                    else:
+                        self.h2_win = 'Dealer Wins.'
+            elif self.d_val > 21:
+                self.d_bust = True
+                if self.h1_bust:
+                    self.h1_win = 'Push.'
+                else:
+                    if self.h1_surrender:
+                        self.h1_win = 'Surrender.'
+                    else:
+                        self.h1_win = 'Player Wins!'
+                if self.h2_bust:
+                    self.h2_win = 'Push.'
+                else:
+                    if self.h2_surrender:
+                        self.h2_win = 'Surrender.'
+                    else:
+                        self.h2_win = 'Player Wins!'
+            else:
+                if self.split:
+                    if self.h1_bj and self.h2_bj and not self.d_bj:
+                        self.h1_win = 'Player Wins!'
+                        self.h2_win = 'Player Wins!'
+                else:
+                    if self.h1_bj and not self.d_bj:
+                        self.h1_win = 'Player Wins!'
+                if self.d_val > self.h1_val and self.d_val >= 17:
+                    if self.h1_surrender:
+                        self.h1_win = 'Surrender.'
+                    else:
+                        self.h1_win = 'Dealer Wins.'
+                elif self.d_val == self.h1_val and self.d_val > 16:
+                    if self.h1_surrender:
+                        self.h1_win = 'Surrender'
+                    elif self.h1_bj and not self.d_bj:
+                        self.h1_win = 'Player Wins!'
+                    else:
+                        self.h1_win = 'Push.'
+                elif self.d_val < self.h1_val and self.d_val >= 17:
+                    if self.h1_surrender:
+                        self.h1_win = 'Surrender.'
+                    else:
+                        if self.h1_bust:
+                            self.h1_win = 'Dealer Wins.'
+                        else:
+                            self.h1_win = 'Player Wins!'
+                if self.h2_val > 0:
+                    if self.d_val > self.h2_val and self.d_val >= 17:
+                        if self.h2_surrender:
+                            self.h2_win = 'Surrender.'
+                        else:
+                            self.h2_win = 'Dealer Wins.'
+                    elif self.d_val == self.h2_val:
+                        if self.h2_surrender:
+                            self.h2_win = 'Surrender.'
+                        elif self.h2_bj and not self.d_bj:
+                            self.h2_win = 'Player Wins!'
+                        else:
+                            self.h2_win = 'Push.'
+                    elif self.d_val < self.h2_val and self.d_val >= 17:
+                        if self.h2_surrender:
+                            self.h2_win = 'Surrender.'
+                        else:
+                            if self.h2_bust:
+                                self.h2_win = 'Dealer Wins.'
+                            else:
+                                self.h2_win = 'Player Wins!'
+            if self.split:
+                if self.h1_win and self.h2_win:
+                    self.hand_over = True
+            else:
+                if self.h1_win:
+                    self.hand_over = True
 
 
     def deal(self):
         if self.balance <= 0:
             self.get_loan()
         self.reset()
-        self.shuffle()
-        self.turn = 'Player'
         print('\n' * 50)
         self.make_bet()
         for _ in range(2):
             self.player.append(self.cards.pop(0))
             self.dealer.append(self.cards.pop(0))
 
-        d_val, p_val = self.get_hand_val()
-        self.show_table(d_val, p_val)
+        self.get_hand_vals()
+        self.show_table()
 
         if self.hand_over:
             self.play_again()
         else:
             while not self.hand_over:
                 if self.turn == 'Player':
-                    hit_or_stand = input('\nHit or Stand: ').lower()
-                    if hit_or_stand == 'hit':
+                    action = self.take_action()
+                    if action in ('hit', 'hit me'):
                         self.hit()
-                    elif hit_or_stand == 'stand':
-                        self.turn = 'Dealer'
+                    elif action in ('stand', 'stay'):
+                        if self.split and self.active_hand == 0:
+                            self.active_hand = 1
+                        else:
+                            self.turn = 'Dealer'
+                    elif action in ('double', 'double down', 'dd'):
+                        can_double = self.can_double()
+                        if can_double:
+                            self.double()
+                        else:
+                            print("\nCan't double down on this hand.")                            
+                    elif action == 'split':
+                        can_split = self.can_split()
+                        if can_split:
+                            self.split_hand()
+                        else:
+                            print(can_split[1])
+                    elif action == 'surrender':
+                        if self.active_hand == 0:
+                            self.h1_surrender = True
+                            self.h1_win = 'Surrender.'
+                            if self.split:
+                                self.active_hand = 1
+                            else:
+                                self.hand_over = True
+                        elif self.active_hand == 1:
+                            self.h2_surrender = True
+                            self.h2_win = 'Surrender.'
+                            if self.h1_surrender:
+                                self.hand_over = True
+                            else:
+                                self.turn = 'Dealer'
+                    else:
+                        print('Valid actions: Hit, Stay, Double, Split, or Surrender.')
                 if self.turn == 'Dealer':
-                    if d_val <= p_val:
-                        self.hit()
-                d_val, p_val = self.get_hand_val()
-                self.show_table(d_val, p_val)
-                sleep(1.5)
+                    self.get_hand_vals()
+                    if self.split:
+                        if not self.h1_win:
+                            if self.d_val <= self.h1_val and self.d_val < 17:
+                                self.hit()
+                        elif not self.h2_win:
+                            if self.d_val <= self.h2_val and self.d_val < 17:
+                                self.hit()                
+                    else:
+                        if self.d_val <= self.h1_val and self.d_val < 17:
+                            self.hit()
+                self.get_hand_vals()
+                self.show_table()
+                sleep(1)
             self.play_again()
 
 
-    def get_hand_val(self):
-        dealer_total = 0
-        player_total = 0
-        player_vals = [card.value for card in self.player]
-        if self.turn == 'Player':
-            dealer_vals = [self.dealer[0].value]
-        elif self.turn == 'Dealer':
-            dealer_vals = [card.value for card in self.dealer]
-        sorted_dealer = sorted(dealer_vals, key=lambda x: x == 'A')
-        sorted_player = sorted(player_vals, key=lambda x: x == 'A')
-        for card in sorted_dealer:
-            if card == 'A':
-                if dealer_total > 10: dealer_total += 1
-                else: dealer_total += 11
-            else: dealer_total += card_vals[card]
-        for card in sorted_player:
-            if card == 'A':
-                if player_total > 10: player_total += 1
-                else: player_total += 11
-            else: player_total += card_vals[card]
-        return dealer_total, player_total
-
-    def show_table(self, d_val, p_val):
-        winner = None
+    def show_table(self):
         show_dealer = []
         show_player = []
-        
-        for card in self.player:
-            show_player.append(display_deck[f'{card.value} of {card.suit}'].split('\n'))
 
         if self.turn == 'Player':
             show_dealer.append(display_deck[f'{self.dealer[0].value} of {self.dealer[0].suit}'].split('\n'))
@@ -179,68 +492,92 @@ class Blackjack:
             for card in self.dealer:
                 show_dealer.append(display_deck[f'{card.value} of {card.suit}'].split('\n'))
 
+        print('\n' * 50)
+        for i in range(5):
+                print(*[card[i] for card in show_dealer])
         if self.turn == 'Player':
-            if p_val == 21 and len(self.player) == 2:
-                if d_val == 21:
-                    winner = 'Push'
-                else:
-                    p_val = f'{p_val} Blackjack!'
-                    winner = 'Player'
-                    self.blackjack = True
-                self.hand_over = True
-            elif p_val == 21:
-                self.turn = 'Dealer'
-            elif p_val > 21:
-                p_val = f'{p_val} (Bust)'
-                winner = 'Dealer'
-                self.hand_over = True
-        elif self.turn == 'Dealer':
-            if d_val == 21 and len(self.dealer) == 2:
-                d_val = f'{d_val} Blackjack!'
-                winner = 'Dealer'
-                self.hand_over = True
-            elif d_val > 21:
-                d_val = f'{d_val} (Bust)'
-                winner = 'Player'
-                self.hand_over = True
-            elif d_val > p_val:
-                winner = 'Dealer'
-                self.hand_over = True
-            elif d_val == p_val and d_val >= 17:
-                winner = 'Push'
-                self.hand_over = True
-        
-        print('\n' * 10)
-        for i in range(5):
-            print(*[card[i] for card in show_dealer])
-        print(f'Dealer showing: {d_val}\n')
-        print('│' + '─' * (7 * max(len(self.player), len(self.dealer))) + '│') 
-        print('\n')
-        for i in range(5):
-            print(*[card[i] for card in show_player])
-        print(f'\nPlayer Total: {p_val}')
-        print(f'\nPlayer Bet: ${"%.2f" % self.bet}')
-        print(f'Player Balance: ${"%.2f" % self.balance}')
+            print(f'Dealer showing: {self.d_mask_val}\n')
+        else:
+            d_val = f'Dealer showing: {self.d_val}'
+            if self.d_bj:
+                d_val += ' - Blackjack'
+            elif self.d_bust:
+                d_val += ' - Bust'
+            print(d_val, '\n')
 
-        if winner:
-            sleep(1.5)
-            if winner == 'Player':
-                print('\nYou Win!')
-                if self.blackjack:
-                    self.balance += (self.bet + (self.bet * 1.5))
-                    self.blackjack = False
-                else:
-                    self.balance += self.bet * 2
-                self.bet = 0
-            elif winner == 'Dealer':
-                print('\nYou Lose.')
-            elif winner == 'Push':
-                print('\nPush.')
-                self.balance += self.bet
-                self.bet = 0
-            print(f'\nPlayer Balance: ${"%.2f" % self.balance}')
-            self.hand_over == True
-            
+        print('│' + '─' * (7 * max(len(self.player), len(self.dealer))) + '│')
+
+        if self.split:
+            for hand in self.player:
+                for card in hand:
+                    show_player.append(display_deck[f'{card.value} of {card.suit}'].split('\n'))
+                show_player.append(['        ', '        ', '        ', '        ', '        '])
+
+            for i in range(5):
+                print(*[card[i] for card in show_player])
+
+            h1_val = f'Total: {self.h1_val}'
+            if self.h1_bj:
+                h1_val += ' - Blackjack'
+            elif self.h1_bust:
+                h1_val += ' - Bust'
+            h2_val = f'Total: {self.h2_val}'
+            if self.h2_bj:
+                h2_val += ' - Blackjack'
+            elif self.h2_bust:
+                h2_val += ' - Bust'
+            bet_1 = f'Bet 1: {self.bet_1}'
+            bet_2 = f'Bet 2: {self.bet_2}'
+            totals_spacer = ' ' * ((len(self.player[0]) * 7) + (len(self.player[0]) - 1) + 10 - len(h1_val))
+            bet_spacer = ' ' * ((len(self.player[0]) * 7) + (len(self.player[0]) - 1) + 10 - len(bet_1))
+            winning_hands_spacer = ' ' * ((len(self.player[0]) * 7) + (len(self.player[0]) - 1) + 10 - len(self.h1_win))
+            print(h1_val + totals_spacer + h2_val)
+            print(bet_1 + bet_spacer + bet_2)
+            print('\n')
+            print(self.h1_win + winning_hands_spacer + self.h2_win)
+            if self.h1_win and self.h2_win:
+                self.resolve_bets()
+                print(f'Player Balance: ${"%.2f" % self.balance}')
+        else:
+            for card in self.player:
+                show_player.append(display_deck[f'{card.value} of {card.suit}'].split('\n'))
+
+            for i in range(5):
+                print(*[card[i] for card in show_player])
+
+            total = f'\nPlayer Total: {self.h1_val}'
+            if self.h1_bj:
+                total += ' - Blackjack'
+            print(total)
+            print(f'\nPlayer Bet: ${"%.2f" % self.bet_1}')
+            print('\n')
+            print(self.h1_win)
+            print('\n')
+            if self.h1_win:
+                self.resolve_bets()
+                print(f'Player Balance: ${"%.2f" % self.balance}')
+    
+    
+    def resolve_bets(self):
+        if self.h1_win == 'Player Wins!':
+            if self.h1_bj:
+                self.balance += self.bet_1 + self.bet_1 * 1.5
+            else:
+                self.balance += self.bet_1 * 2
+        elif self.h1_win == 'Push.':
+            self.balance += self.bet_1
+        elif self.h1_win == 'Surrender':
+            self.balance += round(self.bet_1 / 2, 2)
+        
+        if self.h2_win == 'Player Wins!':
+            if self.h2_bj:
+                self.balance += self.bet_2 + self.bet_2 * 1.5
+            else:
+                self.balance += self.bet_2 * 2
+        elif self.h2_win == 'Push.':
+            self.balance += self.bet_2
+        elif self.h1_win == 'Surrender':
+            self.balance += round(self.bet_2 / 2, 2)
 
 
 bj = Blackjack()
