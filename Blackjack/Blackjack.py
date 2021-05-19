@@ -538,16 +538,18 @@ class Blackjack:
                     self.h1_win = 'Dealer Wins.'
                 elif self.h1_surrender:
                     self.h1_win = 'Surrender.'
-                elif self.d_val > self.h1_val:
+                elif self.d_val >= 17 and self.d_val > self.h1_val:
                     self.h1_win = 'Dealer Wins.'
+
                 if self.h2_bj:
                     self.h2_win = 'Player Wins.'
                 elif self.h2_bust:
                     self.h2_win = 'Dealer Wins.'
                 elif self.h2_surrender:
                     self.h2_win = 'Surrender.'
-                elif self.d_val > self.h2_val:
+                elif self.d_val >= 17 and self.d_val > self.h2_val:
                     self.h2_win = 'Dealer Wins.'
+
         # If all hands have been assigned a winner, hand is over.
         if self.split:
             if self.h1_win and self.h2_win:
@@ -570,59 +572,31 @@ class Blackjack:
                 hand_1_winner_label.grid()
                 hand_2_winner_label.grid()
                 if self.h1_win == 'Dealer Wins.':
-                    hand_1_winner_label.config(
-                                               bg='red',
-                                               fg='white'
-                                               )
+                    hand_1_winner_label.config(bg='red', fg='white')
                 elif self.h1_win == 'Push.':
-                    hand_1_winner_label.config(
-                                               bg='white',
-                                               fg='black'
-                                               )
+                    hand_1_winner_label.config(bg='white', fg='black')
                 else:
-                    hand_1_winner_label.config(
-                                               bg='#468C4E',
-                                               fg='white'
-                                               )
+                    hand_1_winner_label.config(bg='#468C4E', fg='white')
                 if self.h2_win == 'Dealer Wins.':
-                    hand_2_winner_label.config(
-                                               bg='red',
-                                               fg='white'
-                                               )
+                    hand_2_winner_label.config(bg='red', fg='white')
                 elif self.h2_win == 'Push.':
-                    hand_2_winner_label.config(
-                                               bg='white',
-                                               fg='black'
-                                               )
+                    hand_2_winner_label.config(bg='white', fg='black')
                 else:
-                    hand_2_winner_label.config(
-                                               bg='#468C4E',
-                                               fg='white'
-                                               )
+                    hand_2_winner_label.config(bg='#468C4E', fg='white')
             else:
                 winner.set(self.h1_win)
                 if self.h1_win == 'Dealer Wins.':
-                    winner_label.config(
-                                        bg='red',
-                                        fg='white'
-                                        )
+                    winner_label.config(bg='red', fg='white')
                 elif self.h1_win == 'Push.':
-                    winner_label.config(
-                                        bg='white',
-                                        fg='black'
-                                        )
+                    winner_label.config(bg='white', fg='black')
                 else:
-                    winner_label.config(
-                                        bg='#468C4E',
-                                        fg='white'
-                                        )
+                    winner_label.config(bg='#468C4E', fg='white')
                 winner_label.grid()
 
             self.resolve_bets()
             root.after(2000, self.new_hand)
         # If hand not over, hit dealer and return to play_dealer after 1000 ms.
         else:
-            # if self.d_val <= self.h1_val and self.d_val < 17:
             self.dealer_hit()
             root.after(1000, self.play_dealer)
 
@@ -782,7 +756,7 @@ class Blackjack:
         balance = open("bj_balance.txt", "w")
         balance.write(str(self.balance))
         balance.write('\n')
-        balance.write('0')
+        balance.write('5')
         balance.close()
         root.destroy()
 
@@ -1145,7 +1119,7 @@ bet_scale = tk.Scale(
                      length=350,
                      width=35,
                      command=game.bet_slider,
-                     from_=1,
+                     from_=5,
                      to=game.balance,
                      orient='horizontal',
                      resolution=5,
