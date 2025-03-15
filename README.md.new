@@ -1,0 +1,35 @@
+# git-maber
+
+Main Git Repository for personal projects, configuration files, and school work.
+
+## Projects
+
+### PokeData - Pokémon Card Price Checker
+A Svelte-based web application for checking and comparing Pokémon card prices across various marketplaces.
+- **Location:** [/PokeData](/PokeData)
+- **Features:** Card search, price comparison, responsive design
+- **Tech Stack:** Svelte, JavaScript, IndexedDB
+
+### Blackjack
+A Python implementation of the classic Blackjack card game.
+- **Location:** [/Blackjack](/Blackjack) and [Blackjack.py](Blackjack.py)
+- **Features:** Command-line interface, game logic
+- **Tech Stack:** Python
+
+## Structure
+
+```
+git-maber/
+├── Blackjack/           # Blackjack game directory
+├── PokeData/            # Pokémon Card Price Checker application
+├── dotfiles/            # Configuration files
+└── Blackjack.py         # Blackjack game implementation
+```
+
+## Getting Started
+
+Each project has its own README with specific instructions for setup and usage.
+
+## License
+
+Personal repository - All rights reserved.
