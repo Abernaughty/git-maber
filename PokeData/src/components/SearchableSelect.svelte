@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
   
   // Props
   export let items = [];
@@ -16,40 +16,43 @@
   let highlightedIndex = -1;
   let inputElement;
   let dropdownElement;
+  let componentElement;
   
   const dispatch = createEventDispatcher();
   
   // Update filtered items when search text changes
   $: {
-    if (searchText) {
+    console.log(`Filtering data. Items: ${items.length}, Search text: '${searchText}'`);
+    
+    if (searchText && searchText.trim() !== '') {
       const searchLower = searchText.toLowerCase();
       filteredItems = items.filter(item => {
+        if (!item || !item[labelField]) {
+          return false;
+        }
+
         const primaryMatch = item[labelField].toLowerCase().includes(searchLower);
-        const secondaryMatch = secondaryField && item[secondaryField].toLowerCase().includes(searchLower);
+        const secondaryMatch = secondaryField && item[secondaryField] && 
+                              item[secondaryField].toLowerCase().includes(searchLower);
+        
         return primaryMatch || secondaryMatch;
       });
     } else {
       filteredItems = [...items];
     }
     
-    // Reset highlighted index when filtered items change
     highlightedIndex = -1;
   }
   
   // Functions
   function handleFocus() {
+    console.log('Input focused, opening dropdown');
     isFocused = true;
   }
   
-  function handleBlur(event) {
-    // Short delay to allow click to register on dropdown items
-    setTimeout(() => {
-      // Don't blur if clicking inside the dropdown
-      if (dropdownElement && dropdownElement.contains(event.relatedTarget)) {
-        return;
-      }
-      isFocused = false;
-    }, 100);
+  function closeDropdown() {
+    console.log('Explicitly closing dropdown');
+    isFocused = false;
   }
   
   function handleKeydown(event) {
@@ -66,12 +69,11 @@
         break;
       case 'Enter':
         if (highlightedIndex >= 0 && highlightedIndex < filteredItems.length) {
-          selectItem(filteredItems[highlightedIndex]);
+          handleItemSelect(filteredItems[highlightedIndex]);
         }
         break;
       case 'Escape':
-        inputElement.blur();
-        isFocused = false;
+        closeDropdown();
         break;
     }
   }
@@ -85,16 +87,36 @@
     }
   }
   
-  function selectItem(item) {
+  // Handle item selection with explicit steps
+  async function handleItemSelect(item) {
+    if (!item) return;
+    
+    console.log('Item selected:', item);
+    
+    // Update the value and search text
     value = item;
-    searchText = item ? getDisplayText(item) : '';
-    isFocused = false;
+    searchText = getDisplayText(item);
+    
+    // Explicitly close the dropdown
+    closeDropdown();
+    
+    // Make sure the state is updated before dispatching the event
+    await tick();
+    
+    // Dispatch the select event after state is updated
     dispatch('select', item);
+    
+    // Force focus out of the input field
+    if (inputElement) {
+      inputElement.blur();
+    }
+    
+    console.log('Selection complete, dropdown state:', isFocused);
   }
   
   function getDisplayText(item) {
     if (!item) return '';
-    if (secondaryField) {
+    if (secondaryField && item[secondaryField]) {
       return `${item[labelField]} (${item[secondaryField]})`;
     }
     return item[labelField];
@@ -104,22 +126,33 @@
   $: {
     if (value && !searchText) {
       searchText = getDisplayText(value);
-    } else if (!value && searchText) {
-      // Reset search text if value is cleared externally
+    } else if (!value && searchText && !isFocused) {
       searchText = '';
     }
   }
+  
+  // Add document click handler to close dropdown when clicking outside
+  function handleDocumentClick(event) {
+    if (isFocused && componentElement && !componentElement.contains(event.target)) {
+      closeDropdown();
+    }
+  }
+  
+  onMount(() => {
+    document.addEventListener('click', handleDocumentClick);
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  });
 </script>
 
-<div class="searchable-select">
+<div class="searchable-select" bind:this={componentElement}>
   <div class="input-container">
     <input
       bind:this={inputElement}
       type="text"
-      value={searchText}
-      on:input={(e) => searchText = e.target.value}
+      bind:value={searchText}
       on:focus={handleFocus}
-      on:blur={handleBlur}
       on:keydown={handleKeydown}
       placeholder={placeholder}
       autocomplete="off"
@@ -139,13 +172,15 @@
         <div class="no-results">No matches found</div>
       {:else}
         {#each filteredItems as item, index}
-          <div 
+          <!-- Use button instead of div for better accessibility and event handling -->
+          <button 
+            type="button"
             class="item item-{index} {highlightedIndex === index ? 'highlighted' : ''}"
-            on:mousedown={() => selectItem(item)}
+            on:click|preventDefault|stopPropagation={() => handleItemSelect(item)}
             on:mouseover={() => highlightedIndex = index}
           >
             {getDisplayText(item)}
-          </div>
+          </button>
         {/each}
       {/if}
     </div>
@@ -205,10 +240,16 @@
   }
   
   .item {
+    display: block;
+    width: 100%;
+    text-align: left;
     padding: 0.5rem 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.15s ease;
+    background: none;
+    border: none;
     border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.15s ease;
   }
   
   .item:last-child {

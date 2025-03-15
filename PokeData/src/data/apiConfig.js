@@ -12,7 +12,10 @@ export const API_CONFIG = {
   // Endpoints
   endpoints: {
     search: '/search',
-    pricing: '/pricing'
+    pricing: '/pricing',
+    sets: '/sets',
+    cards: '/cards',
+    set: '/set'
   },
   
   // Headers function to get standard headers
@@ -31,5 +34,17 @@ export const API_CONFIG = {
   
   buildPricingUrl(id) {
     return `${this.baseUrl}${this.endpoints.pricing}?id=${id}&asset_type=CARD`;
+  },
+  
+  buildSetsUrl() {
+    return `${this.baseUrl}${this.endpoints.sets}`;
+  },
+  
+  buildCardsForSetUrl(setCode) {
+    return `${this.baseUrl}${this.endpoints.search}?query=&set_code=${encodeURIComponent(setCode)}&asset_type=CARD`;
+  },
+  
+  buildSetByIdUrl(setId) {
+    return `${this.baseUrl}${this.endpoints.set}?set_id=${encodeURIComponent(setId)}`;
   }
 };

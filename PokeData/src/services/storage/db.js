@@ -182,11 +182,42 @@ export const dbService = {
   },
   
   /**
+   * Clear cache for a specific set
+   * @param {string} setCode - The set code to clear cache for
+   * @returns {Promise<void>}
+   */
+  async clearSetCache(setCode) {
+    try {
+      console.log(`Clearing cache for set: ${setCode}`);
+      const db = await openDatabase();
+      const transaction = db.transaction(STORES.cardsBySet, 'readwrite');
+      const store = transaction.objectStore(STORES.cardsBySet);
+      
+      const request = store.delete(setCode);
+      
+      return new Promise((resolve, reject) => {
+        request.onsuccess = () => {
+          console.log(`Successfully cleared cache for set: ${setCode}`);
+          resolve();
+        };
+        request.onerror = (event) => {
+          console.error(`Error clearing cache for set ${setCode}:`, event.target.error);
+          reject(event.target.error);
+        };
+      });
+    } catch (error) {
+      console.error(`Error in clearSetCache for ${setCode}:`, error);
+      throw error;
+    }
+  },
+  
+  /**
    * Clear all stored data (useful for testing or resets)
    * @returns {Promise<void>}
    */
   async clearAllData() {
     try {
+      console.log('Clearing all cached data...');
       const db = await openDatabase();
       const transaction = db.transaction([STORES.setList, STORES.cardsBySet], 'readwrite');
       
@@ -194,8 +225,14 @@ export const dbService = {
       transaction.objectStore(STORES.cardsBySet).clear();
       
       return new Promise((resolve, reject) => {
-        transaction.oncomplete = () => resolve();
-        transaction.onerror = (event) => reject(event.target.error);
+        transaction.oncomplete = () => {
+          console.log('Successfully cleared all cached data');
+          resolve();
+        };
+        transaction.onerror = (event) => {
+          console.error('Error in clearAllData:', event.target.error);
+          reject(event.target.error);
+        };
       });
     } catch (error) {
       console.error('Error clearing all data:', error);

@@ -7,6 +7,47 @@
   import SearchableSelect from './components/SearchableSelect.svelte';
   import CardVariantSelector from './components/CardVariantSelector.svelte';
   
+  // Function to download the cards for a set
+  async function downloadSetData() {
+    if (!selectedSet) {
+      alert('Please select a set first');
+      return;
+    }
+    
+    try {
+      // Get cards from cache or API
+      const cards = await pokeDataService.getCardsForSet(selectedSet.code, selectedSet.id);
+      
+      if (cards.length === 0) {
+        alert(`No cards found for set ${selectedSet.name}`);
+        return;
+      }
+      
+      // Create a JSON blob
+      const jsonData = JSON.stringify(cards, null, 2);
+      const blob = new Blob([jsonData], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      // Create a link and trigger download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${selectedSet.code}-cards.json`;
+      document.body.appendChild(a);
+      a.click();
+      
+      // Clean up
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+      
+      alert(`Downloaded ${cards.length} cards for ${selectedSet.name}`);
+    } catch (error) {
+      console.error('Error downloading set data:', error);
+      alert(`Error downloading set data: ${error.message}`);
+    }
+  }
+  
   // Function to clear the cache (for testing)
   async function clearCache() {
     try {
@@ -31,8 +72,28 @@
   let selectedVariant = null;
 
   // Handle set selection
-  function handleSetSelect(event) {
+  async function handleSetSelect(event) {
     selectedSet = event.detail;
+    cardName = ''; // Clear card name when set changes
+    
+    // Optional: Load cards for the selected set in the background
+    // This would enable offline use and faster searches
+    try {
+      console.log(`Loading cards for set ${selectedSet.code}...`);
+      const cards = await pokeDataService.getCardsForSet(selectedSet.code, selectedSet.id);
+      console.log(`Loaded ${cards.length} cards for set ${selectedSet.code}`);
+      
+      // Example: Check for Umbreon cards
+      const umbreonCards = cards.filter(card => 
+        card.name && card.name.toLowerCase().includes('umbreon')
+      );
+      if (umbreonCards.length > 0) {
+        console.log(`Found ${umbreonCards.length} Umbreon cards in set ${selectedSet.code}`);
+      }
+    } catch (error) {
+      console.error(`Failed to pre-load cards for set ${selectedSet.code}:`, error);
+      // Silent error - don't show to user unless they try to search
+    }
   }
   
   // Functions for handling variant selection
@@ -103,7 +164,37 @@
     selectedVariant = null;
     
     try {
-      // Search for cards by name, using caching for the selected set
+      // Try to get cards from set cache first
+      const setCards = await dbService.getCardsForSet(selectedSet.code);
+      
+      if (setCards && setCards.length > 0) {
+        // Search locally
+        console.log(`Searching for ${cardName} in cached set data`);
+        const matchingCards = setCards.filter(card => 
+          card.name.toLowerCase().includes(cardName.toLowerCase())
+        );
+        
+        if (matchingCards.length > 0) {
+          console.log(`Found ${matchingCards.length} matches in cached set data`);
+          
+          if (matchingCards.length === 1) {
+            // If only one card is found, load its pricing directly
+            selectedVariant = matchingCards[0];
+            priceData = await pokeDataService.getCardPricing(selectedVariant.id);
+          } else {
+            // If multiple cards are found, show the variant selector
+            cardVariants = matchingCards;
+            showVariantSelector = true;
+            priceData = null; // Clear any existing pricing data
+          }
+          
+          isLoading = false;
+          return;
+        }
+      }
+      
+      // If no cache or no matches in cache, make API call
+      console.log(`No matches in cache, trying API search`);
       const searchData = await pokeDataService.searchCards(cardName, selectedSet.code);
       
       // Find all cards in the specified set that match the name
@@ -203,6 +294,9 @@
   
   <div class="admin-tools">
     <button class="secondary-button" on:click={clearCache}>Clear Cache</button>
+    {#if selectedSet}
+      <button class="secondary-button" on:click={downloadSetData}>Download Set Data</button>
+    {/if}
   </div>
   
   <!-- Card Variant Selector Modal -->
