@@ -17,13 +17,22 @@
   let inputElement;
   let dropdownElement;
   let componentElement;
+  let lastSelectedValue = null;
   
   const dispatch = createEventDispatcher();
   
+  // Track value changes
+  $: if (value !== lastSelectedValue) {
+    lastSelectedValue = value;
+    if (value && !inputElement?.matches(':focus')) {
+      searchText = getDisplayText(value);
+    } else if (!value && !inputElement?.matches(':focus')) {
+      searchText = '';
+    }
+  }
+  
   // Update filtered items when search text changes
   $: {
-    console.log(`Filtering data. Items: ${items.length}, Search text: '${searchText}'`);
-    
     if (searchText && searchText.trim() !== '') {
       const searchLower = searchText.toLowerCase();
       filteredItems = items.filter(item => {
@@ -46,12 +55,10 @@
   
   // Functions
   function handleFocus() {
-    console.log('Input focused, opening dropdown');
     isFocused = true;
   }
   
   function closeDropdown() {
-    console.log('Explicitly closing dropdown');
     isFocused = false;
   }
   
@@ -87,31 +94,18 @@
     }
   }
   
-  // Handle item selection with explicit steps
-  async function handleItemSelect(item) {
+  function handleItemSelect(item) {
     if (!item) return;
     
-    console.log('Item selected:', item);
-    
-    // Update the value and search text
+    // Update the internal value
     value = item;
     searchText = getDisplayText(item);
     
-    // Explicitly close the dropdown
+    // Close dropdown but keep focus in input
     closeDropdown();
     
-    // Make sure the state is updated before dispatching the event
-    await tick();
-    
-    // Dispatch the select event after state is updated
+    // Dispatch the select event
     dispatch('select', item);
-    
-    // Force focus out of the input field
-    if (inputElement) {
-      inputElement.blur();
-    }
-    
-    console.log('Selection complete, dropdown state:', isFocused);
   }
   
   function getDisplayText(item) {
@@ -122,16 +116,18 @@
     return item[labelField];
   }
   
-  // Initialize search text based on value
-  $: {
-    if (value && !searchText) {
-      searchText = getDisplayText(value);
-    } else if (!value && searchText && !isFocused) {
-      searchText = '';
+  function handleInput() {
+    // Show dropdown when typing
+    isFocused = true;
+    
+    // If text changed and doesn't match selected value, clear the value
+    if (value && searchText !== getDisplayText(value)) {
+      value = null;
+      dispatch('select', null);
     }
   }
   
-  // Add document click handler to close dropdown when clicking outside
+  // Close dropdown when clicking outside
   function handleDocumentClick(event) {
     if (isFocused && componentElement && !componentElement.contains(event.target)) {
       closeDropdown();
@@ -153,7 +149,9 @@
       type="text"
       bind:value={searchText}
       on:focus={handleFocus}
+      on:click={handleFocus}
       on:keydown={handleKeydown}
+      on:input={handleInput}
       placeholder={placeholder}
       autocomplete="off"
     />
@@ -172,11 +170,10 @@
         <div class="no-results">No matches found</div>
       {:else}
         {#each filteredItems as item, index}
-          <!-- Use button instead of div for better accessibility and event handling -->
           <button 
             type="button"
             class="item item-{index} {highlightedIndex === index ? 'highlighted' : ''}"
-            on:click|preventDefault|stopPropagation={() => handleItemSelect(item)}
+            on:click|preventDefault={() => handleItemSelect(item)}
             on:mouseover={() => highlightedIndex = index}
           >
             {getDisplayText(item)}
@@ -250,6 +247,7 @@
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.15s ease;
+    color: #333;
   }
   
   .item:last-child {
@@ -258,11 +256,18 @@
   
   .item:hover, .highlighted {
     background-color: #f0f0f0;
+    color: #3c5aa6;
   }
   
   .no-results {
     padding: 0.5rem 0.75rem;
     color: #666;
     font-style: italic;
+  }
+  
+  .dropdown {
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 </style>
