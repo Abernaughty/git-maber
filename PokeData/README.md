@@ -1,54 +1,79 @@
 # Pokémon Card Price Checker
 
-A Svelte application for checking Pokémon card prices across various marketplaces.
+A web application for looking up Pokémon card pricing data based on set name and card name.
 
 ## Features
 
-- Search for Pokémon cards by name and set
-- Filter card sets using search functionality
-- View current market prices from various sources
-- Responsive design works on desktop and mobile devices
-- Multiple card variant selection for same-named cards
-- IndexedDB caching to reduce API calls
+- Search for cards by set name and card name
+- View detailed pricing information from various sources
+- Support for multiple card variants
+- Offline caching for improved performance
+- Responsive design
 
-## Getting Started
+## Installation
 
-1. Clone this repository
-2. Navigate to the project directory
-3. Install dependencies:
+This project uses pnpm for package management.
+
+1. Clone the repository:
    ```bash
-   npm install
+   git clone https://github.com/git-maber/PokeData.git
+   cd PokeData
    ```
-4. Start the development server:
+
+2. Install dependencies:
    ```bash
-   npm run dev
+   pnpm install
    ```
-5. Open your browser and navigate to `http://localhost:3000`
 
-## API Integration
+## Development
 
-This application uses the PokeDATA API to fetch card information and pricing data. The API requires:
-- A valid API key (JWT token)
-- A subscription key
+Start the development server:
 
-For development purposes, mock data is provided when the API is unavailable.
+```bash
+pnpm dev
+```
 
-## Caching Strategy
+Or use the included batch file:
 
-The application uses IndexedDB to cache:
-- The complete set list (permanently)
-- Cards for each set (loaded on demand, stored permanently)
+```bash
+dev.bat
+```
 
-Only pricing data is fetched fresh from the API, as prices change regularly.
+The app will be available at http://localhost:3000 with hot reloading enabled.
 
-## Development Notes
+## Production Build
 
-- CORS issues may occur when connecting to the API directly from the browser
-- Mock data is available in `public/mock/` for local development
-- In a production environment, consider implementing server-side API calls
+Build for production:
 
-## Scripts
+```bash
+pnpm build
+```
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
+Start the production server:
+
+```bash
+pnpm start
+```
+
+## Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm clean` - Clean installation files
+- `pnpm prod-install` - Install production dependencies only
+
+## Project Structure
+
+- `src/` - Source code
+  - `components/` - UI components
+  - `data/` - Static data and configuration
+  - `services/` - API and data services
+- `public/` - Static assets
+  - `build/` - Compiled code (generated)
+  - `images/` - Images
+  - `mock/` - Mock data for development
+
+## License
+
+Private
