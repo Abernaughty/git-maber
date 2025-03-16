@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-.pnpm-store/
 
 # Production build files
 /public/build/
@@ -16,10 +15,6 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-
-# Package manager files
-package-lock.json
 
 # Editor directories and files
 .vscode/

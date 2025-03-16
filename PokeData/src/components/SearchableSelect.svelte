@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onMount, tick } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   
   // Props
   export let items = [];
@@ -16,40 +16,23 @@
   let highlightedIndex = -1;
   let inputElement;
   let dropdownElement;
-  let componentElement;
-  let lastSelectedValue = null;
   
   const dispatch = createEventDispatcher();
   
-  // Track value changes
-  $: if (value !== lastSelectedValue) {
-    lastSelectedValue = value;
-    if (value && !inputElement?.matches(':focus')) {
-      searchText = getDisplayText(value);
-    } else if (!value && !inputElement?.matches(':focus')) {
-      searchText = '';
-    }
-  }
-  
   // Update filtered items when search text changes
   $: {
-    if (searchText && searchText.trim() !== '') {
+    if (searchText) {
       const searchLower = searchText.toLowerCase();
       filteredItems = items.filter(item => {
-        if (!item || !item[labelField]) {
-          return false;
-        }
-
         const primaryMatch = item[labelField].toLowerCase().includes(searchLower);
-        const secondaryMatch = secondaryField && item[secondaryField] && 
-                              item[secondaryField].toLowerCase().includes(searchLower);
-        
+        const secondaryMatch = secondaryField && item[secondaryField].toLowerCase().includes(searchLower);
         return primaryMatch || secondaryMatch;
       });
     } else {
       filteredItems = [...items];
     }
     
+    // Reset highlighted index when filtered items change
     highlightedIndex = -1;
   }
   
@@ -58,8 +41,15 @@
     isFocused = true;
   }
   
-  function closeDropdown() {
-    isFocused = false;
+  function handleBlur(event) {
+    // Short delay to allow click to register on dropdown items
+    setTimeout(() => {
+      // Don't blur if clicking inside the dropdown
+      if (dropdownElement && dropdownElement.contains(event.relatedTarget)) {
+        return;
+      }
+      isFocused = false;
+    }, 100);
   }
   
   function handleKeydown(event) {
@@ -76,11 +66,12 @@
         break;
       case 'Enter':
         if (highlightedIndex >= 0 && highlightedIndex < filteredItems.length) {
-          handleItemSelect(filteredItems[highlightedIndex]);
+          selectItem(filteredItems[highlightedIndex]);
         }
         break;
       case 'Escape':
-        closeDropdown();
+        inputElement.blur();
+        isFocused = false;
         break;
     }
   }
@@ -94,64 +85,42 @@
     }
   }
   
-  function handleItemSelect(item) {
-    if (!item) return;
-    
-    // Update the internal value
+  function selectItem(item) {
     value = item;
-    searchText = getDisplayText(item);
-    
-    // Close dropdown but keep focus in input
-    closeDropdown();
-    
-    // Dispatch the select event
+    searchText = item ? getDisplayText(item) : '';
+    isFocused = false;
     dispatch('select', item);
   }
   
   function getDisplayText(item) {
     if (!item) return '';
-    if (secondaryField && item[secondaryField]) {
+    if (secondaryField) {
       return `${item[labelField]} (${item[secondaryField]})`;
     }
     return item[labelField];
   }
   
-  function handleInput() {
-    // Show dropdown when typing
-    isFocused = true;
-    
-    // If text changed and doesn't match selected value, clear the value
-    if (value && searchText !== getDisplayText(value)) {
-      value = null;
-      dispatch('select', null);
+  // Initialize search text based on value
+  $: {
+    if (value && !searchText) {
+      searchText = getDisplayText(value);
+    } else if (!value && searchText) {
+      // Reset search text if value is cleared externally
+      searchText = '';
     }
   }
-  
-  // Close dropdown when clicking outside
-  function handleDocumentClick(event) {
-    if (isFocused && componentElement && !componentElement.contains(event.target)) {
-      closeDropdown();
-    }
-  }
-  
-  onMount(() => {
-    document.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  });
 </script>
 
-<div class="searchable-select" bind:this={componentElement}>
+<div class="searchable-select">
   <div class="input-container">
     <input
       bind:this={inputElement}
       type="text"
-      bind:value={searchText}
+      value={searchText}
+      on:input={(e) => searchText = e.target.value}
       on:focus={handleFocus}
-      on:click={handleFocus}
+      on:blur={handleBlur}
       on:keydown={handleKeydown}
-      on:input={handleInput}
       placeholder={placeholder}
       autocomplete="off"
     />
@@ -170,14 +139,13 @@
         <div class="no-results">No matches found</div>
       {:else}
         {#each filteredItems as item, index}
-          <button 
-            type="button"
+          <div 
             class="item item-{index} {highlightedIndex === index ? 'highlighted' : ''}"
-            on:click|preventDefault={() => handleItemSelect(item)}
+            on:mousedown={() => selectItem(item)}
             on:mouseover={() => highlightedIndex = index}
           >
             {getDisplayText(item)}
-          </button>
+          </div>
         {/each}
       {/if}
     </div>
@@ -237,17 +205,10 @@
   }
   
   .item {
-    display: block;
-    width: 100%;
-    text-align: left;
     padding: 0.5rem 0.75rem;
-    background: none;
-    border: none;
-    border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
-    font-size: 1rem;
     transition: background-color 0.15s ease;
-    color: #333;
+    border-bottom: 1px solid #f0f0f0;
   }
   
   .item:last-child {
@@ -256,18 +217,11 @@
   
   .item:hover, .highlighted {
     background-color: #f0f0f0;
-    color: #3c5aa6;
   }
   
   .no-results {
     padding: 0.5rem 0.75rem;
     color: #666;
     font-style: italic;
-  }
-  
-  .dropdown {
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 </style>
