@@ -7,47 +7,6 @@
   import SearchableSelect from './components/SearchableSelect.svelte';
   import CardVariantSelector from './components/CardVariantSelector.svelte';
   
-  // Function to download the cards for a set
-  async function downloadSetData() {
-    if (!selectedSet) {
-      alert('Please select a set first');
-      return;
-    }
-    
-    try {
-      // Get cards from cache or API
-      const cards = await pokeDataService.getCardsForSet(selectedSet.code, selectedSet.id);
-      
-      if (cards.length === 0) {
-        alert(`No cards found for set ${selectedSet.name}`);
-        return;
-      }
-      
-      // Create a JSON blob
-      const jsonData = JSON.stringify(cards, null, 2);
-      const blob = new Blob([jsonData], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      
-      // Create a link and trigger download
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${selectedSet.code}-cards.json`;
-      document.body.appendChild(a);
-      a.click();
-      
-      // Clean up
-      setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      }, 100);
-      
-      alert(`Downloaded ${cards.length} cards for ${selectedSet.name}`);
-    } catch (error) {
-      console.error('Error downloading set data:', error);
-      alert(`Error downloading set data: ${error.message}`);
-    }
-  }
-  
   // Function to clear the cache (for testing)
   async function clearCache() {
     try {
@@ -66,34 +25,71 @@
   let error = null;
   let availableSets = [];
   
+  // New state variables for cards
+  let cardsInSet = [];
+  let isLoadingCards = false;
+  let selectedCard = null;
+  
   // Variables for handling card variants
   let cardVariants = [];
   let showVariantSelector = false;
   let selectedVariant = null;
+  
+  // Format price to always show 2 decimal places
+  function formatPrice(value) {
+    if (value === undefined || value === null) return "0.00";
+    return parseFloat(value).toFixed(2);
+  }
 
   // Handle set selection
   async function handleSetSelect(event) {
     selectedSet = event.detail;
-    cardName = ''; // Clear card name when set changes
+    loadCardsForSet(selectedSet);
+  }
+  
+  // New function to load cards for a set
+  async function loadCardsForSet(set) {
+    if (!set) return;
     
-    // Optional: Load cards for the selected set in the background
-    // This would enable offline use and faster searches
     try {
-      console.log(`Loading cards for set ${selectedSet.code}...`);
-      const cards = await pokeDataService.getCardsForSet(selectedSet.code, selectedSet.id);
-      console.log(`Loaded ${cards.length} cards for set ${selectedSet.code}`);
+      isLoadingCards = true;
+      cardsInSet = [];
+      selectedCard = null;
+      cardName = '';
+      
+      // Get cards for the selected set using the pokeDataService
+      const cards = await pokeDataService.getCardsForSet(set.code, set.id);
+      
+      // Transform the cards into a format suitable for the SearchableSelect component
+      cardsInSet = cards.map(card => ({
+        id: card.id,
+        name: card.name,
+        num: card.num,
+        rarity: card.rarity || '',
+        variant: card.variant || '',
+        image_url: card.image_url || ''
+      }));
+      
+      isLoadingCards = false;
       
       // Example: Check for Umbreon cards
       const umbreonCards = cards.filter(card => 
         card.name && card.name.toLowerCase().includes('umbreon')
       );
       if (umbreonCards.length > 0) {
-        console.log(`Found ${umbreonCards.length} Umbreon cards in set ${selectedSet.code}`);
+        console.log(`Found ${umbreonCards.length} Umbreon cards in set ${set.code}`);
       }
-    } catch (error) {
-      console.error(`Failed to pre-load cards for set ${selectedSet.code}:`, error);
-      // Silent error - don't show to user unless they try to search
+    } catch (err) {
+      console.error('Error loading cards for set:', err);
+      isLoadingCards = false;
+      cardsInSet = []; // Reset to empty array in case of error
     }
+  }
+  
+  // Add a new function to handle card selection
+  function handleCardSelect(event) {
+    selectedCard = event.detail;
+    cardName = selectedCard ? selectedCard.name : '';
   }
   
   // Functions for handling variant selection
@@ -110,6 +106,31 @@
     showVariantSelector = false;
   }
   
+  // Get the selected card ID
+  function getSelectedCardId() {
+    return selectedCard ? selectedCard.id : null;
+  }
+  
+  // Function to filter out zero or null price values
+  function filterValidPrices(pricing) {
+    if (!pricing) return {};
+    
+    // Create a new object with only valid price entries
+    const filteredPricing = {};
+    
+    Object.entries(pricing).forEach(([market, priceInfo]) => {
+      // Only include prices that are defined and greater than 0
+      if (priceInfo && 
+          priceInfo.value !== undefined && 
+          priceInfo.value !== null && 
+          parseFloat(priceInfo.value) > 0) {
+        filteredPricing[market] = priceInfo;
+      }
+    });
+    
+    return filteredPricing;
+  }
+  
   // Load pricing data for a specific variant
   async function loadPricingForVariant(variant) {
     try {
@@ -121,7 +142,14 @@
       error = null;
       
       // Get pricing data for the selected variant
-      priceData = await pokeDataService.getCardPricing(variant.id);
+      const rawPriceData = await pokeDataService.getCardPricing(variant.id);
+      
+      // Filter out zero or null price values
+      if (rawPriceData && rawPriceData.pricing) {
+        rawPriceData.pricing = filterValidPrices(rawPriceData.pricing);
+      }
+      
+      priceData = rawPriceData;
       isLoading = false;
     } catch (err) {
       console.error('Error loading pricing for variant:', err);
@@ -131,15 +159,23 @@
       // For development: Use mock data if API fails
       try {
         console.log('Attempting to load mock data for variant...');
-        priceData = await pokeDataService.loadMockData(selectedSet.name, cardName);
+        const mockData = await pokeDataService.loadMockData(selectedSet.name, cardName);
+        
+        // Filter the mock data too
+        if (mockData && mockData.pricing) {
+          mockData.pricing = filterValidPrices(mockData.pricing);
+        }
+        
         if (variant) {
           // Update mock data to match the selected variant
-          priceData.name = variant.name;
-          priceData.num = variant.num;
+          mockData.name = variant.name;
+          mockData.num = variant.num;
           if (variant.rarity) {
-            priceData.rarity = variant.rarity;
+            mockData.rarity = variant.rarity;
           }
         }
+        
+        priceData = mockData;
         error = "Using mock data (API unavailable). This is for demonstration purposes only.";
       } catch (mockErr) {
         console.error('Failed to load mock data:', mockErr);
@@ -152,68 +188,32 @@
       error = "Please select a set";
       return;
     }
-    if (!cardName) {
-      error = "Please enter a card name";
+    
+    if (!selectedCard) {
+      error = "Please select a card";
       return;
     }
     
     isLoading = true;
     error = null;
-    cardVariants = [];
-    showVariantSelector = false;
-    selectedVariant = null;
     
     try {
-      // Try to get cards from set cache first
-      const setCards = await dbService.getCardsForSet(selectedSet.code);
-      
-      if (setCards && setCards.length > 0) {
-        // Search locally
-        console.log(`Searching for ${cardName} in cached set data`);
-        const matchingCards = setCards.filter(card => 
-          card.name.toLowerCase().includes(cardName.toLowerCase())
-        );
-        
-        if (matchingCards.length > 0) {
-          console.log(`Found ${matchingCards.length} matches in cached set data`);
-          
-          if (matchingCards.length === 1) {
-            // If only one card is found, load its pricing directly
-            selectedVariant = matchingCards[0];
-            priceData = await pokeDataService.getCardPricing(selectedVariant.id);
-          } else {
-            // If multiple cards are found, show the variant selector
-            cardVariants = matchingCards;
-            showVariantSelector = true;
-            priceData = null; // Clear any existing pricing data
-          }
-          
-          isLoading = false;
-          return;
-        }
+      // Get the card ID from the selected card
+      const cardId = getSelectedCardId();
+      if (!cardId) {
+        throw new Error('Invalid card selection');
       }
       
-      // If no cache or no matches in cache, make API call
-      console.log(`No matches in cache, trying API search`);
-      const searchData = await pokeDataService.searchCards(cardName, selectedSet.code);
+      // Load pricing data directly using the card ID
+      const rawPriceData = await pokeDataService.getCardPricing(cardId);
       
-      // Find all cards in the specified set that match the name
-      const matchingCards = pokeDataService.findCardsInSet(searchData, selectedSet.name);
-      
-      if (matchingCards.length === 0) {
-        throw new Error('Card not found in the specified set');
+      // Filter out zero or null price values
+      if (rawPriceData && rawPriceData.pricing) {
+        rawPriceData.pricing = filterValidPrices(rawPriceData.pricing);
       }
       
-      if (matchingCards.length === 1) {
-        // If only one card is found, load its pricing directly
-        selectedVariant = matchingCards[0];
-        priceData = await pokeDataService.getCardPricing(selectedVariant.id);
-      } else {
-        // If multiple cards are found, show the variant selector
-        cardVariants = matchingCards;
-        showVariantSelector = true;
-        priceData = null; // Clear any existing pricing data
-      }
+      priceData = rawPriceData;
+      
     } catch (err) {
       console.error('API Error:', err);
       error = err.message;
@@ -221,7 +221,14 @@
       // For development: Use mock data if API fails
       try {
         console.log('Attempting to load mock data...');
-        priceData = await pokeDataService.loadMockData(selectedSet.name, cardName);
+        const mockData = await pokeDataService.loadMockData(selectedSet.name, cardName);
+        
+        // Filter the mock data too
+        if (mockData && mockData.pricing) {
+          mockData.pricing = filterValidPrices(mockData.pricing);
+        }
+        
+        priceData = mockData;
         error = "Using mock data (API unavailable). This is for demonstration purposes only.";
       } catch (mockErr) {
         console.error('Failed to load mock data:', mockErr);
@@ -263,10 +270,28 @@
 
     <div class="form-group">
       <label for="cardName">Card Name:</label>
-      <input id="cardName" bind:value={cardName} placeholder="e.g., Charizard">
+      <!-- Replace the input field with SearchableSelect -->
+      {#if !selectedSet}
+        <div class="disabled-select">
+          <input disabled placeholder="Select a set first">
+        </div>
+      {:else if isLoadingCards}
+        <div class="loading-select">
+          <input disabled placeholder="Loading cards...">
+        </div>
+      {:else}
+        <SearchableSelect
+          items={cardsInSet}
+          labelField="name"
+          secondaryField="num"
+          placeholder="Search for a card..."
+          bind:value={selectedCard}
+          on:select={handleCardSelect}
+        />
+      {/if}
     </div>
 
-    <button on:click={fetchCardPrice} disabled={isLoading}>
+    <button on:click={fetchCardPrice} disabled={isLoading || !selectedCard}>
       {isLoading ? 'Loading...' : 'Get Price'}
     </button>
 
@@ -283,20 +308,21 @@
           <p><strong>Rarity:</strong> {priceData.rarity}</p>
         {/if}
         <h3>Prices:</h3>
-        <ul>
-          {#each Object.entries(priceData.pricing) as [market, price]}
-            <li><span class="market">{market}:</span> <span class="price">${price.value}</span> <span class="currency">{price.currency}</span></li>
-          {/each}
-        </ul>
+        {#if Object.keys(priceData.pricing).length === 0}
+          <p class="no-prices">No pricing data available for this card.</p>
+        {:else}
+          <ul>
+            {#each Object.entries(priceData.pricing) as [market, price]}
+              <li><span class="market">{market}:</span> <span class="price">${formatPrice(price.value)}</span> <span class="currency">{price.currency}</span></li>
+            {/each}
+          </ul>
+        {/if}
       </div>
     {/if}
   </div>
   
   <div class="admin-tools">
     <button class="secondary-button" on:click={clearCache}>Clear Cache</button>
-    {#if selectedSet}
-      <button class="secondary-button" on:click={downloadSetData}>Download Set Data</button>
-    {/if}
   </div>
   
   <!-- Card Variant Selector Modal -->
@@ -394,6 +420,12 @@
     cursor: not-allowed;
   }
   
+  .disabled-select input, .loading-select input {
+    background-color: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+  }
+  
   .admin-tools {
     margin-top: 1rem;
     text-align: center;
@@ -470,6 +502,12 @@
   .currency {
     color: #666;
     font-size: 0.9rem;
+  }
+  
+  .no-prices {
+    color: #6c757d;
+    font-style: italic;
+    padding: 0.5rem 0;
   }
   
   /* Responsive adjustments */
