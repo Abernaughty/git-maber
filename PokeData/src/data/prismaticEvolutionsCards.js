@@ -96,4 +96,7 @@ export const prismaticEvolutionsCards = [
         "release_date": "2025-01-17",
         "secret": false,
         "set_code": "PRE",
-        "set_id": 557
+        "set_id": 557,
+        "set_name": "Prismatic Evolutions"
+    }
+];

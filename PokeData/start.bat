@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-@echo off
-cd %~dp0
-pnpm start
-=======
 @echo off
 cd %~dp0
 pnpm start

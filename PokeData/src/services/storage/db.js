@@ -5,10 +5,11 @@
 
 // Database configuration
 const DB_NAME = 'poke-data-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Incremented to trigger schema upgrade
 const STORES = {
   setList: 'setList',
-  cardsBySet: 'cardsBySet'
+  cardsBySet: 'cardsBySet',
+  cardPricing: 'cardPricing'
 };
 
 /**
@@ -38,6 +39,10 @@ export const openDatabase = () => {
       
       if (!db.objectStoreNames.contains(STORES.cardsBySet)) {
         db.createObjectStore(STORES.cardsBySet, { keyPath: 'setCode' });
+      }
+      
+      if (!db.objectStoreNames.contains(STORES.cardPricing)) {
+        db.createObjectStore(STORES.cardPricing, { keyPath: 'id' });
       }
     };
   });
@@ -114,12 +119,15 @@ export const dbService = {
    */
   async saveCardsForSet(setCode, cards) {
     try {
+      // Use a fallback key if setCode is null or undefined
+      const storageKey = setCode || 'unknown-set';
+      
       const db = await openDatabase();
       const transaction = db.transaction(STORES.cardsBySet, 'readwrite');
       const store = transaction.objectStore(STORES.cardsBySet);
       
       await store.put({
-        setCode,
+        setCode: storageKey,
         cards,
         timestamp: Date.now()
       });
@@ -141,11 +149,14 @@ export const dbService = {
    */
   async getCardsForSet(setCode) {
     try {
+      // Use a fallback key if setCode is null or undefined
+      const storageKey = setCode || 'unknown-set';
+      
       const db = await openDatabase();
       const transaction = db.transaction(STORES.cardsBySet, 'readonly');
       const store = transaction.objectStore(STORES.cardsBySet);
       
-      const request = store.get(setCode);
+      const request = store.get(storageKey);
       
       return new Promise((resolve, reject) => {
         request.onsuccess = () => {
@@ -173,7 +184,10 @@ export const dbService = {
    */
   async hasCardsForSet(setCode) {
     try {
-      const cards = await this.getCardsForSet(setCode);
+      // Use a fallback key if setCode is null or undefined
+      const storageKey = setCode || 'unknown-set';
+      
+      const cards = await this.getCardsForSet(storageKey);
       return cards !== null;
     } catch (error) {
       console.error(`Error checking if we have cards for set ${setCode}:`, error);
@@ -188,11 +202,14 @@ export const dbService = {
    */
   async clearSetData(setCode) {
     try {
+      // Use a fallback key if setCode is null or undefined
+      const storageKey = setCode || 'unknown-set';
+      
       const db = await openDatabase();
       const transaction = db.transaction(STORES.cardsBySet, 'readwrite');
       const store = transaction.objectStore(STORES.cardsBySet);
       
-      const request = store.delete(setCode);
+      const request = store.delete(storageKey);
       
       return new Promise((resolve, reject) => {
         request.onsuccess = () => {
@@ -208,16 +225,73 @@ export const dbService = {
   },
   
   /**
-   * Clear all stored data (useful for testing or resets)
+   * Store card pricing data
+   * @param {string} cardId - The card ID
+   * @param {Object} pricingData - The pricing data to store
    * @returns {Promise<void>}
    */
+  async storeCardPricing(cardId, pricingData) {
+    try {
+      const db = await openDatabase();
+      const transaction = db.transaction(STORES.cardPricing, 'readwrite');
+      const store = transaction.objectStore(STORES.cardPricing);
+      
+      await store.put({
+        id: cardId,
+        data: pricingData,
+        timestamp: Date.now()
+      });
+      
+      return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = (event) => reject(event.target.error);
+      });
+    } catch (error) {
+      console.error(`Error storing pricing for card ${cardId}:`, error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get card pricing data
+   * @param {string} cardId - The card ID
+   * @returns {Promise<Object>} The pricing data
+   */
+  async getCardPricing(cardId) {
+    try {
+      const db = await openDatabase();
+      const transaction = db.transaction(STORES.cardPricing, 'readonly');
+      const store = transaction.objectStore(STORES.cardPricing);
+      
+      const request = store.get(cardId);
+      
+      return new Promise((resolve, reject) => {
+        request.onsuccess = () => {
+          // If we have the data in the cache, return it
+          if (request.result && request.result.data) {
+            resolve(request.result.data);
+          } else {
+            // No data found
+            resolve(null);
+          }
+        };
+        
+        request.onerror = (event) => reject(event.target.error);
+      });
+    } catch (error) {
+      console.error(`Error getting pricing for card ${cardId}:`, error);
+      throw error;
+    }
+  },
+  
   async clearAllData() {
     try {
       const db = await openDatabase();
-      const transaction = db.transaction([STORES.setList, STORES.cardsBySet], 'readwrite');
+      const transaction = db.transaction([STORES.setList, STORES.cardsBySet, STORES.cardPricing], 'readwrite');
       
       transaction.objectStore(STORES.setList).clear();
       transaction.objectStore(STORES.cardsBySet).clear();
+      transaction.objectStore(STORES.cardPricing).clear();
       
       return new Promise((resolve, reject) => {
         transaction.oncomplete = () => {
