@@ -11,11 +11,9 @@ export const API_CONFIG = {
   
   // Endpoints
   endpoints: {
-    search: '/search',
-    pricing: '/pricing',
-    sets: '/sets',
-    cards: '/cards',
-    set: '/set'
+    pricing: '/pricing', // Get Info and Pricing for Card or Product
+    sets: '/sets',      // List All Sets 
+    set: '/set'         // List Cards in Set
   },
   
   // Headers function to get standard headers
@@ -28,23 +26,15 @@ export const API_CONFIG = {
   },
   
   // URL builder functions
-  buildSearchUrl(query) {
-    return `${this.baseUrl}${this.endpoints.search}?query=${encodeURIComponent(query)}&asset_type=CARD`;
-  },
-  
   buildPricingUrl(id) {
-    return `${this.baseUrl}${this.endpoints.pricing}?id=${id}&asset_type=CARD`;
+    return `${this.baseUrl}${this.endpoints.pricing}?id=${encodeURIComponent(id)}&asset_type=CARD`;
   },
   
   buildSetsUrl() {
     return `${this.baseUrl}${this.endpoints.sets}`;
   },
   
-  buildCardsForSetUrl(setCode) {
-    return `${this.baseUrl}${this.endpoints.search}?query=&set_code=${encodeURIComponent(setCode)}&asset_type=CARD`;
-  },
-  
-  buildSetByIdUrl(setId) {
+  buildCardsForSetUrl(setId) {
     return `${this.baseUrl}${this.endpoints.set}?set_id=${encodeURIComponent(setId)}`;
   }
 };

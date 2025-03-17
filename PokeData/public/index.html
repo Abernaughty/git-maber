@@ -11,7 +11,46 @@
   <link rel='stylesheet' href='./build/bundle.css'>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <script defer src='./build/bundle.js'></script>
+  <!-- Database reset script -->
+  <script>
+    // Delete any existing database before loading the app
+    function resetDatabase() {
+      return new Promise((resolve, reject) => {
+        try {
+          const DB_NAME = 'poke-data-db';
+          const request = indexedDB.deleteDatabase(DB_NAME);
+          
+          request.onsuccess = () => {
+            console.log(`Database ${DB_NAME} deleted successfully on page load`);
+            resolve();
+          };
+          
+          request.onerror = (event) => {
+            console.error('Error deleting database:', event.target.error);
+            // Still resolve so the app can load
+            resolve();
+          };
+          
+          request.onblocked = () => {
+            console.warn('Database deletion blocked');
+            // Still resolve so the app can load
+            resolve();
+          };
+        } catch (error) {
+          console.error('Error in database reset script:', error);
+          // Still resolve so the app can load
+          resolve();
+        }
+      });
+    }
+
+    // Reset database before loading app
+    resetDatabase().then(() => {
+      console.log('Database reset complete, app will now load');
+    });
+  </script>
+
+  <script type="module" src='./build/main.js'></script>
 </head>
 
 <body>

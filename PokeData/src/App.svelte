@@ -1,23 +1,15 @@
 <script>
   import { onMount } from 'svelte';
-  import { setList } from './data/setList';
   import { API_CONFIG } from './data/apiConfig';
   import { pokeDataService } from './services/pokeDataService';
   import { dbService } from './services/storage/db';
   import SearchableSelect from './components/SearchableSelect.svelte';
+  import CardSearchSelect from './components/CardSearchSelect.svelte';
   import CardVariantSelector from './components/CardVariantSelector.svelte';
   
-  // Function to clear the cache (for testing)
-  async function clearCache() {
-    try {
-      await dbService.clearAllData();
-      alert('Cache cleared successfully!');
-    } catch (error) {
-      console.error('Error clearing cache:', error);
-      alert('Error clearing cache: ' + error.message);
-    }
-  }
-
+  // Reference to CardSearchSelect component
+  let cardSearchComponent;
+  
   let selectedSet = null;
   let cardName = '';
   let priceData = null;
@@ -44,21 +36,37 @@
   // Handle set selection
   async function handleSetSelect(event) {
     selectedSet = event.detail;
-    loadCardsForSet(selectedSet);
+    console.log('Selected set:', selectedSet);
+    // Verify we have the set ID before loading cards
+    if (selectedSet && selectedSet.id) {
+      loadCardsForSet(selectedSet);
+    } else {
+      console.error('Selected set does not have an ID property:', selectedSet);
+      error = 'Invalid set data. Please select a different set.';
+    }
   }
   
-  // New function to load cards for a set
+  // Load cards for a selected set
   async function loadCardsForSet(set) {
     if (!set) return;
     
     try {
-      isLoadingCards = true;
-      cardsInSet = [];
+      // Clear all card-related state first
+      priceData = null;
       selectedCard = null;
       cardName = '';
+      cardsInSet = [];
+      
+      // Show loading state
+      isLoadingCards = true;
+      error = null;
+      
+      console.log(`Loading cards for set ${set.name} (code: ${set.code}, id: ${set.id})...`);
       
       // Get cards for the selected set using the pokeDataService
       const cards = await pokeDataService.getCardsForSet(set.code, set.id);
+      
+      console.log(`Received ${cards.length} cards for set ${set.name}`);
       
       // Transform the cards into a format suitable for the SearchableSelect component
       cardsInSet = cards.map(card => ({
@@ -69,6 +77,15 @@
         variant: card.variant || '',
         image_url: card.image_url || ''
       }));
+      
+      console.log(`Transformed ${cardsInSet.length} cards for display`);
+      
+      // Check if any cards lack name property
+      const invalidCards = cards.filter(card => !card.name);
+      if (invalidCards.length > 0) {
+        console.warn(`Found ${invalidCards.length} cards without names!`);
+        console.warn('Sample invalid card:', invalidCards[0]);
+      }
       
       isLoadingCards = false;
       
@@ -86,10 +103,25 @@
     }
   }
   
-  // Add a new function to handle card selection
+  // Function to handle card selection changes
   function handleCardSelect(event) {
+    console.log('Card selection event:', event.detail);
+    
+    // Clear price data first to prevent reference errors
+    priceData = null;
+    
+    // Update the selected card state
     selectedCard = event.detail;
     cardName = selectedCard ? selectedCard.name : '';
+    
+    // Clear any previous error
+    error = null;
+    
+    // Validate the selection
+    if (selectedCard && !selectedCard.id) {
+      console.error('Selected card does not have an ID property:', selectedCard);
+      error = 'Invalid card data. Please select a different card.';
+    }
   }
   
   // Functions for handling variant selection
@@ -111,22 +143,38 @@
     return selectedCard ? selectedCard.id : null;
   }
   
-  // Function to filter out zero or null price values
+  // Function to filter out zero or null price values with safety
   function filterValidPrices(pricing) {
-    if (!pricing) return {};
+    // Safety check for null/undefined input
+    if (!pricing || typeof pricing !== 'object') return {};
     
     // Create a new object with only valid price entries
     const filteredPricing = {};
     
-    Object.entries(pricing).forEach(([market, priceInfo]) => {
-      // Only include prices that are defined and greater than 0
-      if (priceInfo && 
-          priceInfo.value !== undefined && 
-          priceInfo.value !== null && 
-          parseFloat(priceInfo.value) > 0) {
-        filteredPricing[market] = priceInfo;
-      }
-    });
+    try {
+      Object.entries(pricing).forEach(([market, priceInfo]) => {
+        // Skip null values entirely
+        if (priceInfo === null || priceInfo === undefined) return;
+        
+        // Handle different pricing formats
+        if (typeof priceInfo === 'object' && 
+            priceInfo.value !== undefined && 
+            priceInfo.value !== null && 
+            parseFloat(priceInfo.value) > 0) {
+          // Object format with value property
+          filteredPricing[market] = priceInfo;
+        } else if (typeof priceInfo === 'number' && priceInfo > 0) {
+          // Direct number format
+          filteredPricing[market] = { value: priceInfo, currency: 'USD' };
+        } else if (typeof priceInfo === 'string' && parseFloat(priceInfo) > 0) {
+          // String that can be parsed as a number
+          filteredPricing[market] = { value: parseFloat(priceInfo), currency: 'USD' };
+        }
+      });
+    } catch (err) {
+      console.error('Error filtering prices:', err);
+      return {}; // Return empty object on error
+    }
     
     return filteredPricing;
   }
@@ -201,15 +249,22 @@
       // Get the card ID from the selected card
       const cardId = getSelectedCardId();
       if (!cardId) {
-        throw new Error('Invalid card selection');
+        throw new Error('Invalid card selection - missing ID');
       }
+      
+      console.log(`Fetching price data for card ID: ${cardId}`);
       
       // Load pricing data directly using the card ID
       const rawPriceData = await pokeDataService.getCardPricing(cardId);
       
+      console.log('Received price data:', rawPriceData);
+      
       // Filter out zero or null price values
       if (rawPriceData && rawPriceData.pricing) {
         rawPriceData.pricing = filterValidPrices(rawPriceData.pricing);
+        console.log('Filtered pricing data:', rawPriceData.pricing);
+      } else {
+        console.warn('No pricing data found in the response:', rawPriceData);
       }
       
       priceData = rawPriceData;
@@ -240,12 +295,36 @@
 
   onMount(async () => {
     try {
+      console.log('Initializing app and loading set list...');
       // Get the set list with caching
       const sets = await pokeDataService.getSetList();
+      console.log(`Loaded ${sets.length} sets`);
+      
+      // Verify all sets have an ID property
+      const setsWithoutIds = sets.filter(set => !set.id);
+      if (setsWithoutIds.length > 0) {
+        console.warn(`Found ${setsWithoutIds.length} sets without IDs`);
+        // Add IDs to the sets that don't have them
+        let maxId = Math.max(...sets.filter(set => set.id).map(set => set.id), 0);
+        setsWithoutIds.forEach(set => {
+          maxId++;
+          set.id = maxId;
+        });
+        console.log('Added IDs to sets that were missing them');
+      }
+      
+      // Check for any missing set codes
+      const setsWithoutCodes = sets.filter(set => !set.code);
+      if (setsWithoutCodes.length > 0) {
+        console.warn(`Found ${setsWithoutCodes.length} sets without codes`);
+      }
+      
       availableSets = sets;
     } catch (error) {
       console.error('Error loading set list:', error);
       // Fallback to imported data
+      console.log('Using fallback set list');
+      const { setList } = await import('./data/setList.js');
       availableSets = setList;
     }
   });
@@ -270,6 +349,7 @@
 
     <div class="form-group">
       <label for="cardName">Card Name:</label>
+      
       <!-- Replace the input field with SearchableSelect -->
       {#if !selectedSet}
         <div class="disabled-select">
@@ -279,13 +359,15 @@
         <div class="loading-select">
           <input disabled placeholder="Loading cards...">
         </div>
+      {:else if cardsInSet.length === 0}
+        <div class="error-select">
+          <input disabled placeholder="No cards found for this set">
+        </div>
       {:else}
-        <SearchableSelect
-          items={cardsInSet}
-          labelField="name"
-          secondaryField="num"
-          placeholder="Search for a card..."
-          bind:value={selectedCard}
+        <CardSearchSelect
+          bind:this={cardSearchComponent}
+          cards={cardsInSet}
+          bind:selectedCard={selectedCard}
           on:select={handleCardSelect}
         />
       {/if}
@@ -299,21 +381,31 @@
       <p class="error">{error}</p>
     {/if}
 
-    {#if priceData}
+    <!-- Safely display results only if the price data exists -->
+    {#if priceData !== null && priceData !== undefined && typeof priceData === 'object'}
       <div class="results">
-        <h2>{priceData.name}</h2>
-        <p><strong>Set:</strong> {priceData.set_name}</p>
-        <p><strong>Number:</strong> {priceData.num}</p>
-        {#if priceData.rarity}
-          <p><strong>Rarity:</strong> {priceData.rarity}</p>
+        <!-- Always use safe property access to avoid null references -->
+        <h2>{priceData?.name || (selectedCard && selectedCard.name) || 'Card'}</h2>
+        <p><strong>Set:</strong> {priceData?.set_name || (selectedSet && selectedSet.name) || 'Unknown'}</p>
+        <p><strong>Number:</strong> {priceData?.num || (selectedCard && selectedCard.num) || 'Unknown'}</p>
+        
+        <!-- Only display rarity if we have it -->
+        {#if (priceData && priceData.rarity) || (selectedCard && selectedCard.rarity)}
+          <p><strong>Rarity:</strong> {(priceData && priceData.rarity) || (selectedCard && selectedCard.rarity) || 'Unknown'}</p>
         {/if}
+        
         <h3>Prices:</h3>
-        {#if Object.keys(priceData.pricing).length === 0}
+        <!-- Check if we have any valid pricing data -->
+        {#if !priceData?.pricing || Object.keys(priceData.pricing || {}).length === 0}
           <p class="no-prices">No pricing data available for this card.</p>
         {:else}
           <ul>
-            {#each Object.entries(priceData.pricing) as [market, price]}
-              <li><span class="market">{market}:</span> <span class="price">${formatPrice(price.value)}</span> <span class="currency">{price.currency}</span></li>
+            {#each Object.entries(priceData.pricing || {}) as [market, price]}
+              <li>
+                <span class="market">{market}:</span> 
+                <span class="price">${formatPrice(price?.value)}</span> 
+                <span class="currency">{price?.currency || 'USD'}</span>
+              </li>
             {/each}
           </ul>
         {/if}
@@ -321,9 +413,7 @@
     {/if}
   </div>
   
-  <div class="admin-tools">
-    <button class="secondary-button" on:click={clearCache}>Clear Cache</button>
-  </div>
+
   
   <!-- Card Variant Selector Modal -->
   <CardVariantSelector
@@ -381,7 +471,7 @@
     font-weight: 500;
   }
   
-  input, select {
+  input {
     width: 100%;
     padding: 0.6rem 0.75rem;
     margin-bottom: 0.75rem;
@@ -391,7 +481,7 @@
     transition: border-color 0.3s ease;
   }
   
-  input:focus, select:focus {
+  input:focus {
     outline: none;
     border-color: #3c5aa6;
     box-shadow: 0 0 0 2px rgba(60, 90, 166, 0.2);
@@ -426,22 +516,15 @@
     cursor: not-allowed;
   }
   
-  .admin-tools {
-    margin-top: 1rem;
-    text-align: center;
+  .error-select input {
+    background-color: #fff8f8;
+    color: #cc0000;
+    cursor: not-allowed;
+    border: 1px solid #ffcccc;
   }
+
   
-  .secondary-button {
-    width: auto;
-    background-color: #6c757d;
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-  }
-  
-  .secondary-button:hover {
-    background-color: #5a6268;
-  }
-  
+
   .error {
     color: #ee1515;
     font-size: 0.9rem;
