@@ -54,27 +54,48 @@ export const pokeDataService = {
    */
   async getSetList() {
     try {
+      console.log('Fetching set list...');
       // First try to get from cache
       const cachedSets = await dbService.getSetList();
       if (cachedSets && cachedSets.length > 0) {
-        console.log('Using cached sets data');
+        console.log(`Using cached sets data - ${cachedSets.length} sets`);
         return sortSetsByReleaseDate(ensureSetsHaveIds(cachedSets));
       }
       
       // If not in cache, fetch from API
       const url = API_CONFIG.buildSetsUrl();
+      console.log(`Fetching sets from API: ${url}`);
+      
       const response = await fetchWithProxy(url, {
         headers: API_CONFIG.getHeaders()
       });
       
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorText = await response.text().catch(() => 'Unable to get error details');
+        console.error(`API error: ${response.status} - ${errorText}`);
+        throw new Error(`API error: ${response.status}. Details: ${errorText}`);
       }
       
       const data = await response.json();
+      console.log('API response for sets:', data);
+      
+      // Check for different response formats
+      let setsData = data;
+      
+      // Handle data wrapper
+      if (!Array.isArray(data) && data.data && Array.isArray(data.data)) {
+        console.log('Found data wrapper in sets response');
+        setsData = data.data;
+      }
+      
+      // Handle sets wrapper
+      if (!Array.isArray(data) && data.sets && Array.isArray(data.sets)) {
+        console.log('Found sets wrapper in response');
+        setsData = data.sets;
+      }
       
       // Ensure all sets have IDs
-      const processedData = ensureSetsHaveIds(data);
+      const processedData = ensureSetsHaveIds(setsData);
       console.log(`Processed ${processedData.length} sets with IDs`);
       
       // Cache the results
@@ -108,6 +129,8 @@ export const pokeDataService = {
       // Log any potential issues with set code
       if (!setCode) {
         console.warn('Set code is null or undefined, using fallback key for cache');
+        // Use setId as fallback cache key if setCode is missing
+        setCode = `id_${setId}`;
       }
       
       // Try to get from cache first
@@ -128,7 +151,9 @@ export const pokeDataService = {
       });
       
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorText = await response.text().catch(() => 'Unable to get error details');
+        console.error(`API error for set ${setCode}: ${response.status} - ${errorText}`);
+        throw new Error(`API error: ${response.status}. Details: ${errorText}`);
       }
       
       const data = await response.json();
@@ -137,30 +162,41 @@ export const pokeDataService = {
       // Process the cards data
       let cards = [];
       
-      // Determine the format of the response
-      if (data && typeof data === 'object') {
-        if (Array.isArray(data)) {
-          console.log(`Response is a direct array with ${data.length} items`);
-          cards = data;
-        } else if (data.results && Array.isArray(data.results)) {
-          console.log(`Response has a results array with ${data.results.length} items`);
-          cards = data.results;
-        } else if (data.cards && Array.isArray(data.cards)) {
-          console.log(`Response has a cards array with ${data.cards.length} items`);
-          cards = data.cards;
-        } else {
-          console.warn(`Unexpected data format - no recognized array structure:`, data);
-          // Try to extract cards from any array property
-          for (const key in data) {
-            if (Array.isArray(data[key]) && data[key].length > 0 && data[key][0].name) {
-              console.log(`Found potential cards array in property '${key}' with ${data[key].length} items`);
-              cards = data[key];
-              break;
-            }
+      // Check if we have a cards property in the response
+      if (data && data.cards && Array.isArray(data.cards)) {
+        console.log(`Found cards array with ${data.cards.length} items`);
+        cards = data.cards;
+      }
+      // If no cards property, check if the response itself is an array of cards
+      else if (data && Array.isArray(data)) {
+        console.log(`Response is a direct array with ${data.length} items`);
+        cards = data;
+      }
+      // If we have a data property with an array
+      else if (data && data.data && Array.isArray(data.data)) {
+        console.log(`Response has a data array with ${data.data.length} items`);
+        cards = data.data;
+      }
+      // If we have a results property with an array
+      else if (data && data.results && Array.isArray(data.results)) {
+        console.log(`Response has a results array with ${data.results.length} items`);
+        cards = data.results;
+      }
+      else {
+        console.warn('Unexpected data format:', data);
+        // Try to extract cards from any array property as a last resort
+        for (const key in data) {
+          if (Array.isArray(data[key]) && data[key].length > 0) {
+            console.log(`Found potential cards array in property '${key}' with ${data[key].length} items`);
+            cards = data[key];
+            break;
           }
         }
-      } else {
-        console.warn(`Unexpected response type: ${typeof data}`);
+      }
+      
+      // If we found any cards, log the first one as a sample
+      if (cards.length > 0) {
+        console.log('First card sample:', cards[0]);
       }
       
       // Log the number of cards found
@@ -185,6 +221,12 @@ export const pokeDataService = {
    */
   async getCardPricing(cardId) {
     try {
+      if (!cardId) {
+        throw new Error('Card ID is required to fetch pricing data');
+      }
+
+      console.log(`Getting pricing data for card ID: ${cardId}`);
+      
       // Try to get from cache first
       const cachedPricing = await dbService.getCardPricing(cardId);
       if (cachedPricing) {
@@ -194,22 +236,36 @@ export const pokeDataService = {
       
       // If not in cache, fetch from API
       const url = API_CONFIG.buildPricingUrl(cardId);
+      console.log(`API URL for pricing: ${url}`);
+      
       const response = await fetchWithProxy(url, {
         headers: API_CONFIG.getHeaders()
       });
       
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const errorText = await response.text().catch(() => 'Unable to get error details');
+        console.error(`API error for pricing ${cardId}: ${response.status} - ${errorText}`);
+        throw new Error(`API error: ${response.status}. Details: ${errorText}`);
       }
       
       const data = await response.json();
+      console.log(`Pricing API response for card ${cardId}:`, data);
       
-      // Cache the results
-      if (data) {
-        await dbService.storeCardPricing(cardId, data);
+      // Process the pricing data based on the API response format
+      let pricingData = data;
+      
+      // Check if the API returns a data wrapper object
+      if (data && data.data && typeof data.data === 'object') {
+        console.log('Found data wrapper in pricing response');
+        pricingData = data.data;
       }
       
-      return data;
+      // Cache the results
+      if (pricingData) {
+        await dbService.saveCardPricing(cardId, pricingData);
+      }
+      
+      return pricingData;
     } catch (error) {
       console.error(`Error fetching pricing for card ${cardId}:`, error);
       throw error;

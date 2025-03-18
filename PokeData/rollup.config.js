@@ -32,16 +32,19 @@ export default {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
+		format: 'esm',
+		dir: 'public/build'
 	},
 	plugins: [
-		// Add environment variables
+		// Updated custom replace plugin with sourcemap support
 		{
 			name: 'replace',
 			transform(code, id) {
-				return code.replace(/process\.env\.NODE_ENV/g, JSON.stringify(production ? 'production' : 'development'));
+				const result = code.replace(/process\.env\.NODE_ENV/g, JSON.stringify(production ? 'production' : 'development'));
+				return {
+					code: result,
+					map: { mappings: '' } // Add an empty sourcemap
+				};
 			}
 		},
 		svelte({

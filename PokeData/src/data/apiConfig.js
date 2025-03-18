@@ -11,9 +11,9 @@ export const API_CONFIG = {
   
   // Endpoints
   endpoints: {
-    pricing: '/pricing',
-    sets: '/sets',
-    set: '/set'
+    pricing: '/pricing', // Get Info and Pricing for Card or Product
+    sets: '/sets',      // List All Sets 
+    set: '/set'         // List Cards in Set
   },
   
   // Headers function to get standard headers
@@ -27,7 +27,7 @@ export const API_CONFIG = {
   
   // URL builder functions
   buildPricingUrl(id) {
-    return `${this.baseUrl}${this.endpoints.pricing}?id=${id}&asset_type=CARD`;
+    return `${this.baseUrl}${this.endpoints.pricing}?id=${encodeURIComponent(id)}&asset_type=CARD`;
   },
   
   buildSetsUrl() {

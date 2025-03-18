@@ -5,11 +5,11 @@
 
 // Database configuration
 const DB_NAME = 'poke-data-db';
-const DB_VERSION = 2; // Incremented to trigger schema upgrade
+const DB_VERSION = 1; // Reset to version 1
 const STORES = {
   setList: 'setList',
   cardsBySet: 'cardsBySet',
-  cardPricing: 'cardPricing'
+  cardPricing: 'cardPricing' // Added store for card pricing
 };
 
 /**
@@ -41,6 +41,7 @@ export const openDatabase = () => {
         db.createObjectStore(STORES.cardsBySet, { keyPath: 'setCode' });
       }
       
+      // Create cardPricing store if it doesn't exist
       if (!db.objectStoreNames.contains(STORES.cardPricing)) {
         db.createObjectStore(STORES.cardPricing, { keyPath: 'id' });
       }
@@ -178,6 +179,66 @@ export const dbService = {
   },
   
   /**
+   * Save pricing data for a specific card to IndexedDB
+   * @param {string} cardId - The card ID
+   * @param {Object} pricingData - The pricing data for the card
+   * @returns {Promise<void>}
+   */
+  async saveCardPricing(cardId, pricingData) {
+    try {
+      const db = await openDatabase();
+      const transaction = db.transaction(STORES.cardPricing, 'readwrite');
+      const store = transaction.objectStore(STORES.cardPricing);
+      
+      await store.put({
+        id: cardId,
+        data: pricingData,
+        timestamp: Date.now()
+      });
+      
+      return new Promise((resolve, reject) => {
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = (event) => reject(event.target.error);
+      });
+    } catch (error) {
+      console.error(`Error saving pricing data for card ${cardId}:`, error);
+      throw error;
+    }
+  },
+  
+  /**
+   * Get pricing data for a specific card from IndexedDB
+   * @param {string} cardId - The card ID
+   * @returns {Promise<Object>} The pricing data for the card
+   */
+  async getCardPricing(cardId) {
+    try {
+      const db = await openDatabase();
+      const transaction = db.transaction(STORES.cardPricing, 'readonly');
+      const store = transaction.objectStore(STORES.cardPricing);
+      
+      const request = store.get(cardId);
+      
+      return new Promise((resolve, reject) => {
+        request.onsuccess = () => {
+          // If we have the data in the cache, return it
+          if (request.result && request.result.data) {
+            resolve(request.result.data);
+          } else {
+            // No data found
+            resolve(null);
+          }
+        };
+        
+        request.onerror = (event) => reject(event.target.error);
+      });
+    } catch (error) {
+      console.error(`Error getting pricing data for card ${cardId}:`, error);
+      throw error;
+    }
+  },
+  
+  /**
    * Check if we have cards for a specific set in the cache
    * @param {string} setCode - The set code
    * @returns {Promise<boolean>} True if we have the data, false otherwise
@@ -225,9 +286,33 @@ export const dbService = {
   },
   
   /**
-   * Store card pricing data
-   * @param {string} cardId - The card ID
-   * @param {Object} pricingData - The pricing data to store
+   * Clear pricing data for a specific card
+   * @param {string} cardId - The card ID to clear
+   * @returns {Promise<void>}
+   */
+  async clearCardPricing(cardId) {
+    try {
+      const db = await openDatabase();
+      const transaction = db.transaction(STORES.cardPricing, 'readwrite');
+      const store = transaction.objectStore(STORES.cardPricing);
+      
+      const request = store.delete(cardId);
+      
+      return new Promise((resolve, reject) => {
+        request.onsuccess = () => {
+          console.log(`Cleared pricing cache for card ${cardId}`);
+          resolve();
+        };
+        request.onerror = (event) => reject(event.target.error);
+      });
+    } catch (error) {
+      console.error(`Error clearing pricing data for card ${cardId}:`, error);
+      throw error;
+    }
+  },
+  
+  /**
+   * Clear all stored data (useful for testing or resets)
    * @returns {Promise<void>}
    */
   async storeCardPricing(cardId, pricingData) {
@@ -304,5 +389,31 @@ export const dbService = {
       console.error('Error clearing all data:', error);
       throw error;
     }
+  },
+  
+  /**
+   * Delete the entire database
+   * @returns {Promise<void>}
+   */
+  async resetDatabase() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.deleteDatabase(DB_NAME);
+      
+      request.onsuccess = () => {
+        console.log(`Database ${DB_NAME} deleted successfully`);
+        resolve();
+      };
+      
+      request.onerror = (event) => {
+        console.error('Error deleting database:', event.target.error);
+        reject(event.target.error);
+      };
+      
+      request.onblocked = () => {
+        console.warn('Database deletion blocked - may have open connections');
+        // Still attempt to continue
+        resolve();
+      };
+    });
   }
 };
