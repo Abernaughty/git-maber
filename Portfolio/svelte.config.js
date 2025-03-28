@@ -17,7 +17,7 @@ const config = {
 		}),
 		// This ensures the correct base path for GitHub Pages
 		paths: {
-			base: process.env.NODE_ENV === 'production' ? '/git-maber' : ''
+			base: process.env.NODE_ENV === 'production' ? 'git-maber' : ''
 		},
 		// Define files location
 		files: {
