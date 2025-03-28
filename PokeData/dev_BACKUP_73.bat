@@ -41,4 +41,8 @@ if not exist "node_modules" (
 )
 
 echo Starting development server...
+<<<<<<< HEAD
 pnpm dev
+=======
+pnpm dev
+>>>>>>> f3ac0060c1e7b16418d8f6ce77ca4315ba9eae18

@@ -1,10 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-<<<<<<< HEAD
-  import { setList } from './data/setList';
-  import { prismaticEvolutionsCards } from './data/prismaticEvolutionsCards';
-=======
->>>>>>> f3ac0060c1e7b16418d8f6ce77ca4315ba9eae18
   import { API_CONFIG } from './data/apiConfig';
   import { pokeDataService } from './services/pokeDataService';
   import { dbService } from './services/storage/db';
@@ -42,26 +37,12 @@
   async function handleSetSelect(event) {
     selectedSet = event.detail;
     console.log('Selected set:', selectedSet);
-<<<<<<< HEAD
-    
-    // Add extra logging for Stellar Crown set
-    if (selectedSet && selectedSet.name === 'Stellar Crown') {
-      console.log('Stellar Crown set details:', JSON.stringify(selectedSet));
-    }
-    
-    if (selectedSet && selectedSet.id) {
-      loadCardsForSet(selectedSet);
-    } else {
-      console.error('Selected set does not have an ID:', selectedSet);
-      error = "Invalid set data. Please try another set.";
-=======
     // Verify we have the set ID before loading cards
     if (selectedSet && selectedSet.id) {
       loadCardsForSet(selectedSet);
     } else {
       console.error('Selected set does not have an ID property:', selectedSet);
       error = 'Invalid set data. Please select a different set.';
->>>>>>> f3ac0060c1e7b16418d8f6ce77ca4315ba9eae18
     }
   }
   
@@ -79,11 +60,6 @@
       priceData = null;
       selectedCard = null;
       cardName = '';
-<<<<<<< HEAD
-      error = null;
-      
-      console.log(`Loading cards for set: ${set.code} (${set.name}) with ID: ${set.id}`);
-=======
       cardsInSet = [];
       
       // Show loading state
@@ -91,7 +67,6 @@
       error = null;
       
       console.log(`Loading cards for set ${set.name} (code: ${set.code}, id: ${set.id})...`);
->>>>>>> f3ac0060c1e7b16418d8f6ce77ca4315ba9eae18
       
       // Get cards for the selected set using the pokeDataService
       let cards = await pokeDataService.getCardsForSet(set.code, set.id);
@@ -141,9 +116,6 @@
         image_url: card.image_url || ''
       }));
       
-<<<<<<< HEAD
-      console.log(`Processed ${cardsInSet.length} cards for display`);
-=======
       console.log(`Transformed ${cardsInSet.length} cards for display`);
       
       // Check if any cards lack name property
@@ -154,7 +126,6 @@
       }
       
       isLoadingCards = false;
->>>>>>> f3ac0060c1e7b16418d8f6ce77ca4315ba9eae18
       
       isLoadingCards = false;
     } catch (err) {
@@ -359,19 +330,6 @@
       console.log('Initializing app and loading set list...');
       // Get the set list with caching
       const sets = await pokeDataService.getSetList();
-<<<<<<< HEAD
-      if (sets && sets.length > 0) {
-        availableSets = sets;
-        console.log(`Loaded ${sets.length} sets from API/cache`);
-      } else {
-        console.log('No sets returned from API/cache, using fallback data');
-        availableSets = setList;
-      }
-    } catch (error) {
-      console.error('Error loading set list:', error);
-      // Fallback to imported data
-      console.log('Using fallback set list due to error');
-=======
       console.log(`Loaded ${sets.length} sets`);
       
       // Verify all sets have an ID property
@@ -399,7 +357,6 @@
       // Fallback to imported data
       console.log('Using fallback set list');
       const { setList } = await import('./data/setList.js');
->>>>>>> f3ac0060c1e7b16418d8f6ce77ca4315ba9eae18
       availableSets = setList;
     }
     
