@@ -25,6 +25,7 @@ const config = {
 		},
 		// Allow direct asset access without going through SvelteKit's routing
 		prerender: {
+			default: true,
 			handleMissingId: 'ignore'
 		}
 	}
