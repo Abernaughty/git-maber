@@ -1,7 +1,6 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/images/*", "/*.ico", "/*.png"]
+    "rewrite": "/index.html"
   },
   "mimeTypes": {
     ".js": "application/javascript",
@@ -21,10 +20,6 @@
     "X-Content-Type-Options": "nosniff"
   },
   "routes": [
-    {
-      "route": "/git-maber/_app/*",
-      "rewrite": "/_app/*"
-    },
     {
       "route": "/*",
       "rewrite": "/index.html"
