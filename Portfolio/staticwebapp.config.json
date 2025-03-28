@@ -23,8 +23,7 @@
   "routes": [
     {
       "route": "/git-maber/_app/*",
-      "rewrite": "/_app/*",
-      "statusCode": 200
+      "rewrite": "/_app/*"
     },
     {
       "route": "/*",
