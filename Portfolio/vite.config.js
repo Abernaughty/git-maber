@@ -15,7 +15,7 @@ export default defineConfig({
     })
   ],
   // Base path for GitHub Pages
-  base: process.env.NODE_ENV === 'production' ? 'git-maber' : '',
+  base: process.env.NODE_ENV === 'production' ? '' : '',
   // Don't override the static assets directory
   publicDir: false,
   build: {
