@@ -1,0 +1,11 @@
+{
+    "navigationFallback": {
+        "rewrite": "/index.html"
+    },
+    "routes": [
+        {
+        "route": "/git-maber/*",
+        "rewrite": "/git-maber/index.html"
+        }
+    ]
+}

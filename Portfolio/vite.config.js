@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	// Base path for GitHub Pages
-	base: process.env.NODE_ENV === 'production' ? '/git-maber/' : '',
+	base: process.env.NODE_ENV === 'production' ? '/git-maber' : '',
 	// Don't override the static assets directory
 	publicDir: false,
 	build: {
