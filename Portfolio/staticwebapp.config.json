@@ -11,10 +11,13 @@
       ".map": "application/json",
       ".txt": "text/plain",
       ".ico": "image/x-icon",
-      ".svg": "image/svg+xml"
+      ".svg": "image/svg+xml",
+      ".ttf": "font/ttf",
+      ".woff": "font/woff",
+      ".woff2": "font/woff2"
     },
     "globalHeaders": {
-      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;",
+      "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:;",
       "X-Content-Type-Options": "nosniff"
     }
 }
