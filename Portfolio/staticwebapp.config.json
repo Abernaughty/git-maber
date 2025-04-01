@@ -23,15 +23,11 @@
   "routes": [
     {
       "route": "/_app/*",
-      "rewrite": "/_app/*"
+      "serve": "/_app/*"
     },
     {
       "route": "/static/*",
-      "rewrite": "/static/*"
-    },
-    {
-      "route": "/images/*",
-      "rewrite": "/images/*"
+      "serve": "/static/*"
     },
     {
       "route": "/*",
