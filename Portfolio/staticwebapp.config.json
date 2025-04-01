@@ -1,6 +1,7 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": ["/_app/*", "/static/*", "/favicon.ico", "/*.png", "/*.jpg", "/*.jpeg", "/*.svg", "/*.css", "/*.js"]
   },
   "mimeTypes": {
     ".js": "application/javascript",
@@ -20,6 +21,14 @@
     "X-Content-Type-Options": "nosniff"
   },
   "routes": [
+    {
+      "route": "/_app/*",
+      "serve": "/_app/*"
+    },
+    {
+      "route": "/static/*",
+      "serve": "/static/*"
+    },
     {
       "route": "/*",
       "rewrite": "/index.html"
