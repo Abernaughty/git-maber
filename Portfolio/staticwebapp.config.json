@@ -30,6 +30,10 @@
       "serve": "/static/*"
     },
     {
+      "route": "/images/*",
+      "serve": "/images/*"
+    },
+    {
       "route": "/*",
       "rewrite": "/index.html"
     }
