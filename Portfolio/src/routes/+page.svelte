@@ -15,7 +15,8 @@
     // Set the background image with the correct path
     const bgElement = document.querySelector('.hero-background-image');
     if (bgElement) {
-      bgElement.style.backgroundImage = `url('images/bear-coding.png')`;
+      const imagePath = `${basePath}/images/bear-coding.png`;
+      bgElement.style.backgroundImage = `url(${imagePath})`;
     }
   });
 </script>
@@ -190,7 +191,7 @@
     width: 100%;
     height: 100%;
     z-index: 0;
-    background-image: url('images/bear-coding.png');
+    background-image: url('../images/bear-coding.png');
     background-size: cover;
     background-position: center;
     filter: brightness(0.7);
