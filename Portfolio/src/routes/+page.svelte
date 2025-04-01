@@ -149,11 +149,11 @@
         </div>
         <div class="contact-method">
           <h3>GitHub</h3>
-          <a href="https://github.com/git-maber" target="_blank">github.com/git-maber</a>
+          <a href="https://github.com/Abernaughty/git-maber" target="_blank">github.com/Abernaughty/git-maber</a>
         </div>
         <div class="contact-method">
           <h3>LinkedIn</h3>
-          <a href="https://linkedin.com/in/mikeabernathy" target="_blank">linkedin.com/in/mikeabernathy</a>
+          <a href="https://www.linkedin.com/in/michael-abernathy-674a96217/" target="_blank">linkedin.com/in/michael-abernathy</a>
         </div>
       </div>
     </div>
@@ -191,7 +191,7 @@
     width: 100%;
     height: 100%;
     z-index: 0;
-    background-image: url('/images/bear-coding.png');
+    background-image: url('../images/bear-coding.png');
     background-size: cover;
     background-position: center;
     filter: brightness(0.7);
