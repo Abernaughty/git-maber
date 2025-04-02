@@ -166,16 +166,61 @@
 
       <!-- Project Card 2 -->
       <div class="card project-card">
-        <h3>Project Two</h3>
-        <p>A brief description of your second project. Highlight the main features and your contributions.</p>
+        <h3>Blackjack Web Application</h3>
+        <p>A fully functional web-based Blackjack game with comprehensive gameplay features, persistent state management, and responsive design. Converted from a Python/Tkinter application to a modern web experience.</p>
         <div class="tech-stack">
-          <span class="tech-tag">Svelte</span>
-          <span class="tech-tag">Node.js</span>
-          <span class="tech-tag">MongoDB</span>
+          <span class="tech-tag">HTML5</span>
+          <span class="tech-tag">CSS3</span>
+          <span class="tech-tag">JavaScript</span>
+          <span class="tech-tag">Local Storage</span>
         </div>
         <div class="project-links">
-          <a href="#" class="project-link">View Project</a>
-          <a href="#" class="project-link">Source Code</a>
+          <a href="https://blackjack.maber.io" class="project-link">Live Demo</a>
+          <a href="#" class="project-link open-modal" data-modal="blackjack-modal">View Details</a>
+        </div>
+      </div>
+      
+      <!-- Blackjack Project Modal -->
+      <div id="blackjack-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <h2>Blackjack Web Application</h2>
+          
+          <div class="modal-section">
+            <h3>Project Overview</h3>
+            <p>A fully functional web-based Blackjack game that brings the classic casino experience to the browser. Originally developed as a Python/Tkinter application, this project showcases a complete reimagining of the game using modern web technologies.</p>
+          </div>
+          
+          <div class="modal-section">
+            <h3>Key Features</h3>
+            <ul>
+              <li><strong>Full Blackjack Gameplay:</strong> Comprehensive rule set with Hit, Stand, Double, Split, and Surrender options</li>
+              <li><strong>Responsive Design:</strong> Seamless play across desktop and mobile devices</li>
+              <li><strong>Persistent Game State:</strong> Local Storage for maintaining game progress</li>
+              <li><strong>Realistic Card Visuals:</strong> Intuitive and engaging user interface</li>
+              <li><strong>Loan System:</strong> Keeps the game engaging when balance runs low</li>
+            </ul>
+          </div>
+          
+          <div class="modal-section">
+            <h3>Technical Details</h3>
+            <ul>
+              <li><strong>Frontend Technologies:</strong> HTML5, CSS3, JavaScript (ES6+)</li>
+              <li><strong>State Management:</strong> Local Storage API for game persistence</li>
+              <li><strong>Deployment:</strong> Azure Static Web Apps</li>
+              <li><strong>Responsive Approach:</strong> Mobile-first design with cross-browser compatibility</li>
+            </ul>
+          </div>
+          
+          <div class="modal-section">
+            <h3>Implementation Highlights</h3>
+            <p>The application demonstrates a sophisticated approach to game logic, state management, and user interaction. By leveraging modern web technologies, the project successfully transforms a desktop application into a dynamic web experience.</p>
+          </div>
+          
+          <div class="project-links modal-links">
+            <a href="https://github.com/Abernaughty/git-maber/tree/main/blackjack-web" class="btn">View Source Code</a>
+            <a href="https://blackjack.maber.io" class="btn btn-outline">Live Demo</a>
+          </div>
         </div>
       </div>
 
@@ -192,10 +237,11 @@
       <div class="skill-category">
         <h3>Frontend</h3>
         <ul class="skill-list">
-          <li>HTML5</li>
-          <li>CSS3</li>
-          <li>JavaScript</li>
-          <li>Svelte</li>
+          <li>JavaScript (ES6+), HTML5, CSS3</li>
+          <li>Svelte / SvelteKit</li>
+          <li>Progressive Web App (PWA) concepts</li>
+          <li>Responsive design</li>
+          <li>CSS theming and styling</li>
         </ul>
       </div>
 
@@ -203,17 +249,19 @@
         <h3>Backend</h3>
         <ul class="skill-list">
           <li>Node.js</li>
-          <li>Express</li>
-          <li>RESTful APIs</li>
+          <li>RESTful API consumption</li>
+          <li>Serverless architecture</li>
         </ul>
       </div>
 
       <div class="skill-category">
         <h3>Tools & Others</h3>
         <ul class="skill-list">
-          <li>Git</li>
-          <li>VS Code</li>
-          <li>Responsive Design</li>
+          <li>Git & GitHub</li>
+          <li>CI/CD pipelines</li>
+          <li>Azure Static Web Apps</li>
+          <li>Python (logic development, Tkinter GUI)</li>
+          <li>Algorithmic thinking & logic implementation</li>
         </ul>
       </div>
     </div>
