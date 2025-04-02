@@ -1,18 +1,19 @@
 # Blackjack Game
 
-A Python-based implementation of the classic Blackjack card game that runs in the terminal.
+A Python implementation of the classic Blackjack card game with a graphical user interface built using Tkinter.
 
 ## Features
 
-- Terminal-based user interface
+- Full graphical interface with card visuals
 - Complete implementation of standard Blackjack rules
 - Player balance tracking and persistence
-- Card visualization in the terminal
+- Visual card representation
 - Betting system
 
 ## Requirements
 
 - Python 3.6 or higher
+- Tkinter (included with most Python installations)
 
 ## Installation
 
@@ -47,7 +48,7 @@ A Python-based implementation of the classic Blackjack card game that runs in th
 
 ## Project Structure
 
-- `Blackjack.py` - Main game file containing all game logic
+- `Blackjack.py` - Main game file containing all game logic and UI code
 - `bj_balance.txt` - File storing player's current balance
 - `images/` - Directory containing card images and assets
 
