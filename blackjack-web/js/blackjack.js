@@ -1,6 +1,19 @@
 /**
- * Blackjack Game
- * Main game logic
+ * Blackjack Game - Main game logic
+ * 
+ * This file contains the core game logic for the Blackjack card game.
+ * It handles all gameplay mechanics including dealing, betting, player actions,
+ * hand evaluation, and game state management.
+ * 
+ * Game rules implemented:
+ * - Standard blackjack rules with dealer standing on 17
+ * - Blackjack pays 3:2
+ * - Player can hit, stand, double down, split pairs, and surrender
+ * - Split aces receive only one additional card each
+ * - Player can double after splitting
+ * 
+ * @author Abernaughty
+ * @version 1.0.0
  */
 
 class Blackjack {
