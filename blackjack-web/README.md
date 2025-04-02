@@ -17,6 +17,14 @@ A browser-based implementation of the classic casino card game Blackjack, conver
 - Responsive design that works on desktop and mobile
 - Loan system when balance runs low
 
+## Technologies Used
+
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6+)
+- Local Storage API for persistence
+- No external libraries or frameworks required
+
 ## How to Play
 
 1. Use the slider to set your bet amount
@@ -30,12 +38,17 @@ A browser-based implementation of the classic casino card game Blackjack, conver
 
 The goal is to get closer to 21 than the dealer without going over. Face cards are worth 10, Aces are worth 1 or 11, and all other cards are worth their face value.
 
-## Technologies Used
+## Project Structure
 
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- Local Storage API for state persistence
+- `index.html` - Main HTML file
+- `css/` - Stylesheet directory
+  - `styles.css` - Main CSS file
+- `js/` - JavaScript files
+  - `blackjack.js` - Game logic
+  - `ui.js` - User interface management
+  - `storage.js` - Local storage handling
+- `assets/` - Images and other resources
+  - `images/` - Card faces and UI elements
 
 ## Installation and Setup
 
@@ -57,7 +70,7 @@ npx http-server
 
 ## Deployment
 
-This app is deployed on Azure Static Web Apps. The live version can be found at [YOUR-AZURE-URL-HERE].
+This app is deployed on Azure Static Web Apps. The live version can be found at [blackjack.maber.io](https://blackjack.maber.io/).
 
 ## Browser Compatibility
 
@@ -67,6 +80,12 @@ Tested and working on:
 - Edge (latest)
 - Safari (latest)
 
+## Requirements
+
+- Modern web browser with JavaScript enabled
+- No server-side dependencies
+- No build process required
+
 ## Future Improvements
 
 - Add sound effects for card dealing and game actions
@@ -75,11 +94,15 @@ Tested and working on:
 - Create a high score leaderboard
 - Add more blackjack variations
 
+## Related Projects
+
+A Python version of this game is available in the [Blackjack](/Blackjack) directory of the main repository.
+
 ## Credits
 
-- Card images from [the original Python project]
-- Felt background texture from [the original Python project]
+- Card images from [the original Python project](/Blackjack/images/card_faces)
+- Felt background texture from [the original Python project](/Blackjack/images/felt.png)
 
 ## License
 
-[Choose an appropriate license, e.g., MIT]
+This project is for personal and educational use.
