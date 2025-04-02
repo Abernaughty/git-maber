@@ -1,6 +1,7 @@
 {
   "name": "poke-data-project",
   "version": "0.1.0",
+  "description": "Pokémon Card Price Checker built with Svelte",
   "private": true,
   "scripts": {
     "build": "rollup -c",
@@ -27,5 +28,11 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "packageManager": "pnpm@8.15.4"
+  "packageManager": "pnpm@8.15.4",
+  "keywords": [
+    "svelte",
+    "pokemon",
+    "card-prices",
+    "tcg"
+  ]
 }
