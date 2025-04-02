@@ -115,7 +115,8 @@
           <span class="tech-tag">CSS</span>
         </div>
         <div class="project-links">
-          <a href="https://github.com/Abernaughty/git-maber/tree/main/PokeData" class="project-link">Source Code</a>
+          <a href="https://pokedata.maber.io" class="project-link" target="_blank" rel="noopener noreferrer">Live Demo</a>
+          <a href="https://github.com/Abernaughty/git-maber/tree/main/PokeData" class="project-link" target="_blank" rel="noopener noreferrer">Source Code</a>
           <a href="#" class="project-link open-modal" data-modal="pokedata-modal">View Details</a>
         </div>
       </div>
@@ -157,7 +158,8 @@
           </div>
           
           <div class="project-links modal-links">
-            <a href="https://github.com/git-maber/PokeData" class="btn">View Source Code</a>
+            <a href="https://github.com/Abernaughty/git-maber/tree/main/PokeData" class="btn" target="_blank" rel="noopener noreferrer">View Source Code</a>
+            <a href="https://pokedata.maber.io" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Live Demo</a>
           </div>
         </div>
       </div>
@@ -175,7 +177,8 @@
           <span class="tech-tag">Local Storage</span>
         </div>
         <div class="project-links">
-          <a href="https://blackjack.maber.io" class="project-link">Live Demo</a>
+          <a href="https://blackjack.maber.io" class="project-link" target="_blank" rel="noopener noreferrer">Live Demo</a>
+          <a href="https://github.com/Abernaughty/git-maber/tree/main/blackjack-web" class="project-link" target="_blank" rel="noopener noreferrer">Source Code</a>
           <a href="#" class="project-link open-modal" data-modal="blackjack-modal">View Details</a>
         </div>
       </div>
@@ -218,8 +221,8 @@
           </div>
           
           <div class="project-links modal-links">
-            <a href="https://github.com/Abernaughty/git-maber/tree/main/blackjack-web" class="btn">View Source Code</a>
-            <a href="https://blackjack.maber.io" class="btn btn-outline">Live Demo</a>
+            <a href="https://github.com/Abernaughty/git-maber/tree/main/blackjack-web" class="btn" target="_blank" rel="noopener noreferrer">View Source Code</a>
+            <a href="https://blackjack.maber.io" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Live Demo</a>
           </div>
         </div>
       </div>
