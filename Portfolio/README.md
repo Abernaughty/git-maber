@@ -8,6 +8,13 @@ Make sure you have the following installed:
 - [Node.js](https://nodejs.org/) (v16 or newer recommended)
 - npm (comes with Node.js) or [pnpm](https://pnpm.io/)
 
+## Dependencies
+
+- SvelteKit (v2.0.0 or newer)
+- Vite (v5.0.0 or newer)
+- Svelte (v4.2.7 or newer)
+- gh-pages (for deployment)
+
 ## Setup Instructions
 
 1. **Install dependencies:**
@@ -93,7 +100,7 @@ This creates a production-ready version in the `build` directory which you can d
 
 - [Vercel](https://vercel.com/)
 - [Netlify](https://www.netlify.com/)
-- [GitHub Pages](https://pages.github.com/)
+- [GitHub Pages](https://pages.github.com/) (use `npm run deploy` if configured)
 - Any other static site hosting service
 
 ## Further Enhancements
