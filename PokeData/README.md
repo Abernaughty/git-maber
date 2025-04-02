@@ -26,6 +26,13 @@ This script will automatically check and install all required dependencies befor
 - Node.js (v14 or higher)
 - Internet connection (for initial setup and API calls)
 
+## Dependencies
+
+- Svelte (UI framework)
+- Rollup (module bundler)
+- PNPM (package manager)
+- SirvCLI (static file server)
+
 ## Manual Installation
 
 If you prefer to set up manually, this project uses pnpm for package management.
