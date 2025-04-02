@@ -30,6 +30,14 @@ package-lock.json
 *.sln
 *.sw?
 
+# Vim swap files
+*.sw[a-p]
+.*.sw[a-p]
+*_BACKUP_*.bat
+*_BASE_*.bat
+*_LOCAL_*.bat
+*_REMOTE_*.bat
+
 # OS specific files
 .DS_Store
 Thumbs.db
