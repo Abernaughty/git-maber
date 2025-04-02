@@ -14,6 +14,7 @@ A Python implementation of the classic Blackjack card game with a graphical user
 
 - Python 3.6 or higher
 - Tkinter (included with most Python installations)
+- PIL/Pillow (Python Imaging Library) for image handling
 
 ## Installation
 
@@ -22,12 +23,17 @@ A Python implementation of the classic Blackjack card game with a graphical user
    git clone https://github.com/Abernaughty/git-maber.git
    ```
 
-2. Navigate to the Blackjack directory
+2. Install required dependencies
+   ```
+   pip install pillow
+   ```
+
+3. Navigate to the Blackjack directory
    ```
    cd git-maber/Blackjack
    ```
 
-3. Run the game
+4. Run the game
    ```
    python Blackjack.py
    ```
@@ -41,6 +47,7 @@ A Python implementation of the classic Blackjack card game with a graphical user
    - Stand (keep current hand)
    - Double Down (double your bet and get one more card)
    - Split (if you have two cards of the same value)
+   - Surrender (forfeit half your bet and end the hand)
 
 4. Try to get as close to 21 as possible without going over
 5. The dealer will then play according to standard rules
@@ -51,6 +58,8 @@ A Python implementation of the classic Blackjack card game with a graphical user
 - `Blackjack.py` - Main game file containing all game logic and UI code
 - `bj_balance.txt` - File storing player's current balance
 - `images/` - Directory containing card images and assets
+  - `card_faces/` - Card face images
+  - `felt.png` - Table background texture
 
 ## Game Rules
 
@@ -60,6 +69,8 @@ A Python implementation of the classic Blackjack card game with a graphical user
 - Aces are worth 1 or 11, whichever is more favorable
 - If you exceed 21, you "bust" and lose your bet
 - Blackjack (an Ace and a 10-value card) pays 3:2
+- Dealer must hit on 16 or less and stand on 17 or more
+- Split hands are played separately with equal bets
 
 ## Customization
 
