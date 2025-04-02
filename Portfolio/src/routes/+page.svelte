@@ -263,6 +263,7 @@
           <li>Git & GitHub</li>
           <li>CI/CD pipelines</li>
           <li>Azure Static Web Apps</li>
+          <li>Azure API Management</li>
           <li>Python (logic development, Tkinter GUI)</li>
           <li>Algorithmic thinking & logic implementation</li>
         </ul>
