@@ -18,6 +18,45 @@
       bgElement.style.backgroundImage = `url('images/bear-coding.png')`;
     }
   });
+  // JavaScript to add at the end of your +page.svelte script section
+
+  // Modal handling
+  onMount(() => {
+    // Get all elements with class 'open-modal'
+    const openModalButtons = document.querySelectorAll('.open-modal');
+    
+    // Add click event listeners to all open modal buttons
+    openModalButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modalId = button.getAttribute('data-modal');
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.style.display = 'block';
+        }
+      });
+    });
+    
+    // Get all elements with class 'close-modal'
+    const closeModalButtons = document.querySelectorAll('.close-modal');
+    
+    // Add click event listeners to all close modal buttons
+    closeModalButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const modal = button.closest('.modal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+      });
+    });
+    
+    // Close modal when clicking outside of modal content
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.style.display = 'none';
+      }
+    });
+  });
 </script>
 
 <svelte:head>
@@ -65,19 +104,65 @@
     <h2>My Projects</h2>
     <div class="grid">
       <!-- Project Card 1 -->
+      <!-- PokeData Project Card - Add this to the projects section in your +page.svelte file -->
       <div class="card project-card">
-        <h3>Project One</h3>
-        <p>A brief description of your first project. What does it do? What technologies did you use?</p>
+        <h3>Pokémon Card Price Checker</h3>
+        <p>A responsive web application for looking up Pokémon card pricing data from various market sources. Features include searchable set and card selection, offline caching for improved performance, and detailed pricing information.</p>
         <div class="tech-stack">
-          <span class="tech-tag">HTML</span>
+          <span class="tech-tag">Svelte</span>
+          <span class="tech-tag">IndexedDB</span>
+          <span class="tech-tag">REST API</span>
           <span class="tech-tag">CSS</span>
-          <span class="tech-tag">JavaScript</span>
         </div>
         <div class="project-links">
-          <a href="#" class="project-link">View Project</a>
-          <a href="#" class="project-link">Source Code</a>
+          <a href="https://github.com/Abernaughty/git-maber/tree/main/PokeData" class="project-link">Source Code</a>
+          <a href="#" class="project-link open-modal" data-modal="pokedata-modal">View Details</a>
         </div>
       </div>
+
+      <!-- Modal with more detailed project information - Add this at the end of your +page.svelte file -->
+      <div id="pokedata-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-modal">&times;</span>
+          <h2>Pokémon Card Price Checker</h2>
+          
+          <div class="modal-section">
+            <h3>Project Overview</h3>
+            <p>The Pokémon Card Price Checker is a responsive web application that allows users to quickly and efficiently look up current market prices for Pokémon trading cards. Built with modern web technologies, this tool helps collectors and traders make informed decisions by providing real-time pricing data from various sources.</p>
+          </div>
+          
+          <div class="modal-section">
+            <h3>Key Features</h3>
+            <ul>
+              <li><strong>Comprehensive Card Search:</strong> Searchable dropdowns for set and card selection</li>
+              <li><strong>Enhanced Data Handling:</strong> Offline-first approach with persistent local storage</li>
+              <li><strong>Real-time Pricing:</strong> Up-to-date pricing from multiple market sources</li>
+              <li><strong>Responsive Design:</strong> Optimized for both desktop and mobile devices</li>
+            </ul>
+          </div>
+          
+          <div class="modal-section">
+            <h3>Technical Details</h3>
+            <ul>
+              <li><strong>Frontend Framework:</strong> Svelte.js</li>
+              <li><strong>Data Storage:</strong> IndexedDB for offline caching</li>
+              <li><strong>API Integration:</strong> Custom REST API endpoints with authentication</li>
+              <li><strong>Build Tools:</strong> Rollup.js for module bundling</li>
+            </ul>
+          </div>
+          
+          <div class="modal-section">
+            <h3>Implementation Highlights</h3>
+            <p>The application implements a clean data flow architecture where UI components interact with data services, which handle all API communication and caching. The IndexedDB-based caching system stores set lists, card data, and pricing information locally, reducing unnecessary network requests and providing offline functionality.</p>
+          </div>
+          
+          <div class="project-links modal-links">
+            <a href="https://github.com/git-maber/PokeData" class="btn">View Source Code</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSS styles to add to your <style> section -->
 
       <!-- Project Card 2 -->
       <div class="card project-card">
@@ -319,4 +404,103 @@
       grid-template-columns: 1fr;
     }
   }
+  /* Add these styles to your page's <style> section */
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: var(--surface);
+  margin: 5% auto;
+  padding: var(--space-lg);
+  border-radius: var(--border-radius);
+  max-width: 800px;
+  width: 90%;
+  animation: modalFadeIn 0.3s;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.close-modal {
+  color: var(--text);
+  float: right;
+  font-size: var(--fs-xl);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: var(--primary);
+}
+
+.modal-section {
+  margin-bottom: var(--space-lg);
+}
+
+.modal-section h3 {
+  color: var(--primary);
+  margin-bottom: var(--space-sm);
+}
+
+.modal-section ul {
+  list-style-position: inside;
+  margin-bottom: var(--space-md);
+}
+
+.modal-section ul li {
+  margin-bottom: var(--space-sm);
+}
+
+.modal-links {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-xl);
+}
+
+/* Ensure the project card is properly formatted */
+.project-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.project-card h3 {
+  color: var(--primary);
+}
+
+.project-card .project-links {
+  margin-top: auto;
+  padding-top: var(--space-md);
+}
+
+/* Button to open modal */
+.open-modal {
+  cursor: pointer;
+}
+
+.open-modal:hover {
+  text-decoration: underline;
+}
 </style>
