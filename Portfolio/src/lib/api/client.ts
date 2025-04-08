@@ -23,9 +23,18 @@ export interface RequestOptions {
 }
 
 /**
+ * Check if code is running in a browser environment
+ */
+const isBrowser = typeof window !== 'undefined';
+
+/**
  * Get the authorization header if a token exists
  */
 const getAuthHeader = (): Record<string, string> => {
+  if (!isBrowser) {
+    return {};
+  }
+  
   const token = localStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
