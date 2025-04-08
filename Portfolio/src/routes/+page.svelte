@@ -1,10 +1,14 @@
 <script>
   import { onMount } from 'svelte';
+  import ProjectCard from '$lib/components/ProjectCard.svelte';
+  import { projectsStore, featuredProjects } from '$lib/stores';
   
   // Initialize variables
   let basePath = '';
+  let loading = false;
+  let error = null;
   
-  onMount(() => {
+  onMount(async () => {
     // Determine basePath based on current URL
     if (window.location.pathname.includes('/git-maber/')) {
       basePath = '/git-maber';
@@ -15,47 +19,20 @@
     // Set the background image with the correct path
     const bgElement = document.querySelector('.hero-background-image');
     if (bgElement) {
-      bgElement.style.backgroundImage = `url('images/bear-coding.png')`;
+      const imagePath = `${basePath}/images/bear-coding.png`;
+      bgElement.style.backgroundImage = `url(${imagePath})`;
     }
-  });
-  // JavaScript to add at the end of your +page.svelte script section
-
-  // Modal handling
-  onMount(() => {
-    // Get all elements with class 'open-modal'
-    const openModalButtons = document.querySelectorAll('.open-modal');
     
-    // Add click event listeners to all open modal buttons
-    openModalButtons.forEach(button => {
-      button.addEventListener('click', (e) => {
-        e.preventDefault();
-        const modalId = button.getAttribute('data-modal');
-        const modal = document.getElementById(modalId);
-        if (modal) {
-          modal.style.display = 'block';
-        }
-      });
-    });
-    
-    // Get all elements with class 'close-modal'
-    const closeModalButtons = document.querySelectorAll('.close-modal');
-    
-    // Add click event listeners to all close modal buttons
-    closeModalButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const modal = button.closest('.modal');
-        if (modal) {
-          modal.style.display = 'none';
-        }
-      });
-    });
-    
-    // Close modal when clicking outside of modal content
-    window.addEventListener('click', (e) => {
-      if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-      }
-    });
+    // Fetch projects
+    try {
+      loading = true;
+      await projectsStore.fetchProjects();
+      loading = false;
+    } catch (err) {
+      loading = false;
+      error = err instanceof Error ? err.message : 'Failed to load projects';
+      console.error('Error loading projects:', err);
+    }
   });
 </script>
 
@@ -102,133 +79,34 @@
 <section id="projects" class="section">
   <div class="container">
     <h2>My Projects</h2>
-    <div class="grid">
-      <!-- Project Card 1 -->
-      <!-- PokeData Project Card - Add this to the projects section in your +page.svelte file -->
-      <div class="card project-card">
-        <h3>Pokémon Card Price Checker</h3>
-        <p>A responsive web application for looking up Pokémon card pricing data from various market sources. Features include searchable set and card selection, offline caching for improved performance, and detailed pricing information.</p>
-        <div class="tech-stack">
-          <span class="tech-tag">Svelte</span>
-          <span class="tech-tag">IndexedDB</span>
-          <span class="tech-tag">REST API</span>
-          <span class="tech-tag">CSS</span>
-        </div>
-        <div class="project-links">
-          <a href="https://pokedata.maber.io" class="project-link" target="_blank" rel="noopener noreferrer">Live Demo</a>
-          <a href="https://github.com/Abernaughty/git-maber/tree/main/PokeData" class="project-link" target="_blank" rel="noopener noreferrer">Source Code</a>
-          <a href="#" class="project-link open-modal" data-modal="pokedata-modal">View Details</a>
-        </div>
+    
+    {#if $projectsStore.loading}
+      <div class="loading-container">
+        <p>Loading projects...</p>
       </div>
-
-      <!-- Modal with more detailed project information - Add this at the end of your +page.svelte file -->
-      <div id="pokedata-modal" class="modal">
-        <div class="modal-content">
-          <span class="close-modal">&times;</span>
-          <h2>Pokémon Card Price Checker</h2>
-          
-          <div class="modal-section">
-            <h3>Project Overview</h3>
-            <p>The Pokémon Card Price Checker is a responsive web application that allows users to quickly and efficiently look up current market prices for Pokémon trading cards. Built with modern web technologies, this tool helps collectors and traders make informed decisions by providing real-time pricing data from various sources.</p>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Key Features</h3>
-            <ul>
-              <li><strong>Comprehensive Card Search:</strong> Searchable dropdowns for set and card selection</li>
-              <li><strong>Enhanced Data Handling:</strong> Offline-first approach with persistent local storage</li>
-              <li><strong>Real-time Pricing:</strong> Up-to-date pricing from multiple market sources</li>
-              <li><strong>Responsive Design:</strong> Optimized for both desktop and mobile devices</li>
-            </ul>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Technical Details</h3>
-            <ul>
-              <li><strong>Frontend Framework:</strong> Svelte.js</li>
-              <li><strong>Data Storage:</strong> IndexedDB for offline caching</li>
-              <li><strong>API Integration:</strong> Custom REST API endpoints with authentication</li>
-              <li><strong>Build Tools:</strong> Rollup.js for module bundling</li>
-            </ul>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Implementation Highlights</h3>
-            <p>The application implements a clean data flow architecture where UI components interact with data services, which handle all API communication and caching. The IndexedDB-based caching system stores set lists, card data, and pricing information locally, reducing unnecessary network requests and providing offline functionality.</p>
-          </div>
-          
-          <div class="project-links modal-links">
-            <a href="https://github.com/Abernaughty/git-maber/tree/main/PokeData" class="btn" target="_blank" rel="noopener noreferrer">View Source Code</a>
-            <a href="https://pokedata.maber.io" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Live Demo</a>
-          </div>
-        </div>
+    {:else if $projectsStore.error}
+      <div class="error-container">
+        <p>Error loading projects: {$projectsStore.error}</p>
+        <button class="btn" on:click={() => projectsStore.fetchProjects()}>Retry</button>
       </div>
-
-      <!-- CSS styles to add to your <style> section -->
-
-      <!-- Project Card 2 -->
-      <div class="card project-card">
-        <h3>Blackjack Web Application</h3>
-        <p>A fully functional web-based Blackjack game with comprehensive gameplay features, persistent state management, and responsive design. Converted from a Python/Tkinter application to a modern web experience.</p>
-        <div class="tech-stack">
-          <span class="tech-tag">HTML5</span>
-          <span class="tech-tag">CSS3</span>
-          <span class="tech-tag">JavaScript</span>
-          <span class="tech-tag">Local Storage</span>
-        </div>
-        <div class="project-links">
-          <a href="https://blackjack.maber.io" class="project-link" target="_blank" rel="noopener noreferrer">Live Demo</a>
-          <a href="https://github.com/Abernaughty/git-maber/tree/main/blackjack-web" class="project-link" target="_blank" rel="noopener noreferrer">Source Code</a>
-          <a href="#" class="project-link open-modal" data-modal="blackjack-modal">View Details</a>
-        </div>
+    {:else if $projectsStore.projects.length === 0}
+      <div class="empty-container">
+        <p>No projects found.</p>
       </div>
-      
-      <!-- Blackjack Project Modal -->
-      <div id="blackjack-modal" class="modal">
-        <div class="modal-content">
-          <span class="close-modal">&times;</span>
-          <h2>Blackjack Web Application</h2>
-          
-          <div class="modal-section">
-            <h3>Project Overview</h3>
-            <p>A fully functional web-based Blackjack game that brings the classic casino experience to the browser. Originally developed as a Python/Tkinter application, this project showcases a complete reimagining of the game using modern web technologies.</p>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Key Features</h3>
-            <ul>
-              <li><strong>Full Blackjack Gameplay:</strong> Comprehensive rule set with Hit, Stand, Double, Split, and Surrender options</li>
-              <li><strong>Responsive Design:</strong> Seamless play across desktop and mobile devices</li>
-              <li><strong>Persistent Game State:</strong> Local Storage for maintaining game progress</li>
-              <li><strong>Realistic Card Visuals:</strong> Intuitive and engaging user interface</li>
-              <li><strong>Loan System:</strong> Keeps the game engaging when balance runs low</li>
-            </ul>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Technical Details</h3>
-            <ul>
-              <li><strong>Frontend Technologies:</strong> HTML5, CSS3, JavaScript (ES6+)</li>
-              <li><strong>State Management:</strong> Local Storage API for game persistence</li>
-              <li><strong>Deployment:</strong> Azure Static Web Apps</li>
-              <li><strong>Responsive Approach:</strong> Mobile-first design with cross-browser compatibility</li>
-            </ul>
-          </div>
-          
-          <div class="modal-section">
-            <h3>Implementation Highlights</h3>
-            <p>The application demonstrates a sophisticated approach to game logic, state management, and user interaction. By leveraging modern web technologies, the project successfully transforms a desktop application into a dynamic web experience.</p>
-          </div>
-          
-          <div class="project-links modal-links">
-            <a href="https://github.com/Abernaughty/git-maber/tree/main/blackjack-web" class="btn" target="_blank" rel="noopener noreferrer">View Source Code</a>
-            <a href="https://blackjack.maber.io" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Live Demo</a>
-          </div>
-        </div>
+    {:else}
+      <div class="grid">
+        {#each $projectsStore.projects as project (project.id)}
+          <ProjectCard 
+            title={project.title}
+            description={project.description}
+            techStack={project.techStack}
+            imageUrl={project.imageUrl}
+            liveUrl={project.liveUrl}
+            sourceUrl={project.sourceUrl}
+          />
+        {/each}
       </div>
-
-      <!-- Add more project cards as needed -->
-    </div>
+    {/if}
   </div>
 </section>
 
@@ -240,11 +118,10 @@
       <div class="skill-category">
         <h3>Frontend</h3>
         <ul class="skill-list">
-          <li>JavaScript (ES6+), HTML5, CSS3</li>
-          <li>Svelte / SvelteKit</li>
-          <li>Progressive Web App (PWA) concepts</li>
-          <li>Responsive design</li>
-          <li>CSS theming and styling</li>
+          <li>HTML5</li>
+          <li>CSS3</li>
+          <li>JavaScript</li>
+          <li>Svelte</li>
         </ul>
       </div>
 
@@ -252,20 +129,18 @@
         <h3>Backend</h3>
         <ul class="skill-list">
           <li>Node.js</li>
-          <li>RESTful API consumption</li>
-          <li>Serverless architecture</li>
+          <li>Express</li>
+          <li>RESTful APIs</li>
         </ul>
       </div>
 
       <div class="skill-category">
         <h3>Tools & Others</h3>
         <ul class="skill-list">
-          <li>Git & GitHub</li>
-          <li>CI/CD pipelines</li>
-          <li>Azure Static Web Apps</li>
+          <li>Git</li>
+          <li>VS Code</li>
+          <li>Responsive Design</li>
           <li>Azure API Management</li>
-          <li>Python (logic development, Tkinter GUI)</li>
-          <li>Algorithmic thinking & logic implementation</li>
         </ul>
       </div>
     </div>
@@ -285,11 +160,11 @@
         </div>
         <div class="contact-method">
           <h3>GitHub</h3>
-          <a href="https://github.com/Abernaughty/git-maber" target="_blank">github.com/Abernaughty/git-maber</a>
+          <a href="https://github.com/git-maber" target="_blank" rel="noopener noreferrer">github.com/git-maber</a>
         </div>
         <div class="contact-method">
           <h3>LinkedIn</h3>
-          <a href="https://www.linkedin.com/in/michael-abernathy-674a96217/" target="_blank">linkedin.com/in/michael-abernathy</a>
+          <a href="https://linkedin.com/in/mikeabernathy" target="_blank" rel="noopener noreferrer">linkedin.com/in/mikeabernathy</a>
         </div>
       </div>
     </div>
@@ -327,7 +202,7 @@
     width: 100%;
     height: 100%;
     z-index: 0;
-    background-image: url('images/bear-coding.png');
+    background-image: url('/images/bear-coding.png');
     background-size: cover;
     background-position: center;
     filter: brightness(0.7);
@@ -441,6 +316,26 @@
     margin-bottom: var(--space-sm);
   }
 
+  /* Loading, error, and empty states */
+  .loading-container,
+  .error-container,
+  .empty-container {
+    padding: var(--space-lg);
+    text-align: center;
+    background-color: var(--surface);
+    border-radius: var(--border-radius);
+    margin: var(--space-lg) 0;
+  }
+
+  .error-container {
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+
+  .error-container button {
+    margin-top: var(--space-md);
+  }
+
   @media (max-width: 768px) {
     .cta-buttons {
       flex-direction: column;
@@ -456,103 +351,4 @@
       grid-template-columns: 1fr;
     }
   }
-  /* Add these styles to your page's <style> section */
-
-/* Modal styles */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px);
-}
-
-.modal-content {
-  background-color: var(--surface);
-  margin: 5% auto;
-  padding: var(--space-lg);
-  border-radius: var(--border-radius);
-  max-width: 800px;
-  width: 90%;
-  animation: modalFadeIn 0.3s;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.close-modal {
-  color: var(--text);
-  float: right;
-  font-size: var(--fs-xl);
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: var(--primary);
-}
-
-.modal-section {
-  margin-bottom: var(--space-lg);
-}
-
-.modal-section h3 {
-  color: var(--primary);
-  margin-bottom: var(--space-sm);
-}
-
-.modal-section ul {
-  list-style-position: inside;
-  margin-bottom: var(--space-md);
-}
-
-.modal-section ul li {
-  margin-bottom: var(--space-sm);
-}
-
-.modal-links {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--space-xl);
-}
-
-/* Ensure the project card is properly formatted */
-.project-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.project-card h3 {
-  color: var(--primary);
-}
-
-.project-card .project-links {
-  margin-top: auto;
-  padding-top: var(--space-md);
-}
-
-/* Button to open modal */
-.open-modal {
-  cursor: pointer;
-}
-
-.open-modal:hover {
-  text-decoration: underline;
-}
 </style>
