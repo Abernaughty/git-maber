@@ -1,0 +1,362 @@
+# Active Context
+
+## Overview
+This document captures the current work focus, recent changes, next steps, active decisions and considerations, important patterns and preferences, and learnings and project insights for the Portfolio Enhancement Project.
+
+## Current Work Focus
+
+### Primary Focus
+The current primary focus is on enhancing the portfolio through the `portfolio-updates` branch with improved architecture and TypeScript integration:
+
+1. **Implementing a proper API client structure** with mock data to simulate backend functionality.
+   - Create API client modules for projects, blog, and auth
+   - Implement type-safe API requests with TypeScript
+   - Add mock data for development and testing
+   - Structure the API layer for future backend integration
+
+2. **Enhancing TypeScript support** throughout the codebase.
+   - Add type definitions for all data structures
+   - Fix TypeScript errors in existing code
+   - Ensure proper typing for all functions and components
+   - Improve developer experience with better type safety
+
+3. **Creating Svelte stores for state management**.
+   - Implement stores for projects, blog, and authentication
+   - Add proper loading, error, and empty states
+   - Create derived stores for filtered data
+   - Ensure reactive updates throughout the application
+
+4. **Improving browser compatibility and error handling**.
+   - Add robust error handling for API requests
+   - Implement fallbacks for browser-specific features
+   - Ensure consistent behavior across different browsers
+   - Add graceful degradation for older browsers
+
+### Secondary Focus
+While the primary focus is on architecture improvements, we're also addressing:
+
+1. **Server-Side Rendering (SSR) compatibility**.
+   - Add browser environment detection for client-side code
+   - Fix localStorage usage in authentication to be browser-only
+   - Ensure proper hydration of components
+   - Prevent SSR-related errors during build and runtime
+
+2. **Asset management and optimization**.
+   - Add project images to the static directory
+   - Fix image paths to resolve 404 errors
+   - Optimize images for performance
+   - Ensure proper asset loading
+
+3. **Preparing for future backend integration** - laying the groundwork for the planned Express.js backend and Azure integration.
+   - Design API interfaces that will work with real backend
+   - Structure code to minimize changes when backend is added
+   - Document integration points for future development
+   - Maintain alignment with the overall project vision
+
+## Recent Changes
+
+1. **Created the Memory Bank documentation** to establish a clear understanding of the project goals, architecture, and technical approach.
+
+2. **Defined the project scope** in the project brief, outlining the transformation from a static portfolio to a dynamic, Azure-integrated showcase.
+
+3. **Established the system architecture** with a clear separation between frontend, API, and data layers, all integrated with Azure services.
+
+4. **Selected the technology stack** based on the existing portfolio's foundation, with enhancements for full-stack capabilities.
+
+5. **Analyzed the existing portfolio codebase** to understand its structure, strengths, and limitations. Key findings:
+   - The existing portfolio is a simple SvelteKit static site
+   - It uses a single-page design with sections for intro, about, projects, skills, and contact
+   - The codebase is minimal with a clean structure
+   - It uses CSS variables for theming and responsive design
+   - The project structure includes:
+     - `src/routes/+page.svelte`: Main content page
+     - `src/routes/+layout.svelte`: Site layout with header and footer
+     - `src/lib/components/ProjectCard.svelte`: Component for displaying projects
+     - `src/app.css`: Global styles and CSS variables
+   - The site has a dark theme by default
+   - It's using SvelteKit v2 with the static adapter
+
+6. **Created a portfolio-updates branch** for implementing architecture improvements:
+   - Created a new branch to safely implement enhancements
+   - Established workflow for branch management
+   - Set up development environment for the branch
+
+7. **Implemented a proper API client structure with mock data**:
+   - Created API client modules in `src/lib/api/` directory
+   - Implemented client.ts for base API functionality
+   - Added type definitions in types.ts
+   - Created specific API modules (projects.ts, blog.ts, auth.ts)
+   - Added mock data for development and testing
+
+8. **Added TypeScript support with type definitions**:
+   - Converted key files to TypeScript
+   - Created interfaces for data structures
+   - Added type safety to function parameters and returns
+   - Improved developer experience with better type checking
+
+9. **Created Svelte stores for state management**:
+   - Implemented stores for projects, blog, and authentication
+   - Added proper loading, error, and empty states
+   - Created store creation functions with TypeScript
+   - Connected stores to API client functions
+
+10. **Improved error handling and browser compatibility**:
+    - Added robust error handling for API requests
+    - Implemented fallbacks for browser-specific features
+    - Added try/catch blocks for error handling
+    - Created user-friendly error messages
+
+11. **Added SSR compatibility checks**:
+    - Fixed localStorage usage in authentication to be browser-only
+    - Implemented browser environment detection with `typeof window !== 'undefined'`
+    - Ensured proper hydration of components
+    - Prevented SSR-related errors during build and runtime
+
+12. **Enhanced asset management**:
+    - Added project images to the `/static/images/projects/` directory
+    - Fixed image paths to resolve 404 errors
+    - Ensured correct static file serving
+    - Optimized images for performance
+
+13. **Fixed several TypeScript errors**:
+    - Replaced problematic apostrophes in string literals
+    - Fixed this reference issues in the auth store
+    - Added browser environment detection for localStorage
+    - Ensured compatibility with server-side rendering
+
+## Next Steps
+
+### Immediate Next Steps
+1. ✅ **Clone the existing portfolio repository** to the current working directory to begin the enhancement process.
+
+2. ✅ **Analyze the existing codebase structure** to understand:
+   - Current implementation approach
+   - Technologies in use
+   - Code organization
+   - Assets and resources
+
+3. ✅ **Create the portfolio-updates branch** for the enhancement work.
+
+4. ✅ **Implement API client structure with mock data**:
+   - Create API client modules
+   - Add type definitions
+   - Implement mock data
+   - Connect to UI components
+
+5. ✅ **Add TypeScript support**:
+   - Convert key files to TypeScript
+   - Create interfaces for data structures
+   - Fix TypeScript errors
+   - Improve type safety
+
+6. ✅ **Create Svelte stores for state management**:
+   - Implement stores for projects, blog, and auth
+   - Add loading, error, and empty states
+   - Connect stores to API client
+   - Update UI components to use stores
+
+7. ✅ **Add SSR compatibility checks**:
+   - Fix browser-specific code
+   - Add environment detection
+   - Ensure proper hydration
+   - Test SSR functionality
+
+8. ✅ **Add project images and fix paths**:
+   - Add images to static directory
+   - Update image paths in project data
+   - Test image loading
+   - Optimize images for performance
+
+9. **Commit untracked project images** in the static directory.
+
+10. **Test the enhanced portfolio** in both development and production environments:
+    - Verify all components render correctly
+    - Test responsive design on different devices
+    - Check for any console errors
+    - Ensure SSR works properly
+
+11. ✅ **Update memory bank** with recent changes and current status.
+
+### Short-term Goals (1-2 weeks)
+1. **Implement the basic frontend structure** using SvelteKit:
+   - Create the layout components
+   - Set up routing
+   - Implement responsive design with TailwindCSS
+   - Migrate existing content to the new structure
+
+2. **Develop the core API endpoints** with Express.js:
+   - Projects API
+   - Blog API
+   - Contact API
+   - Authentication API
+
+3. **Set up local development environment** with:
+   - Hot reloading for frontend and backend
+   - TypeScript compilation
+   - Linting and formatting
+   - Basic testing framework
+
+4. **Create initial Azure resources** for development:
+   - Resource group
+   - Cosmos DB instance
+   - Storage account
+   - API Management instance (development tier)
+
+### Medium-term Goals (2-4 weeks)
+1. **Implement the admin dashboard** for content management:
+   - Authentication and authorization
+   - Project management interface
+   - Blog post editor
+   - Media management
+
+2. **Develop the Azure integration showcases**:
+   - API Management demonstration
+   - Azure Policy implementation
+   - ARM template showcase
+
+3. **Enhance the project showcase section** with:
+   - Detailed project pages
+   - Interactive demonstrations
+   - Technical documentation
+   - Visual enhancements
+
+4. **Set up CI/CD pipeline** with GitHub Actions:
+   - Automated testing
+   - Build process
+   - Staging deployment
+   - Production deployment workflow
+
+## Active Decisions and Considerations
+
+### Architecture Decisions
+1. **Frontend Framework**: SvelteKit was chosen over React or Vue.js because:
+   - It builds on the existing codebase (if Svelte is already in use)
+   - It offers excellent performance with minimal JavaScript
+   - It provides built-in server-side rendering for SEO benefits
+   - It has a simpler learning curve and development experience
+
+2. **Backend Approach**: Express.js was selected because:
+   - It's lightweight and flexible
+   - It has excellent TypeScript support
+   - It integrates well with Azure services
+   - It's widely adopted with good community support
+
+3. **Database Selection**: Azure Cosmos DB was chosen because:
+   - It offers flexible schema for varied content types
+   - It provides global distribution capabilities
+   - It integrates directly with other Azure services
+   - It supports multiple APIs (SQL, MongoDB, etc.)
+
+### Design Considerations
+1. **UI/UX Approach**:
+   - Professional yet personal design aesthetic
+   - Focus on showcasing projects and skills
+   - Clear information hierarchy
+   - Responsive design for all devices
+   - Accessibility as a priority
+
+2. **Content Strategy**:
+   - Project-centric approach
+   - Technical blog for knowledge sharing
+   - Clear skills and expertise presentation
+   - Easy contact and connection options
+
+### Technical Considerations
+1. **Performance Optimization**:
+   - Server-side rendering for initial load
+   - Code splitting and lazy loading
+   - Image optimization
+   - Caching strategy
+   - CDN integration
+
+2. **Security Implementation**:
+   - JWT-based authentication
+   - HTTPS enforcement
+   - Input validation and sanitization
+   - Azure Key Vault for secrets
+   - Regular dependency updates
+
+## Important Patterns and Preferences
+
+### Code Organization
+1. **Component Structure**:
+   - One component per file
+   - Clear separation of concerns
+   - Logical grouping in directories
+   - Index files for exports
+
+2. **Naming Conventions**:
+   - PascalCase for components
+   - camelCase for variables and functions
+   - kebab-case for files and directories
+   - UPPER_SNAKE_CASE for constants
+
+3. **File Organization**:
+   ```
+   src/
+   ├── components/       # Reusable UI components
+   │   ├── common/       # Shared components
+   │   ├── layout/       # Layout components
+   │   └── [feature]/    # Feature-specific components
+   ├── routes/           # SvelteKit routes
+   ├── lib/              # Shared utilities and helpers
+   │   ├── api/          # API client functions
+   │   ├── stores/       # Svelte stores
+   │   └── utils/        # Utility functions
+   └── static/           # Static assets
+   ```
+
+### Coding Patterns
+1. **Component Composition**:
+   - Small, focused components
+   - Composition over inheritance
+   - Props for configuration
+   - Events for communication
+
+2. **State Management**:
+   - Svelte stores for global state
+   - Component state for local concerns
+   - Derived stores for computed values
+   - Context API for deep component trees
+
+3. **API Interaction**:
+   - Centralized API client
+   - Typed responses with TypeScript
+   - Error handling middleware
+   - Loading state management
+
+### Styling Approach
+1. **TailwindCSS Usage**:
+   - Utility-first approach
+   - Component extraction for repeated patterns
+   - Custom theme configuration
+   - Responsive design with breakpoints
+
+2. **Design System**:
+   - Consistent color palette
+   - Typography scale
+   - Spacing system
+   - Component variants
+
+## Learnings and Project Insights
+
+We've gained several insights during the initial implementation phase:
+
+1. **TypeScript Configuration Challenges**: Setting up TypeScript with Express.js requires careful configuration, especially for route handlers and middleware. We need to ensure proper typing for request and response objects.
+
+2. **Backend Structure Importance**: A well-organized backend structure with clear separation of concerns (routes, controllers, middleware, services) makes the codebase more maintainable and easier to extend.
+
+3. **Authentication Complexity**: Implementing JWT authentication requires careful consideration of token management, security, and user experience. We need to balance security with usability.
+
+4. **Balance of Static and Dynamic**: While adding dynamic capabilities, we need to maintain the performance benefits of static content where appropriate. Not all content needs to be dynamic.
+
+5. **Azure Integration Strategy**: Rather than forcing Azure services into the project, we should identify natural integration points that showcase real-world usage.
+
+6. **Progressive Enhancement**: We should build the enhanced portfolio in layers, ensuring each stage is functional before adding more complexity.
+
+7. **Content First**: Despite the technical focus, the content (projects, skills, blog posts) should drive the design and implementation decisions.
+
+8. **Documentation Importance**: As this project itself is a showcase of skills, thorough documentation of both the code and the architectural decisions is crucial.
+
+---
+*This document was updated on 4/5/2025 at 10:20 PM as part of the Memory Bank update for the Portfolio Enhancement Project.*
