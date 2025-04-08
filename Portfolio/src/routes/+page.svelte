@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import ProjectCard from '$lib/components/ProjectCard.svelte';
+  import TailwindButton from '$lib/components/TailwindButton.svelte';
   import { projectsStore, featuredProjects } from '$lib/stores';
   
   // Initialize variables
@@ -94,7 +95,7 @@
         <p>No projects found.</p>
       </div>
     {:else}
-      <div class="grid">
+      <div class="card-grid">
         {#each $projectsStore.projects as project (project.id)}
           <ProjectCard 
             title={project.title}
@@ -142,6 +143,24 @@
           <li>Responsive Design</li>
           <li>Azure API Management</li>
         </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tailwind Demo Section -->
+<section id="tailwind-demo" class="section">
+  <div class="container">
+    <h2>Tailwind Components</h2>
+    <div class="bg-surface p-lg rounded-md shadow-md">
+      <h3 class="mb-4">Button Styles with Tailwind CSS</h3>
+      <div class="flex flex-wrap gap-4 items-center justify-center">
+        <TailwindButton text="Primary Button" type="primary" />
+        <TailwindButton text="Secondary Button" type="secondary" />
+        <TailwindButton text="Outline Button" type="outline" />
+      </div>
+      <div class="mt-8">
+        <p class="text-center text-sm opacity-70">These buttons are styled using Tailwind CSS utility classes</p>
       </div>
     </div>
   </div>
