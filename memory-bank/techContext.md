@@ -9,6 +9,10 @@ This document outlines the technologies used, development setup, technical const
 - **SvelteKit**: Frontend framework with server-side rendering capabilities
 - **TypeScript**: Added for type safety and improved developer experience
 - **TailwindCSS**: Utility-first CSS framework for responsive design
+- **Design Tokens System**: TypeScript-based design tokens for consistent styling
+- **Component Library**: Reusable UI components with TypeScript typing
+  - **Button Component**: Versatile button with variants, sizes, and states
+  - **Card Component**: Flexible card component with various styling options
 - **Svelte Stores**: For state management and reactive updates
 - **API Client Structure**: For data fetching with mock implementation
 - **SSR Compatibility**: Server-side rendering with browser detection
@@ -27,10 +31,13 @@ This document outlines the technologies used, development setup, technical const
 - **SvelteKit**: Frontend framework for building the user interface with server-side rendering capabilities
 - **TypeScript**: Typed superset of JavaScript for improved developer experience and code quality
 - **TailwindCSS**: Utility-first CSS framework for responsive design
+- **Design System**: Comprehensive design system with tokens, components, and patterns
+  - **Design Tokens**: TypeScript-based design tokens for colors, spacing, typography, etc.
+  - **Component Library**: Extensive library of reusable UI components
+  - **Accessibility**: WCAG 2.1 AA compliant components
 - **Vite**: Build tool and development server
 - **Markdown-it**: For rendering markdown content in blog posts (planned)
 - **Chart.js**: For data visualization in the admin dashboard (planned)
-- **DaisyUI**: Component library built on top of TailwindCSS for consistent UI elements (planned)
 
 #### Backend
 - **Node.js**: JavaScript runtime for server-side code (planned)
@@ -74,33 +81,74 @@ This document outlines the technologies used, development setup, technical const
    - npm or yarn
    - Git
    - Visual Studio Code with recommended extensions
+     - Svelte for VS Code
+     - ESLint
+     - Prettier
+     - Tailwind CSS IntelliSense
+     - TypeScript Vue Plugin (Volar)
    - Azure CLI
 
 2. **Repository Structure**:
    ```
    portfolio/
-   ├── frontend/             # SvelteKit frontend
+   ├── src/                  # SvelteKit frontend
+   │   ├── lib/              # Shared components and utilities
+   │   │   ├── components/   # UI components
+   │   │   │   ├── common/   # Common UI components
+   │   │   │   │   ├── Button/
+   │   │   │   │   │   ├── Button.svelte
+   │   │   │   │   │   ├── Button.test.ts
+   │   │   │   │   │   ├── types.ts
+   │   │   │   │   │   └── index.ts
+   │   │   │   │   ├── Card/
+   │   │   │   │   │   ├── Card.svelte
+   │   │   │   │   │   ├── Card.test.ts
+   │   │   │   │   │   ├── types.ts
+   │   │   │   │   │   └── index.ts
+   │   │   │   │   └── index.ts
+   │   │   │   ├── layout/  # Layout components (future)
+   │   │   │   ├── project/ # Project-specific components (future)
+   │   │   │   ├── blog/    # Blog-specific components (future)
+   │   │   │   └── index.ts
+   │   │   ├── api/         # API client modules
+   │   │   ├── stores/      # Svelte stores
+   │   │   ├── styles/      # Global styles and design tokens
+   │   │   │   ├── design-tokens.ts
+   │   │   │   ├── theme.css
+   │   │   │   └── utilities.css
+   │   │   └── index.ts     # Main library export
+   │   ├── routes/          # SvelteKit routes
+   │   └── app.html         # HTML template
+   ├── static/              # Static assets
+   │   ├── images/          # Image assets
+   │   └── fonts/           # Font files
+   ├── tests/               # Test utilities and setup
+   ├── svelte.config.js     # SvelteKit configuration
+   ├── tailwind.config.js   # TailwindCSS configuration
+   ├── postcss.config.js    # PostCSS configuration
+   ├── vite.config.js       # Vite configuration
+   ├── vitest.config.js     # Vitest configuration
+   ├── tsconfig.json        # TypeScript configuration
+   ├── eslint.config.js     # ESLint configuration
+   ├── .prettierrc          # Prettier configuration
+   ├── .editorconfig        # EditorConfig settings
+   ├── package.json         # Frontend dependencies
+   └── README.md            # Project documentation
+   
+   # Future structure will include:
+   ├── backend/             # Express.js API (planned)
    │   ├── src/
-   │   │   ├── lib/          # Shared components and utilities
-   │   │   ├── routes/       # SvelteKit routes
-   │   │   └── app.html      # HTML template
-   │   ├── static/           # Static assets
-   │   ├── svelte.config.js  # SvelteKit configuration
-   │   └── package.json      # Frontend dependencies
-   ├── backend/              # Express.js API
-   │   ├── src/
-   │   │   ├── controllers/  # Request handlers
-   │   │   ├── middleware/   # Express middleware
-   │   │   ├── models/       # Data models
-   │   │   ├── routes/       # API routes
-   │   │   ├── services/     # Business logic
-   │   │   └── app.ts        # Express application setup
-   │   └── package.json      # Backend dependencies
-   ├── infrastructure/       # Azure ARM templates
-   │   ├── main.bicep        # Main infrastructure definition
-   │   └── modules/          # Modular infrastructure components
-   ├── .github/              # GitHub Actions workflows
-   └── README.md             # Project documentation
+   │   │   ├── controllers/ # Request handlers
+   │   │   ├── middleware/  # Express middleware
+   │   │   ├── models/      # Data models
+   │   │   ├── routes/      # API routes
+   │   │   ├── services/    # Business logic
+   │   │   └── app.ts       # Express application setup
+   │   └── package.json     # Backend dependencies
+   ├── infrastructure/      # Azure ARM templates (planned)
+   │   ├── main.bicep       # Main infrastructure definition
+   │   └── modules/         # Modular infrastructure components
+   └── .github/             # GitHub Actions workflows (planned)
    ```
 
 3. **Setup Commands**:
@@ -275,7 +323,8 @@ This document outlines the technologies used, development setup, technical const
   - Vitest for JavaScript/TypeScript testing (replacing Jest)
   - Component testing with @testing-library/svelte
   - API client and utility function tests
-  - Co-located test files with source code (e.g., component.test.ts next to component.ts)
+  - Co-located test files with source code (e.g., Button.test.ts next to Button.svelte)
+  - Comprehensive testing of component variants and states
 
 - **Integration Testing**:
   - API endpoint testing
@@ -296,6 +345,7 @@ This document outlines the technologies used, development setup, technical const
   - Mock data for testing in src/lib/test-utils.ts
   - Helper functions for common testing tasks
   - Browser environment simulation with jsdom
+  - Accessibility testing utilities
 
 ### Code Quality
 - **Linting**:
@@ -386,7 +436,71 @@ This document outlines the technologies used, development setup, technical const
   - Interactive testing
   - API analytics
 
+## Component Library Development
+
+### Component Architecture
+- **Component Structure**:
+  - Each component is organized in its own directory
+  - Components include implementation (.svelte), types (.ts), tests (.test.ts), and exports (index.ts)
+  - Components follow a consistent API pattern
+  - Components are designed to be composable and reusable
+
+- **Component API Design**:
+  - Props with sensible defaults
+  - TypeScript interfaces for prop types
+  - Event forwarding for interactivity
+  - Slot system for content projection
+  - Reactive declarations for computed values
+
+- **Component Variants**:
+  - Components support multiple variants (e.g., primary, secondary, outline)
+  - Variants are defined as TypeScript union types
+  - Variants are implemented using conditional classes
+  - Variants are thoroughly tested
+
+- **Component Accessibility**:
+  - Semantic HTML elements
+  - ARIA attributes when necessary
+  - Keyboard navigation support
+  - Focus management
+  - Screen reader compatibility
+  - Color contrast compliance
+
+### Design System Implementation
+- **Design Tokens**:
+  - TypeScript-based design tokens in src/lib/styles/design-tokens.ts
+  - Tokens for colors, spacing, typography, shadows, etc.
+  - Strongly typed with TypeScript
+  - Used to generate CSS variables and configure TailwindCSS
+
+- **CSS Variables**:
+  - Generated from design tokens
+  - Defined in src/lib/styles/theme.css
+  - Support for light/dark mode
+  - Accessible throughout the application
+
+- **TailwindCSS Configuration**:
+  - Customized in tailwind.config.js
+  - Uses design tokens for consistent values
+  - Extends Tailwind's utility classes
+  - Provides responsive variants
+
+- **Custom Utilities**:
+  - Defined in src/lib/styles/utilities.css
+  - Complement Tailwind's utility classes
+  - Provide application-specific utilities
+
 ## Development Workflow
+
+### Component Development Workflow
+1. Define component requirements and API
+2. Create component directory structure
+3. Define TypeScript types for props and variants
+4. Implement component with Svelte
+5. Write comprehensive tests
+6. Document component usage
+7. Export component in index.ts
+8. Update component library exports
 
 ### Feature Development
 1. Create feature branch from main

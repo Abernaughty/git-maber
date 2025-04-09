@@ -1,59 +1,13 @@
-/* Preserve existing CSS variables */
-:root {
-  /* Light theme variables - for future use */
-  --background-light: #f8f9fa;
-  --text-light: #212529;
-  --primary-light: #0d6efd;
-  --secondary-light: #6c757d;
-  --accent-light: #0dcaf0;
-  --surface-light: #ffffff;
-  --border-light: #dee2e6;
+/* Import theme and utility styles */
+@import './lib/styles/theme.css';
+@import './lib/styles/utilities.css';
 
-  /* Dark theme variables */
-  --background-dark: #121212;
-  --text-dark: #e0e0e0;
-  --primary-dark: #bb86fc;
-  --secondary-dark: #03dac6;
-  --accent-dark: #cf6679;
-  --surface-dark: #1e1e1e;
-  --border-dark: #333333;
-
-  /* Default to dark theme */
-  --background: var(--background-dark);
-  --text: var(--text-dark);
-  --primary: var(--primary-dark);
-  --secondary: var(--secondary-dark);
-  --accent: var(--accent-dark);
-  --surface: var(--surface-dark);
-  --border: var(--border-dark);
-
-  /* Font sizes */
-  --fs-small: 0.875rem;
-  --fs-normal: 1rem;
-  --fs-medium: 1.25rem;
-  --fs-large: 1.5rem;
-  --fs-xl: 2rem;
-  --fs-xxl: 3rem;
-
-  /* Spacing */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 2rem;
-  --space-xl: 4rem;
-
-  /* Common values */
-  --border-radius: 4px;
-  --transition-speed: 0.3s;
-  --container-width: 1200px;
-}
-
-/* Add Tailwind directives */
+/* Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Add any custom base styles after Tailwind base */
+/* Base styles */
 @layer base {
   * {
     margin: 0;
@@ -64,20 +18,9 @@
   html,
   body {
     height: 100%;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      'Open Sans',
-      'Helvetica Neue',
-      sans-serif;
+    font-family: var(--font-sans);
     font-size: 16px;
-    line-height: 1.6;
+    line-height: var(--lh-normal);
     color: var(--text);
     background-color: var(--background);
     -webkit-font-smoothing: antialiased;
@@ -90,8 +33,8 @@
   h4,
   h5,
   h6 {
-    font-weight: 700;
-    line-height: 1.2;
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-tight);
     margin-bottom: var(--space-md);
   }
 
@@ -107,6 +50,20 @@
     font-size: var(--fs-large);
   }
 
+  h4 {
+    font-size: var(--fs-medium);
+  }
+
+  h5 {
+    font-size: var(--fs-normal);
+    font-weight: var(--fw-semibold);
+  }
+
+  h6 {
+    font-size: var(--fs-small);
+    font-weight: var(--fw-semibold);
+  }
+
   p {
     margin-bottom: var(--space-md);
   }
@@ -114,27 +71,34 @@
   a {
     color: var(--primary);
     text-decoration: none;
-    transition: color var(--transition-speed) ease;
+    transition: color var(--transition-speed) var(--ease-in-out);
   }
 
   a:hover {
     color: var(--secondary);
   }
+
+  code, pre {
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+  }
 }
 
-/* Add custom component styles */
+/* Component styles */
 @layer components {
+  /* Layout components */
   .container {
-    @apply w-full mx-auto px-md;
+    @apply w-full mx-auto px-4;
     max-width: var(--container-width);
   }
 
   .section {
-    @apply py-xl;
+    @apply py-16;
   }
 
+  /* Legacy components (for backward compatibility) */
   .btn {
-    @apply inline-block px-md py-sm bg-primary text-background border-none rounded cursor-pointer transition-colors;
+    @apply inline-flex items-center justify-center px-4 py-2 rounded font-medium bg-primary text-background border-none cursor-pointer transition-colors;
   }
 
   .btn:hover {
@@ -142,7 +106,7 @@
   }
 
   .card {
-    @apply bg-surface rounded p-lg mb-lg shadow-md;
+    @apply bg-surface rounded p-6 mb-6 shadow-md;
   }
 
   /* Responsive grid */
@@ -150,6 +114,15 @@
     display: grid;
     gap: var(--space-lg);
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  /* Utility classes */
+  .visually-hidden {
+    @apply sr-only;
+  }
+
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
   }
 }
 

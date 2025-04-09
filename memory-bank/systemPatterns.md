@@ -172,9 +172,98 @@ The portfolio-updates branch represents an initial implementation step toward th
 - **Benefits**: Reactive updates, simplified state synchronization
 - **Key Stores**: authStore, projectsStore, blogStore
 
-## Component Relationships
+## Component Library Architecture
 
-### Frontend Components
+The portfolio now includes a comprehensive component library built with TypeScript, Svelte, and TailwindCSS. The component library follows a structured architecture to ensure maintainability, reusability, and consistency.
+
+### Component Library Structure
+```
+src/lib/
+├── components/                # All UI components
+│   ├── common/                # Foundational UI components
+│   │   ├── Button/            # Button component and variants
+│   │   │   ├── Button.svelte  # Button implementation
+│   │   │   ├── Button.test.ts # Button tests
+│   │   │   ├── types.ts       # Button TypeScript types
+│   │   │   └── index.ts       # Button exports
+│   │   ├── Card/              # Card component and variants
+│   │   │   ├── Card.svelte    # Card implementation
+│   │   │   ├── Card.test.ts   # Card tests
+│   │   │   ├── types.ts       # Card TypeScript types
+│   │   │   └── index.ts       # Card exports
+│   │   └── index.ts           # Common components exports
+│   ├── layout/                # Layout components (future)
+│   ├── project/               # Project-specific components (future)
+│   ├── blog/                  # Blog-specific components (future)
+│   └── index.ts               # Main components export file
+├── styles/                    # Global styles and design tokens
+│   ├── design-tokens.ts       # Design tokens in TypeScript
+│   ├── theme.css              # CSS variables for theming
+│   └── utilities.css          # Custom utility classes
+├── api/                       # API client modules
+├── stores/                    # Svelte stores
+└── index.ts                   # Main library export file
+```
+
+### Design System Implementation
+
+The design system is implemented through a combination of TypeScript design tokens, CSS variables, and TailwindCSS configuration:
+
+1. **Design Tokens (TypeScript)**:
+   - Defined in `src/lib/styles/design-tokens.ts`
+   - Single source of truth for design values
+   - Strongly typed with TypeScript
+   - Categories include colors, spacing, typography, etc.
+   - Used to generate CSS variables and configure TailwindCSS
+
+2. **CSS Variables**:
+   - Defined in `src/lib/styles/theme.css`
+   - Generated from design tokens
+   - Provide runtime theming capabilities
+   - Support for light/dark mode
+   - Accessible throughout the application
+
+3. **TailwindCSS Configuration**:
+   - Customized in `tailwind.config.js`
+   - Uses design tokens for consistent values
+   - Extends Tailwind's utility classes
+   - Provides responsive variants
+
+4. **Custom Utilities**:
+   - Defined in `src/lib/styles/utilities.css`
+   - Complement Tailwind's utility classes
+   - Provide application-specific utilities
+
+### Component Architecture
+
+Each component in the library follows a consistent architecture:
+
+1. **Component Implementation (*.svelte)**:
+   - Svelte component with TypeScript
+   - Props with default values
+   - Reactive declarations for computed values
+   - Event forwarding
+   - Slot system for content projection
+
+2. **TypeScript Types (types.ts)**:
+   - Props interface
+   - Variant types (union types)
+   - Size types
+   - Event types
+
+3. **Tests (*.test.ts)**:
+   - Unit tests with Vitest
+   - Component tests with Testing Library
+   - Accessibility tests
+   - Event handling tests
+
+4. **Exports (index.ts)**:
+   - Named exports for components
+   - Type exports
+
+### Component Relationships
+
+#### Frontend Components
 ```
 App
 ├── Layout
@@ -202,6 +291,42 @@ App
     ├── ProjectEditor
     ├── BlogEditor
     └── Analytics
+```
+
+#### Component Library
+```
+Components
+├── Common
+│   ├── Button
+│   │   ├── Primary
+│   │   ├── Secondary
+│   │   ├── Outline
+│   │   ├── Ghost
+│   │   └── Link
+│   ├── Card
+│   │   ├── Default
+│   │   ├── Outline
+│   │   ├── Flat
+│   │   └── Elevated
+│   ├── Input (future)
+│   ├── Select (future)
+│   ├── Checkbox (future)
+│   └── Radio (future)
+├── Layout (future)
+│   ├── Container
+│   ├── Grid
+│   ├── Stack
+│   └── Divider
+├── Navigation (future)
+│   ├── Navbar
+│   ├── Tabs
+│   ├── Breadcrumbs
+│   └── Pagination
+└── Feedback (future)
+    ├── Alert
+    ├── Toast
+    ├── Modal
+    └── Progress
 ```
 
 ### Backend Components
@@ -262,11 +387,14 @@ Azure Resources
 ## Critical Implementation Paths
 
 ### 1. Foundation Setup
-1. Clone existing portfolio repository
-2. Set up TypeScript and TailwindCSS
-3. Create basic Express.js API structure
-4. Provision Azure resources via ARM templates
-5. Configure CI/CD pipeline
+1. ✅ Clone existing portfolio repository
+2. ✅ Set up TypeScript and TailwindCSS
+3. ✅ Implement design tokens system
+4. ✅ Create foundation components (Button, Card)
+5. ✅ Set up component testing framework
+6. Create basic Express.js API structure
+7. Provision Azure resources via ARM templates
+8. Configure CI/CD pipeline
 
 ### 2. Authentication System
 1. Implement JWT-based authentication
@@ -347,11 +475,12 @@ Azure Resources
 
 1. **Server-Side Rendering**: Utilize SvelteKit's SSR for improved initial load times and SEO
 2. **Asset Optimization**: Implement image optimization, code splitting, and lazy loading
-3. **Caching Strategy**: Use appropriate caching for API responses and static assets
-4. **Database Indexing**: Properly index Cosmos DB for efficient queries
-5. **CDN Integration**: Use Azure CDN for global content delivery
-6. **API Rate Limiting**: Implement rate limiting via API Management
-7. **Monitoring**: Set up Azure Monitor for performance tracking and alerts
+3. **Component Design**: Create efficient components with minimal reactivity overhead
+4. **Caching Strategy**: Use appropriate caching for API responses and static assets
+5. **Database Indexing**: Properly index Cosmos DB for efficient queries
+6. **CDN Integration**: Use Azure CDN for global content delivery
+7. **API Rate Limiting**: Implement rate limiting via API Management
+8. **Monitoring**: Set up Azure Monitor for performance tracking and alerts
 
 ## Security Considerations
 
@@ -362,7 +491,19 @@ Azure Resources
 5. **Secrets Management**: Use Azure Key Vault for storing secrets
 6. **CORS Policy**: Properly configured CORS policy
 7. **Content Security Policy**: Implement CSP headers
-8. **Regular Updates**: Keep dependencies updated to patch security vulnerabilities
+8. **Accessibility**: Ensure components meet WCAG guidelines
+9. **Regular Updates**: Keep dependencies updated to patch security vulnerabilities
+
+## Accessibility Considerations
+
+1. **Semantic HTML**: Use appropriate HTML elements for their intended purpose
+2. **ARIA Attributes**: Add ARIA roles, states, and properties when necessary
+3. **Keyboard Navigation**: Ensure all interactive elements are keyboard accessible
+4. **Focus Management**: Properly manage focus for interactive components
+5. **Color Contrast**: Maintain sufficient color contrast for text and UI elements
+6. **Screen Reader Support**: Ensure components work well with screen readers
+7. **Responsive Design**: Components adapt to different screen sizes and zoom levels
+8. **Testing**: Include accessibility tests in component test suites
 
 ---
-*This document was updated on 4/5/2025 as part of the Memory Bank initialization for the Portfolio Enhancement Project.*
+*This document was updated on 4/9/2025 as part of the Memory Bank update for the Portfolio Enhancement Project.*

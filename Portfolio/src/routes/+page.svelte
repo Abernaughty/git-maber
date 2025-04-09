@@ -2,6 +2,8 @@
   import { onMount } from 'svelte';
   import ProjectCard from '$lib/components/ProjectCard.svelte';
   import TailwindButton from '$lib/components/TailwindButton.svelte';
+  import { Button } from '$lib/components/common/Button';
+  import { Card } from '$lib/components/common/Card';
   import { projectsStore, featuredProjects } from '$lib/stores';
 
   // Initialize variables
@@ -150,22 +152,104 @@
   </div>
 </section>
 
-<!-- Tailwind Demo Section -->
-<section id="tailwind-demo" class="section">
+<!-- Component Demo Section -->
+<section id="component-demo" class="section">
   <div class="container">
-    <h2>Tailwind Components</h2>
-    <div class="bg-surface p-lg rounded-md shadow-md">
-      <h3 class="mb-4">Button Styles with Tailwind CSS</h3>
-      <div class="flex flex-wrap gap-4 items-center justify-center">
-        <TailwindButton text="Primary Button" type="primary" />
-        <TailwindButton text="Secondary Button" type="secondary" />
-        <TailwindButton text="Outline Button" type="outline" />
+    <h2>Component Library</h2>
+    
+    <!-- Button Component Demo -->
+    <Card className="mb-8">
+      <h3 class="mb-4">Button Component</h3>
+      
+      <div class="mb-6">
+        <h4 class="text-lg mb-2">Button Variants</h4>
+        <div class="flex flex-wrap gap-4 items-center">
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="link">Link</Button>
+        </div>
       </div>
-      <div class="mt-8">
-        <p class="text-center text-sm opacity-70">
-          These buttons are styled using Tailwind CSS utility classes
-        </p>
+      
+      <div class="mb-6">
+        <h4 class="text-lg mb-2">Button Sizes</h4>
+        <div class="flex flex-wrap gap-4 items-center">
+          <Button size="xs">Extra Small</Button>
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+          <Button size="xl">Extra Large</Button>
+        </div>
       </div>
+      
+      <div class="mb-6">
+        <h4 class="text-lg mb-2">Button States</h4>
+        <div class="flex flex-wrap gap-4 items-center">
+          <Button>Default</Button>
+          <Button disabled>Disabled</Button>
+          <Button loading>Loading</Button>
+          <Button fullWidth>Full Width</Button>
+        </div>
+      </div>
+    </Card>
+    
+    <!-- Card Component Demo -->
+    <h3 class="mb-4">Card Component</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <Card variant="default">
+        <h4 class="text-lg mb-2">Default Card</h4>
+        <p>This is a default card with shadow and border.</p>
+      </Card>
+      
+      <Card variant="outline">
+        <h4 class="text-lg mb-2">Outline Card</h4>
+        <p>This card has a border but no shadow.</p>
+      </Card>
+      
+      <Card variant="flat">
+        <h4 class="text-lg mb-2">Flat Card</h4>
+        <p>This card has no border or shadow.</p>
+      </Card>
+      
+      <Card variant="elevated" shadow={true}>
+        <h4 class="text-lg mb-2">Elevated Card</h4>
+        <p>This card has a more pronounced shadow.</p>
+      </Card>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card hover={true} interactive={true}>
+        <h4 class="text-lg mb-2">Interactive Card</h4>
+        <p>This card has hover effects and is interactive. Try clicking it!</p>
+      </Card>
+      
+      <Card padding={false}>
+        <div class="bg-primary-600 text-white p-4 rounded-t-lg">
+          <h4 class="text-lg">Card Header</h4>
+        </div>
+        <div class="p-4">
+          <p>This card has custom padding and a header section.</p>
+        </div>
+      </Card>
+    </div>
+    
+    <!-- Legacy Tailwind Demo -->
+    <div class="mt-12">
+      <h3 class="mb-4">Legacy Tailwind Components</h3>
+      <Card>
+        <h4 class="text-lg mb-2">Button Styles with Tailwind CSS</h4>
+        <div class="flex flex-wrap gap-4 items-center justify-center">
+          <TailwindButton text="Primary Button" type="primary" />
+          <TailwindButton text="Secondary Button" type="secondary" />
+          <TailwindButton text="Outline Button" type="outline" />
+        </div>
+        <div class="mt-4">
+          <p class="text-center text-sm opacity-70">
+            These buttons are styled using the legacy TailwindButton component
+          </p>
+        </div>
+      </Card>
     </div>
   </div>
 </section>
@@ -269,39 +353,6 @@
 
   .about-text {
     flex: 2;
-  }
-
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .tech-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
-    margin: var(--space-md) 0;
-  }
-
-  .tech-tag {
-    background-color: var(--background);
-    color: var(--primary);
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--border-radius);
-    font-size: var(--fs-small);
-  }
-
-  .project-links {
-    display: flex;
-    gap: var(--space-md);
-    margin-top: auto;
-    padding-top: var(--space-md);
-  }
-
-  .project-link {
-    font-size: var(--fs-small);
-    text-decoration: underline;
   }
 
   .skills-container {
