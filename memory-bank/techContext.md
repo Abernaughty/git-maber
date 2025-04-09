@@ -17,6 +17,9 @@ This document outlines the technologies used, development setup, technical const
 - **ESLint**: For code linting with TypeScript support using flat config format
 - **Prettier**: For consistent code formatting across the project
 - **EditorConfig**: For consistent editor settings across different IDEs
+- **Vitest**: Modern testing framework for Vite-based projects
+- **Testing Library**: For testing Svelte components in a user-centric way
+- **JSDOM**: For simulating a browser environment in tests
 
 ### Planned Technologies
 
@@ -58,8 +61,8 @@ This document outlines the technologies used, development setup, technical const
 - **GitHub Actions**: CI/CD pipeline
 - **ESLint**: Code linting
 - **Prettier**: Code formatting
-- **Jest**: Unit testing
-- **Cypress**: End-to-end testing
+- **Vitest**: Unit testing (replacing Jest)
+- **Cypress**: End-to-end testing (planned)
 - **Postman**: API testing
 - **Visual Studio Code**: Primary development environment
 
@@ -269,9 +272,10 @@ This document outlines the technologies used, development setup, technical const
 
 ### Testing Strategy
 - **Unit Testing**:
-  - Jest for JavaScript/TypeScript testing
-  - Component testing with Svelte Testing Library
-  - Service and utility function tests
+  - Vitest for JavaScript/TypeScript testing (replacing Jest)
+  - Component testing with @testing-library/svelte
+  - API client and utility function tests
+  - Co-located test files with source code (e.g., component.test.ts next to component.ts)
 
 - **Integration Testing**:
   - API endpoint testing
@@ -279,13 +283,19 @@ This document outlines the technologies used, development setup, technical const
   - Service integration testing
 
 - **End-to-End Testing**:
-  - Cypress for browser-based testing
+  - Cypress for browser-based testing (planned)
   - Critical user flows
   - Visual regression testing
 
 - **Test Coverage**:
   - Aim for 80%+ code coverage
   - Critical paths must have 100% coverage
+  - Coverage reporting with @vitest/coverage-v8
+
+- **Test Utilities**:
+  - Mock data for testing in src/lib/test-utils.ts
+  - Helper functions for common testing tasks
+  - Browser environment simulation with jsdom
 
 ### Code Quality
 - **Linting**:
@@ -412,4 +422,4 @@ This document outlines the technologies used, development setup, technical const
 7. Announcement and documentation update
 
 ---
-*This document was updated on 4/9/2025 at 9:46 AM as part of the Memory Bank update for the Portfolio Enhancement Project.*
+*This document was updated on 4/9/2025 at 10:52 AM as part of the Memory Bank update for the Portfolio Enhancement Project.*
