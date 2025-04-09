@@ -1,10 +1,10 @@
 <script>
-  export let title = "Project Title";
-  export let description = "Project description goes here.";
+  export let title = 'Project Title';
+  export let description = 'Project description goes here.';
   export let techStack = [];
-  export let liveUrl = "#";
-  export let sourceUrl = "#";
-  export let imageUrl = "";
+  export let liveUrl = '#';
+  export let sourceUrl = '#';
+  export let imageUrl = '';
 </script>
 
 <div class="card project-card">
@@ -13,19 +13,22 @@
       <img src={imageUrl} alt={title} />
     </div>
   {/if}
-  
+
   <h3>{title}</h3>
   <p>{description}</p>
-  
+
   <div class="tech-stack">
     {#each techStack as tech}
       <span class="tech-tag">{tech}</span>
     {/each}
   </div>
-  
+
   <div class="project-links">
-    <a href={liveUrl} class="project-link" target="_blank" rel="noopener noreferrer">View Project</a>
-    <a href={sourceUrl} class="project-link" target="_blank" rel="noopener noreferrer">Source Code</a>
+    <a href={liveUrl} class="project-link" target="_blank" rel="noopener noreferrer">View Project</a
+    >
+    <a href={sourceUrl} class="project-link" target="_blank" rel="noopener noreferrer"
+      >Source Code</a
+    >
   </div>
 </div>
 

@@ -34,7 +34,7 @@ const getAuthHeader = (): Record<string, string> => {
   if (!isBrowser) {
     return {};
   }
-  
+
   const token = localStorage.getItem('token');
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
@@ -47,27 +47,27 @@ const getAuthHeader = (): Record<string, string> => {
  */
 export async function apiRequest<T>(endpoint: string, options: RequestOptions): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  
+
   // Default headers
   const headers = {
     'Content-Type': 'application/json',
     ...getAuthHeader(),
     ...options.headers
   };
-  
+
   // Request options
   const requestOptions: RequestInit = {
     method: options.method,
     headers,
-    body: options.body ? JSON.stringify(options.body) : undefined,
+    body: options.body ? JSON.stringify(options.body) : undefined
   };
-  
+
   try {
     const response = await fetch(url, requestOptions);
-    
+
     // Parse the response as JSON
     const data = await response.json();
-    
+
     // Check if the response is ok (status in the range 200-299)
     if (!response.ok) {
       throw {
@@ -76,7 +76,7 @@ export async function apiRequest<T>(endpoint: string, options: RequestOptions): 
         status: response.status
       };
     }
-    
+
     return data as T;
   } catch (error) {
     console.error('API request failed:', error);

@@ -1,6 +1,6 @@
 <script>
-  export let text = "Button";
-  export let type = "primary"; // primary, secondary, outline
+  export let text = 'Button';
+  export let type = 'primary'; // primary, secondary, outline
   export let onClick = () => {};
 </script>
 

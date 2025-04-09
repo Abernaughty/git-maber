@@ -3,12 +3,12 @@
   import ProjectCard from '$lib/components/ProjectCard.svelte';
   import TailwindButton from '$lib/components/TailwindButton.svelte';
   import { projectsStore, featuredProjects } from '$lib/stores';
-  
+
   // Initialize variables
   let basePath = '';
   let loading = false;
   let error = null;
-  
+
   onMount(async () => {
     // Determine basePath based on current URL
     if (window.location.pathname.includes('/git-maber/')) {
@@ -16,14 +16,14 @@
     } else {
       basePath = '';
     }
-    
+
     // Set the background image with the correct path
     const bgElement = document.querySelector('.hero-background-image');
     if (bgElement) {
       const imagePath = `${basePath}/images/bear-coding.png`;
       bgElement.style.backgroundImage = `url(${imagePath})`;
     }
-    
+
     // Fetch projects
     try {
       loading = true;
@@ -39,14 +39,14 @@
 
 <svelte:head>
   <title>Mike Abernathy | maber.io</title>
-  <meta name="description" content="Personal portfolio website showcasing my projects and skills">
+  <meta name="description" content="Personal portfolio website showcasing my projects and skills" />
 </svelte:head>
 
 <!-- Hero Section -->
 <section class="hero">
   <!-- Single div with CSS class for background image -->
   <div class="hero-background-image"></div>
-  
+
   <div class="container">
     <h1>Hello, I'm <span class="highlight">Mike Abernathy</span></h1>
     <p class="tagline">Aspiring Developer | Building Creative Solutions</p>
@@ -64,12 +64,14 @@
     <div class="about-content">
       <div class="about-text">
         <p>
-          Hello! I'm an aspiring developer passionate about creating web applications and solving problems through code.
-          This portfolio showcases some of my projects and skills as I continue to learn and grow in this field.
+          Hello! I'm an aspiring developer passionate about creating web applications and solving
+          problems through code. This portfolio showcases some of my projects and skills as I
+          continue to learn and grow in this field.
         </p>
         <p>
           I'm constantly learning new technologies and techniques to improve my development skills.
-          Feel free to explore my projects and get in touch if you'd like to collaborate or have any questions.
+          Feel free to explore my projects and get in touch if you'd like to collaborate or have any
+          questions.
         </p>
       </div>
     </div>
@@ -80,7 +82,7 @@
 <section id="projects" class="section">
   <div class="container">
     <h2>My Projects</h2>
-    
+
     {#if $projectsStore.loading}
       <div class="loading-container">
         <p>Loading projects...</p>
@@ -97,7 +99,7 @@
     {:else}
       <div class="card-grid">
         {#each $projectsStore.projects as project (project.id)}
-          <ProjectCard 
+          <ProjectCard
             title={project.title}
             description={project.description}
             techStack={project.techStack}
@@ -160,7 +162,9 @@
         <TailwindButton text="Outline Button" type="outline" />
       </div>
       <div class="mt-8">
-        <p class="text-center text-sm opacity-70">These buttons are styled using Tailwind CSS utility classes</p>
+        <p class="text-center text-sm opacity-70">
+          These buttons are styled using Tailwind CSS utility classes
+        </p>
       </div>
     </div>
   </div>
@@ -179,11 +183,15 @@
         </div>
         <div class="contact-method">
           <h3>GitHub</h3>
-          <a href="https://github.com/git-maber" target="_blank" rel="noopener noreferrer">github.com/git-maber</a>
+          <a href="https://github.com/git-maber" target="_blank" rel="noopener noreferrer"
+            >github.com/git-maber</a
+          >
         </div>
         <div class="contact-method">
           <h3>LinkedIn</h3>
-          <a href="https://linkedin.com/in/mikeabernathy" target="_blank" rel="noopener noreferrer">linkedin.com/in/mikeabernathy</a>
+          <a href="https://linkedin.com/in/mikeabernathy" target="_blank" rel="noopener noreferrer"
+            >linkedin.com/in/mikeabernathy</a
+          >
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ This is a minimalist dark-themed portfolio website built with Svelte. Follow the
 ## Prerequisites
 
 Make sure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (v16 or newer recommended)
 - npm (comes with Node.js) or [pnpm](https://pnpm.io/)
 
@@ -50,17 +51,17 @@ Option 2: Use the reusable `ProjectCard.svelte` component:
 ```svelte
 <script>
   import ProjectCard from '$lib/components/ProjectCard.svelte';
-  
+
   // Define your projects
   const projects = [
     {
-      title: "Project Name",
-      description: "Description of your project",
-      techStack: ["HTML", "CSS", "JavaScript"],
-      liveUrl: "https://your-project-url.com",
-      sourceUrl: "https://github.com/yourusername/project-repo",
-      imageUrl: "/images/project-image.jpg" // Optional
-    },
+      title: 'Project Name',
+      description: 'Description of your project',
+      techStack: ['HTML', 'CSS', 'JavaScript'],
+      liveUrl: 'https://your-project-url.com',
+      sourceUrl: 'https://github.com/yourusername/project-repo',
+      imageUrl: '/images/project-image.jpg' // Optional
+    }
     // Add more projects...
   ];
 </script>

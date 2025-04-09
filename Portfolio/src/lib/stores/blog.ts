@@ -22,16 +22,16 @@ function createBlogStore() {
 
   return {
     subscribe,
-    
+
     // Fetch all blog posts
     fetchPosts: async () => {
       // Set loading state
       update(state => ({ ...state, loading: true, error: null }));
-      
+
       try {
         // Fetch blog posts from API
         const posts = await blogApi.getPosts();
-        
+
         // Update store with fetched posts
         update(state => ({
           ...state,
@@ -40,7 +40,7 @@ function createBlogStore() {
         }));
       } catch (error) {
         console.error('Error fetching blog posts:', error);
-        
+
         // Update store with error
         update(state => ({
           ...state,
@@ -49,7 +49,7 @@ function createBlogStore() {
         }));
       }
     },
-    
+
     // Reset the store to initial state
     reset: () => set(initialState)
   };
