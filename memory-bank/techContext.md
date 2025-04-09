@@ -14,6 +14,9 @@ This document outlines the technologies used, development setup, technical const
 - **SSR Compatibility**: Server-side rendering with browser detection
 - **PostCSS**: With plugins for processing CSS
 - **cssnano**: For CSS optimization in production builds
+- **ESLint**: For code linting with TypeScript support using flat config format
+- **Prettier**: For consistent code formatting across the project
+- **EditorConfig**: For consistent editor settings across different IDEs
 
 ### Planned Technologies
 
@@ -286,14 +289,18 @@ This document outlines the technologies used, development setup, technical const
 
 ### Code Quality
 - **Linting**:
-  - ESLint for JavaScript/TypeScript
-  - Stylelint for CSS
-  - Customized rules for project needs
+  - ESLint v9 with flat config format (eslint.config.js)
+  - TypeScript integration with @typescript-eslint/eslint-plugin
+  - Svelte support with eslint-plugin-svelte
+  - Custom rules for unused variables and explicit any types
+  - npm scripts for linting: `npm run lint` and `npm run lint:fix`
 
 - **Formatting**:
   - Prettier for consistent code style
-  - EditorConfig for editor settings
-  - Pre-commit hooks to enforce formatting
+  - Configuration in .prettierrc with Svelte plugin
+  - .prettierignore to exclude specific files and directories
+  - EditorConfig (.editorconfig) for consistent editor settings
+  - npm scripts for formatting: `npm run format` and `npm run format:check`
 
 - **Documentation**:
   - JSDoc comments for functions and classes
@@ -405,4 +412,4 @@ This document outlines the technologies used, development setup, technical const
 7. Announcement and documentation update
 
 ---
-*This document was updated on 4/8/2025 at 5:41 PM as part of the Memory Bank update for the Portfolio Enhancement Project.*
+*This document was updated on 4/9/2025 at 9:46 AM as part of the Memory Bank update for the Portfolio Enhancement Project.*

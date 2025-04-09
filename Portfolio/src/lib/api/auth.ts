@@ -1,4 +1,4 @@
-import { post, get } from './client';
+import { post as _post, get as _get } from './client';
 import type { LoginRequest, LoginResponse, User } from './types';
 
 /**

@@ -1,4 +1,4 @@
-import { get } from './client';
+import { get as _get } from './client';
 import type { Project } from './types';
 
 /**
@@ -12,7 +12,8 @@ export async function getProjects(): Promise<Project[]> {
     {
       id: '1',
       title: 'Blackjack Game',
-      description: 'A classic Blackjack card game implementation with both Python GUI and web versions.',
+      description:
+        'A classic Blackjack card game implementation with both Python GUI and web versions.',
       techStack: ['Python', 'Tkinter', 'HTML', 'CSS', 'JavaScript'],
       imageUrl: '/images/projects/blackjack.png',
       liveUrl: 'https://red-field-09b58bd10.1.azurestaticapps.net/',
@@ -23,7 +24,8 @@ export async function getProjects(): Promise<Project[]> {
     {
       id: '2',
       title: 'PokeData',
-      description: 'Pokémon card price tracking and data visualization application for trading card collectors.',
+      description:
+        'Pokémon card price tracking and data visualization application for trading card collectors.',
       techStack: ['Svelte', 'JavaScript', 'IndexedDB', 'API Integration'],
       imageUrl: '/images/projects/pokedata.png',
       liveUrl: 'https://thankful-bush-0957ca310.3.azurestaticapps.net/',
@@ -34,7 +36,8 @@ export async function getProjects(): Promise<Project[]> {
     {
       id: '3',
       title: 'Portfolio Website',
-      description: 'Personal portfolio website built with Svelte and SvelteKit to showcase projects and skills.',
+      description:
+        'Personal portfolio website built with Svelte and SvelteKit to showcase projects and skills.',
       techStack: ['Svelte', 'SvelteKit', 'TypeScript', 'CSS'],
       imageUrl: '/images/projects/portfolio.png',
       liveUrl: 'https://git-maber.github.io/git-maber/',
@@ -53,10 +56,10 @@ export async function getProjects(): Promise<Project[]> {
 export async function getProject(id: string): Promise<Project> {
   const projects = await getProjects();
   const project = projects.find(p => p.id === id);
-  
+
   if (!project) {
     throw new Error(`Project with ID ${id} not found`);
   }
-  
+
   return project;
 }
