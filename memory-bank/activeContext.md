@@ -55,7 +55,89 @@ While the primary focus is on architecture improvements, we're also addressing:
 
 ## Recent Changes
 
-1. **Updated portfolio site with design elements from cline.bot** (4/9/2025):
+1. **Updated project links and added TailwindCSS to tech stack** (4/10/2025):
+   - Added TailwindCSS to the Portfolio Website project card's tech stack
+   - Fixed all project "View Project" links to point to the correct domains:
+     - Blackjack Game: Updated to https://blackjack.maber.io
+     - PokeData: Updated to https://pokedata.maber.io
+     - Portfolio Website: Updated to https://dev.maber.io
+   - Fixed all project "Source Code" links with the complete URLs:
+     - Blackjack Game: https://github.com/Abernaughty/git-maber/tree/main/Blackjack
+     - PokeData: https://github.com/Abernaughty/git-maber/tree/main/PokeData
+     - Portfolio Website: https://github.com/Abernaughty/git-maber/tree/main/Portfolio
+   - Fixed GitHub URL in the "Get In Touch" section to prevent line breaks
+   - Added CSS to prevent the URL from breaking into two lines at the hyphen character
+   - Applied `white-space: nowrap` and `display: inline-block` to ensure the entire link stays on one line
+   - Result: All project links now point to the correct URLs and the GitHub URL displays properly on a single line
+
+2. **Updated section headers and links to use blue color** (4/10/2025):
+   - Changed section headers from gradient to solid blue color (#3b82f6)
+   - Updated skill category headers to use the blue color
+   - Styled contact links with blue color and hover effect
+   - Updated project card tech stack tags and links to use blue color
+   - Result: Created a more consistent color scheme throughout the portfolio using the blue color for all headings and interactive elements
+
+3. **Changed bear icon to use generic filename** (4/10/2025):
+   - Updated the image source to use "mabear-icon.png" instead of a specific filename
+   - Created a more flexible implementation that allows for easy icon swapping
+   - Enables dynamic icon updates by simply replacing the file without code changes
+   - Maintained the same styling and hover animation effects
+   - Improved maintainability by decoupling the code from specific image filenames
+   - Result: The bear icon can now be easily changed by replacing the mabear-icon.png file
+
+2. **Replaced BearBW.png with BearGradient.png in header** (4/10/2025):
+   - Replaced the black and white bear icon with a pre-made gradient version
+   - Reverted the CSS mask technique that wasn't displaying correctly
+   - Simplified the implementation by using a direct image replacement
+   - Maintained the subtle rotation animation on hover
+   - Created visual consistency between the icon and text in the header
+   - Improved the overall branding with a cohesive color scheme
+   - Result: The bear icon now has the same purple-blue gradient as the text, creating a unified header design
+
+2. **Added bear icon to header** (4/10/2025):
+   - Added the BearBW.png icon to the left of the "maber.io" logo in the header
+   - Sized the icon appropriately (32px height) to match the header scale
+   - Implemented proper vertical alignment with flexbox
+   - Added a subtle rotation animation on hover for interactivity
+   - Ensured the gradient text styling remained consistent
+   - Restructured the logo markup to accommodate both the icon and text
+   - Improved the visual branding with the coding bear mascot
+   - Enhanced the overall header appearance with the brand icon
+
+2. **Fixed section header gradient display issue** (4/10/2025):
+   - Identified issue where section headers weren't displaying the purple-to-blue gradient correctly
+   - Created a dedicated `.section-header-gradient` class for section headers
+   - Used `width: fit-content` to make the gradient container only as wide as the text
+   - Set `text-align: left` to align headers to the left
+   - Applied the same purple-to-blue gradient used in the logo and hero text
+   - Ensured consistent gradient display across all text elements
+   - Maintained proper text alignment and layout
+   - Fixed the issue where headers were only showing the purple part of the gradient
+   - Improved visual consistency throughout the site
+
+2. **Added favicon and improved text gradient brightness** (4/10/2025):
+   - Added a custom favicon to the portfolio site
+   - Placed the favicon.png file in the Portfolio/static directory
+   - Verified the app.html file already had the correct reference to the favicon
+   - Applied a brightness filter to the "Mike Abernathy" text gradient
+   - Added filter: brightness(1.2) to make the text gradient appear 20% brighter
+   - Improved visual consistency between the text gradient and button gradient borders
+   - Ensured the text stands out better against the dark frosted glass background
+
+2. **Enhanced hero section with glassmorphic design and consistent gradients** (4/10/2025):
+   - Added a dark semi-transparent frosted glass effect behind the hero section text and buttons
+   - Created a shared gradient variable for consistent color flow across elements
+   - Applied the same gradient to both the "Mike Abernathy" text and button borders
+   - Added subtle text shadow to all text in the hero section for a relief effect
+   - Added a slightly darker frosted effect to the buttons to make them stand out from the background
+   - Applied backdrop-filter blur to the buttons for additional depth
+   - Enhanced hover states with darker backgrounds
+   - Removed unused CSS selectors to clean up the codebase
+   - Improved visual hierarchy with consistent styling
+   - Enhanced the overall aesthetic with modern design techniques
+   - Ensured the text stands out clearly from the frosted glass background
+
+2. **Updated portfolio site with design elements from cline.bot** (4/9/2025):
    - Added blue-to-purple gradient text effect for headings and name in hero section
    - Implemented glass card effect with backdrop filter for hero container and contact cards
    - Enhanced background with subtle gradients and adjusted image brightness
@@ -67,7 +149,7 @@ While the primary focus is on architecture improvements, we're also addressing:
    - Encountered issues with CSS specificity and styling overrides
    - Cleaned up unused CSS selectors
 
-2. **Fixed button gradient consistency issue** (4/10/2025):
+3. **Fixed button gradient consistency issue** (4/10/2025):
    - Identified issue where buttons had inconsistent gradients
    - Initial state: "View My Work" button had blue-to-purple gradient, "Get In Touch" button had blue-to-lighter-blue gradient
    - Goal: Make both buttons have the same gradient for visual consistency
@@ -472,4 +554,4 @@ We've gained several insights during the implementation phase:
 8. **Documentation Importance**: As this project itself is a showcase of skills, thorough documentation of both the code and the architectural decisions is crucial.
 
 ---
-*This document was updated on 4/9/2025 at 7:52 PM as part of the Memory Bank update for the Portfolio Enhancement Project.*
+*This document was updated on 4/10/2025 at 2:28 PM as part of the Memory Bank update for the Portfolio Enhancement Project.*

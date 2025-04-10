@@ -139,6 +139,11 @@
 
   /* Common values */
   --container-width: 1200px; /* Preserve existing variable */
+  
+  /* Custom gradients and colors */
+  --purple-blue-gradient: linear-gradient(90deg, #8b5cf6, #3b82f6); /* Purple to blue gradient - back to 90deg (left to right) */
+  --purple-color: #8b5cf6; /* Purple from the gradient */
+  --blue-color: #3b82f6;   /* Blue from the gradient */
 }
 
 /* Light theme class */

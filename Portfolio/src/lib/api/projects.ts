@@ -16,8 +16,8 @@ export async function getProjects(): Promise<Project[]> {
         'A classic Blackjack card game implementation with both Python GUI and web versions.',
       techStack: ['Python', 'Tkinter', 'HTML', 'CSS', 'JavaScript'],
       imageUrl: '/images/projects/blackjack.png',
-      liveUrl: 'https://red-field-09b58bd10.1.azurestaticapps.net/',
-      sourceUrl: 'https://github.com/git-maber/git-maber/tree/main/Blackjack',
+      liveUrl: 'https://blackjack.maber.io',
+      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/Blackjack',
       featured: true,
       createdAt: '2024-12-15T00:00:00.000Z'
     },
@@ -28,8 +28,8 @@ export async function getProjects(): Promise<Project[]> {
         'Pokémon card price tracking and data visualization application for trading card collectors.',
       techStack: ['Svelte', 'JavaScript', 'IndexedDB', 'API Integration'],
       imageUrl: '/images/projects/pokedata.png',
-      liveUrl: 'https://thankful-bush-0957ca310.3.azurestaticapps.net/',
-      sourceUrl: 'https://github.com/git-maber/git-maber/tree/main/PokeData',
+      liveUrl: 'https://pokedata.maber.io',
+      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/PokeData',
       featured: true,
       createdAt: '2025-02-10T00:00:00.000Z'
     },
@@ -38,10 +38,10 @@ export async function getProjects(): Promise<Project[]> {
       title: 'Portfolio Website',
       description:
         'Personal portfolio website built with Svelte and SvelteKit to showcase projects and skills.',
-      techStack: ['Svelte', 'SvelteKit', 'TypeScript', 'CSS'],
+      techStack: ['Svelte', 'SvelteKit', 'TypeScript', 'CSS', 'TailwindCSS'],
       imageUrl: '/images/projects/portfolio.png',
-      liveUrl: 'https://git-maber.github.io/git-maber/',
-      sourceUrl: 'https://github.com/git-maber/git-maber/tree/main/Portfolio',
+      liveUrl: 'https://dev.maber.io',
+      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/Portfolio',
       featured: true,
       createdAt: '2025-03-20T00:00:00.000Z'
     }

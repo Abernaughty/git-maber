@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Button Examples</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: white;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-weight: 300;
+            font-size: 2.5rem;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .button-example {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #1e1e1e;
+        }
+
+        .button-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .button-description {
+            color: #aaa;
+            margin: 0;
+        }
+
+        /* Button Styles */
+        .gradient-button {
+            background: linear-gradient(90deg, #4776E6 0%, #8E54E9 100%);
+            color: white;
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(79, 114, 205, 0.3);
+            transition: all 0.3s ease;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 114, 205, 0.4);
+        }
+
+        .outline-button {
+            background: transparent;
+            color: #4776E6;
+            font-weight: 500;
+            padding: 11px 24px;
+            border-radius: 8px;
+            border: 2px solid #4776E6;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .outline-button:hover {
+            background: #4776E6;
+            color: white;
+            box-shadow: 0 4px 14px rgba(79, 114, 205, 0.3);
+        }
+
+        .glass-button {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .neumorphic-container {
+            background-color: #e0e5ec;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .neumorphic-button {
+            background: #e0e5ec;
+            color: #4776E6;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 6px 6px 12px #b8bec7, -6px -6px 12px #ffffff;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .neumorphic-button:hover {
+            box-shadow: 4px 4px 8px #b8bec7, -4px -4px 8px #ffffff;
+        }
+
+        .neumorphic-button:active {
+            box-shadow: inset 4px 4px 8px #b8bec7, inset -4px -4px 8px #ffffff;
+        }
+
+        .minimal-button {
+            background: transparent;
+            color: white;
+            font-weight: 500;
+            padding: 10px 0;
+            border: none;
+            position: relative;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .minimal-button::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+
+        .minimal-button:hover::after {
+            width: 100%;
+        }
+
+        .gradient-border-button {
+            background: #121212;
+            color: white;
+            font-weight: 500;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .gradient-border-button::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(5px);
+            border-radius: 10px;
+            animation: glowing 20s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .gradient-border-button:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes glowing {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        /* Portfolio-specific buttons */
+        .portfolio-gradient-button {
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .portfolio-gradient-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <h1>Modern Button Examples</h1>
+    
+    <div class="button-container">
+        <div class="button-example">
+            <h2 class="button-title">1. Gradient Button</h2>
+            <p class="button-description">A modern button with a blue-to-purple gradient background and subtle shadow. Lifts slightly on hover.</p>
+            <button class="gradient-button">View My Work</button>
+        </div>
+
+        <div class="button-example">
+            <h2 class="button-title">2. Outlined Button</h2>
+            <p class="button-description">A clean outlined button that fills with color on hover.</p>
+            <button class="outline-button">Get In Touch</button>
+        </div>
+
+        <div class="button-example">
+            <h2 class="button-title">3. Glassmorphic Button</h2>
+            <p class="button-description">A trendy glass-effect button with blur and transparency.</p>
+            <button class="glass-button">View My Work</button>
+        </div>
+
+        <div class="button-example neumorphic-container">
+            <h2 class="button-title" style="color: #333;">4. Neumorphic Button</h2>
+            <p class="button-description" style="color: #666;">A soft UI button that appears to extrude from the surface.</p>
+            <button class="neumorphic-button">Get In Touch</button>
+        </div>
+
+        <div class="button-example">
+            <h2 class="button-title">5. Minimal Button</h2>
+            <p class="button-description">An ultra-minimal button with an animated underline on hover.</p>
+            <button class="minimal-button">View My Work</button>
+        </div>
+
+        <div class="button-example">
+            <h2 class="button-title">6. Gradient Border Button</h2>
+            <p class="button-description">A button with an animated rainbow border that appears on hover.</p>
+            <button class="gradient-border-button">Get In Touch</button>
+        </div>
+
+        <div class="button-example">
+            <h2 class="button-title">7. Portfolio-Specific Gradient Button</h2>
+            <p class="button-description">A button styled specifically for your portfolio with blue-to-purple gradient matching your existing design.</p>
+            <button class="portfolio-gradient-button">View My Work</button>
+        </div>
+    </div>
+</body>
+</html>

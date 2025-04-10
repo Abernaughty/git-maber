@@ -91,6 +91,28 @@
   background-image: linear-gradient(to right, var(--primary), var(--secondary));
 }
 
+/* Purple to blue gradient text - base styles */
+.purple-blue-gradient-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: var(--purple-blue-gradient);
+  filter: brightness(1.2);
+}
+
+/* Make all gradient text elements display as inline-block */
+.purple-blue-gradient-text {
+  display: inline-block;
+}
+
+/* For section headers, force them to behave like the other gradient text */
+h2.purple-blue-gradient-text {
+  display: table; /* This makes it behave like inline-block but can be centered */
+  margin: 0 auto var(--space-lg); /* Center the header and add bottom margin */
+  text-align: center;
+  width: auto; /* Let the width be determined by content */
+}
+
 /* Animated underline for links */
 .animated-underline {
   position: relative;
@@ -154,6 +176,23 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient Button */
+.gradient-button {
+  background-image: var(--purple-blue-gradient);
+  box-shadow: 0 4px 14px rgba(79, 114, 205, 0.3);
+  transition: all 0.3s ease;
+}
+
+.gradient-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 114, 205, 0.4);
+}
+
+.gradient-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(79, 114, 205, 0.2);
 }
 
 /* Skeleton loading animation */

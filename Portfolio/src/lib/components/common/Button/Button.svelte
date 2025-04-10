@@ -58,7 +58,8 @@
     secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus:ring-secondary-500',
     outline: 'bg-transparent border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900 focus:ring-primary-500',
     ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900 focus:ring-primary-500',
-    link: 'bg-transparent text-primary-600 hover:underline p-0 h-auto focus:ring-primary-500'
+    link: 'bg-transparent text-primary-600 hover:underline p-0 h-auto focus:ring-primary-500',
+    gradient: 'text-white relative overflow-hidden gradient-button focus:ring-purple-500'
   }[variant];
   
   // Compute size classes

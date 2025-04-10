@@ -63,6 +63,17 @@ describe('Button Component', () => {
     expect(button.className).toContain('text-primary-600');
     expect(button.className).toContain('p-0');
   });
+  
+  it('applies gradient style when variant is gradient', () => {
+    const { getByText } = render(Button, { props: { variant: 'gradient' } });
+    const button = getByText('Button');
+    
+    // Check that the button has the gradient class
+    expect(button.className).toContain('gradient-button');
+    expect(button.className).toContain('text-white');
+    expect(button.className).toContain('relative');
+    expect(button.className).toContain('overflow-hidden');
+  });
 
   it('applies size classes correctly', () => {
     const { getByText, rerender } = render(Button, { props: { size: 'sm' } });

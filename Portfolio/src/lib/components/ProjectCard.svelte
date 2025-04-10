@@ -65,7 +65,7 @@
 
   .tech-tag {
     background-color: var(--background);
-    color: var(--primary);
+    color: var(--blue-color);
     padding: var(--space-xs) var(--space-sm);
     border-radius: var(--border-radius);
     font-size: var(--fs-small);
@@ -79,6 +79,7 @@
   }
 
   .project-link {
+    color: var(--blue-color);
     font-size: var(--fs-small);
     text-decoration: underline;
   }

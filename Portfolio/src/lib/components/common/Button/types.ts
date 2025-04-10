@@ -9,7 +9,8 @@ export type ButtonVariant =
   | 'secondary'  // Alternative action
   | 'outline'    // Lower emphasis, bordered button
   | 'ghost'      // Lowest emphasis, background only on hover
-  | 'link';      // Appears as a link but has button semantics
+  | 'link'       // Appears as a link but has button semantics
+  | 'gradient';  // Gradient background with animation effects
 
 export type ButtonSize = 
   | 'xs'   // Extra small

@@ -1,10 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import ProjectCard from '$lib/components/ProjectCard.svelte';
-  import TailwindButton from '$lib/components/TailwindButton.svelte';
-  import { Button } from '$lib/components/common/Button';
-  import { Card } from '$lib/components/common/Card';
-  import { projectsStore, featuredProjects } from '$lib/stores';
+  import { projectsStore } from '$lib/stores';
 
   // Initialize variables
   let basePath = '';
@@ -49,14 +46,14 @@
   <!-- Single div with CSS class for background image -->
   <div class="hero-background-image"></div>
 
-  <div class="glass-card hero-container">
-    <h1>Hello, I'm <span class="gradient-text">Mike Abernathy</span></h1>
+  <div class="glass-card-dark hero-container hero-gradient-container">
+    <h1>Hello, I'm <span class="purple-blue-gradient-text">Mike Abernathy</span></h1>
     <p class="tagline">Aspiring Developer | Building Creative Solutions</p>
     <div class="cta-buttons">
-      <a href="#projects" class="btn-gradient primary-gradient" style="background: linear-gradient(90deg, #3B82F6, #8B5CF6) !important; box-shadow: var(--shadow-blue-purple);">
+      <a href="#projects" class="hero-gradient-outline-button">
         View My Work
       </a>
-      <a href="#contact" class="btn-gradient primary-gradient" style="background: linear-gradient(90deg, #3B82F6, #8B5CF6) !important; box-shadow: var(--shadow-blue-purple);">
+      <a href="#contact" class="hero-gradient-outline-button">
         Get In Touch
       </a>
     </div>
@@ -65,8 +62,8 @@
 
 <!-- About Section -->
 <section id="about" class="section">
-  <div class="container">
-    <h2 class="gradient-text">About Me</h2>
+  <div class="container glass-card-dark section-container">
+    <h2 class="section-header-gradient">About Me</h2>
     <div class="about-content">
       <div class="about-text">
         <p>
@@ -86,8 +83,8 @@
 
 <!-- Projects Section -->
 <section id="projects" class="section">
-  <div class="container">
-    <h2 class="gradient-text">My Projects</h2>
+  <div class="container glass-card-dark section-container">
+    <h2 class="section-header-gradient">My Projects</h2>
 
     {#if $projectsStore.loading}
       <div class="loading-container">
@@ -121,8 +118,8 @@
 
 <!-- Skills Section -->
 <section id="skills" class="section">
-  <div class="container">
-    <h2 class="gradient-text">Skills</h2>
+  <div class="container glass-card-dark section-container">
+    <h2 class="section-header-gradient">Skills</h2>
     <div class="skills-container">
       <div class="skill-category">
         <h3>Frontend</h3>
@@ -131,6 +128,7 @@
           <li>CSS3</li>
           <li>JavaScript</li>
           <li>Svelte</li>
+          <li>TailwindCSS</li>
         </ul>
       </div>
 
@@ -156,112 +154,11 @@
   </div>
 </section>
 
-<!-- Component Demo Section -->
-<section id="component-demo" class="section">
-  <div class="container">
-    <h2 class="gradient-text">Component Library</h2>
-    
-    <!-- Button Component Demo -->
-    <Card className="mb-8">
-      <h3 class="mb-4">Button Component</h3>
-      
-      <div class="mb-6">
-        <h4 class="text-lg mb-2">Button Variants</h4>
-        <div class="flex flex-wrap gap-4 items-center">
-          <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="link">Link</Button>
-        </div>
-      </div>
-      
-      <div class="mb-6">
-        <h4 class="text-lg mb-2">Button Sizes</h4>
-        <div class="flex flex-wrap gap-4 items-center">
-          <Button size="xs">Extra Small</Button>
-          <Button size="sm">Small</Button>
-          <Button size="md">Medium</Button>
-          <Button size="lg">Large</Button>
-          <Button size="xl">Extra Large</Button>
-        </div>
-      </div>
-      
-      <div class="mb-6">
-        <h4 class="text-lg mb-2">Button States</h4>
-        <div class="flex flex-wrap gap-4 items-center">
-          <Button>Default</Button>
-          <Button disabled>Disabled</Button>
-          <Button loading>Loading</Button>
-          <Button fullWidth>Full Width</Button>
-        </div>
-      </div>
-    </Card>
-    
-    <!-- Card Component Demo -->
-    <h3 class="mb-4">Card Component</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-      <Card variant="default">
-        <h4 class="text-lg mb-2">Default Card</h4>
-        <p>This is a default card with shadow and border.</p>
-      </Card>
-      
-      <Card variant="outline">
-        <h4 class="text-lg mb-2">Outline Card</h4>
-        <p>This card has a border but no shadow.</p>
-      </Card>
-      
-      <Card variant="flat">
-        <h4 class="text-lg mb-2">Flat Card</h4>
-        <p>This card has no border or shadow.</p>
-      </Card>
-      
-      <Card variant="elevated" shadow={true}>
-        <h4 class="text-lg mb-2">Elevated Card</h4>
-        <p>This card has a more pronounced shadow.</p>
-      </Card>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Card hover={true} interactive={true}>
-        <h4 class="text-lg mb-2">Interactive Card</h4>
-        <p>This card has hover effects and is interactive. Try clicking it!</p>
-      </Card>
-      
-      <Card padding={false}>
-        <div class="bg-primary-600 text-white p-4 rounded-t-lg">
-          <h4 class="text-lg">Card Header</h4>
-        </div>
-        <div class="p-4">
-          <p>This card has custom padding and a header section.</p>
-        </div>
-      </Card>
-    </div>
-    
-    <!-- Legacy Tailwind Demo -->
-    <div class="mt-12">
-      <h3 class="mb-4">Legacy Tailwind Components</h3>
-      <Card>
-        <h4 class="text-lg mb-2">Button Styles with Tailwind CSS</h4>
-        <div class="flex flex-wrap gap-4 items-center justify-center">
-          <TailwindButton text="Primary Button" type="primary" />
-          <TailwindButton text="Secondary Button" type="secondary" />
-          <TailwindButton text="Outline Button" type="outline" />
-        </div>
-        <div class="mt-4">
-          <p class="text-center text-sm opacity-70">
-            These buttons are styled using the legacy TailwindButton component
-          </p>
-        </div>
-      </Card>
-    </div>
-  </div>
-</section>
 
 <!-- Contact Section -->
 <section id="contact" class="section">
-  <div class="container">
-    <h2 class="gradient-text">Get In Touch</h2>
+  <div class="container glass-card-dark section-container">
+    <h2 class="section-header-gradient">Get In Touch</h2>
     <div class="contact-content">
       <p>I'm currently looking for new opportunities and would love to hear from you!</p>
       <div class="contact-methods">
@@ -287,6 +184,33 @@
 </section>
 
 <style>
+  /* Section styling */
+  .section {
+    padding: calc(var(--space-xl) * 0.5) 0; /* Doubled from previous value, but still less than original */
+    margin: calc(var(--space-xl) * 0.1) 0; /* Changed from negative to small positive margin */
+  }
+  
+  /* Section container with frosted glass effect */
+  .section-container {
+    padding: calc(var(--space-lg) * 1.25); /* Slightly increased from previous value */
+    border-radius: var(--radius-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Section header with solid blue color */
+  .section-header-gradient {
+    color: var(--blue-color);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-bold);
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+  }
+
   .hero {
     padding: var(--space-xl) 0;
     position: relative;
@@ -306,8 +230,86 @@
     padding: 3rem;
     max-width: 800px;
     text-align: center;
+    border-radius: var(--radius-xl);
   }
   
+  .glass-card-dark {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Hero gradient container */
+  .hero-gradient-container {
+    --hero-gradient: var(--purple-blue-gradient); /* Use the shared purple-blue gradient */
+    position: relative;
+  }
+  
+  /* Add subtle text shadow to all hero text for relief */
+  .hero-container h1,
+  .hero-container p,
+  .hero-container a {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Hero gradient text */
+  .hero-gradient-text {
+    background-image: var(--hero-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    display: inline-block;
+    background-size: 100% 100%; /* Ensure gradient covers exactly the text area */
+    filter: brightness(1.2);
+  }
+  
+  /* Hero gradient outline button */
+  .hero-gradient-outline-button {
+    display: inline-block;
+    padding: 11px 24px;
+    background: rgba(0, 0, 0, 0.25);
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    border-radius: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+    z-index: 1;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  .hero-gradient-outline-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    padding: 2px;
+    background: var(--hero-gradient);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
+  
+  .hero-gradient-outline-button:hover {
+    background: rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2);
+    color: white;
+  }
+  
+  .hero-gradient-outline-button:hover::before {
+    filter: brightness(1.2);
+  }
 
   .hero-background-image {
     position: absolute;
@@ -333,7 +335,6 @@
     justify-content: center;
   }
 
-
   .about-content {
     display: flex;
     gap: var(--space-lg);
@@ -351,11 +352,10 @@
   }
   
   .skill-category {
-    background: rgba(10, 10, 10, 0.7);
+    background-color: var(--surface); /* Match to card class */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-blue);
-    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-md); /* Match to card shadow-md */
     padding: var(--space-lg);
     transition: all 0.3s ease;
   }
@@ -366,7 +366,7 @@
   }
   
   .skill-category h3 {
-    color: var(--primary);
+    color: var(--blue-color);
     margin-bottom: var(--space-md);
     text-align: center;
   }
@@ -387,19 +387,19 @@
   }
 
   .contact-methods {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap; /* Prevent wrapping */
     gap: var(--space-lg);
     margin-top: var(--space-lg);
   }
 
   .contact-method {
     padding: var(--space-md);
-    background: rgba(10, 10, 10, 0.7);
+    background-color: var(--surface); /* Match to card class */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-blue-purple);
-    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-md); /* Match to card shadow-md */
     text-align: center;
     transition: all 0.3s ease;
   }
@@ -411,6 +411,17 @@
 
   .contact-method h3 {
     margin-bottom: var(--space-sm);
+  }
+  
+  .contact-method a {
+    color: var(--blue-color);
+    transition: all 0.3s ease;
+    white-space: nowrap; /* Prevent line breaks */
+    display: inline-block; /* Ensure the entire link stays together */
+  }
+  
+  .contact-method a:hover {
+    text-decoration: underline;
   }
 
   /* Loading, error, and empty states */
@@ -445,7 +456,7 @@
     }
 
     .contact-methods {
-      grid-template-columns: 1fr;
+      flex-wrap: wrap; /* Allow wrapping on small screens */
     }
   }
 </style>
