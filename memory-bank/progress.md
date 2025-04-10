@@ -7,7 +7,14 @@ This document tracks what works, what's left to build, current status, known iss
 
 The current state of the project is:
 
-1. **Project Links and Content Updates**:
+1. **Deployment and Build Process**:
+   - ✅ Fixed Azure deployment issues by removing Windows-specific dependency
+   - ✅ Added missing cssnano dependency for PostCSS production builds
+   - ✅ Successfully merged changes to main branch
+   - ✅ Created portfolio-updates-2 branch for future enhancements
+   - ✅ Pushed all changes to remote repository
+
+2. **Project Links and Content Updates**:
    - ✅ Added TailwindCSS to the Portfolio Website project card's tech stack
    - ✅ Fixed all project "View Project" links to point to the correct domains
    - ✅ Fixed all project "Source Code" links with the complete GitHub repository paths

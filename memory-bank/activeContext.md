@@ -55,7 +55,14 @@ While the primary focus is on architecture improvements, we're also addressing:
 
 ## Recent Changes
 
-1. **Updated project links and added TailwindCSS to tech stack** (4/10/2025):
+1. **Fixed deployment issues in Azure** (4/10/2025):
+   - Removed Windows-specific dependency (`@rollup/rollup-win32-x64-msvc`) that was causing compatibility issues with Linux environment in Azure
+   - Added missing `cssnano` dependency required for PostCSS in production builds
+   - Updated both main and portfolio-updates-2 branches with the fixes
+   - Successfully pushed changes to remote repository
+   - Result: Fixed Azure deployment pipeline to properly build the portfolio website
+
+2. **Updated project links and added TailwindCSS to tech stack** (4/10/2025):
    - Added TailwindCSS to the Portfolio Website project card's tech stack
    - Fixed all project "View Project" links to point to the correct domains:
      - Blackjack Game: Updated to https://blackjack.maber.io
