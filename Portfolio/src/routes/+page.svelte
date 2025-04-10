@@ -49,12 +49,16 @@
   <!-- Single div with CSS class for background image -->
   <div class="hero-background-image"></div>
 
-  <div class="container">
-    <h1>Hello, I'm <span class="highlight">Mike Abernathy</span></h1>
+  <div class="glass-card hero-container">
+    <h1>Hello, I'm <span class="gradient-text">Mike Abernathy</span></h1>
     <p class="tagline">Aspiring Developer | Building Creative Solutions</p>
     <div class="cta-buttons">
-      <a href="#projects" class="btn">View My Work</a>
-      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      <a href="#projects" class="btn-gradient primary-gradient" style="background: linear-gradient(90deg, #3B82F6, #8B5CF6) !important; box-shadow: var(--shadow-blue-purple);">
+        View My Work
+      </a>
+      <a href="#contact" class="btn-gradient primary-gradient" style="background: linear-gradient(90deg, #3B82F6, #8B5CF6) !important; box-shadow: var(--shadow-blue-purple);">
+        Get In Touch
+      </a>
     </div>
   </div>
 </section>
@@ -62,7 +66,7 @@
 <!-- About Section -->
 <section id="about" class="section">
   <div class="container">
-    <h2>About Me</h2>
+    <h2 class="gradient-text">About Me</h2>
     <div class="about-content">
       <div class="about-text">
         <p>
@@ -83,7 +87,7 @@
 <!-- Projects Section -->
 <section id="projects" class="section">
   <div class="container">
-    <h2>My Projects</h2>
+    <h2 class="gradient-text">My Projects</h2>
 
     {#if $projectsStore.loading}
       <div class="loading-container">
@@ -118,7 +122,7 @@
 <!-- Skills Section -->
 <section id="skills" class="section">
   <div class="container">
-    <h2>Skills</h2>
+    <h2 class="gradient-text">Skills</h2>
     <div class="skills-container">
       <div class="skill-category">
         <h3>Frontend</h3>
@@ -155,7 +159,7 @@
 <!-- Component Demo Section -->
 <section id="component-demo" class="section">
   <div class="container">
-    <h2>Component Library</h2>
+    <h2 class="gradient-text">Component Library</h2>
     
     <!-- Button Component Demo -->
     <Card className="mb-8">
@@ -257,7 +261,7 @@
 <!-- Contact Section -->
 <section id="contact" class="section">
   <div class="container">
-    <h2>Get In Touch</h2>
+    <h2 class="gradient-text">Get In Touch</h2>
     <div class="contact-content">
       <p>I'm currently looking for new opportunities and would love to hear from you!</p>
       <div class="contact-methods">
@@ -296,15 +300,14 @@
     justify-content: center;
   }
 
-  .hero .container {
+  .hero-container {
     position: relative;
     z-index: 2;
-    background-color: rgba(18, 18, 18, 0.7);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    backdrop-filter: blur(3px);
+    padding: 3rem;
     max-width: 800px;
+    text-align: center;
   }
+  
 
   .hero-background-image {
     position: absolute;
@@ -316,11 +319,7 @@
     background-image: url('/images/bear-coding.png');
     background-size: cover;
     background-position: center;
-    filter: brightness(0.7);
-  }
-
-  .highlight {
-    color: var(--primary);
+    filter: brightness(0.85);
   }
 
   .tagline {
@@ -334,16 +333,6 @@
     justify-content: center;
   }
 
-  .btn-outline {
-    background-color: transparent;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-  }
-
-  .btn-outline:hover {
-    background-color: var(--primary);
-    color: var(--background);
-  }
 
   .about-content {
     display: flex;
@@ -359,6 +348,27 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--space-lg);
+  }
+  
+  .skill-category {
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-blue);
+    backdrop-filter: blur(8px);
+    padding: var(--space-lg);
+    transition: all 0.3s ease;
+  }
+  
+  .skill-category:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-blue-purple);
+  }
+  
+  .skill-category h3 {
+    color: var(--primary);
+    margin-bottom: var(--space-md);
+    text-align: center;
   }
 
   .skill-list {
@@ -385,9 +395,18 @@
 
   .contact-method {
     padding: var(--space-md);
-    background-color: var(--surface);
-    border-radius: var(--border-radius);
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-blue-purple);
+    backdrop-filter: blur(8px);
     text-align: center;
+    transition: all 0.3s ease;
+  }
+  
+  .contact-method:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-purple);
   }
 
   .contact-method h3 {

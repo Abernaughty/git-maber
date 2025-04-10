@@ -7,6 +7,16 @@ This document tracks what works, what's left to build, current status, known iss
 
 The current state of the project is:
 
+1. **Design Enhancements**:
+   - ✅ Added blue-to-purple gradient text effect for headings
+   - ✅ Implemented glass card effect with backdrop filter
+   - ✅ Enhanced background with subtle gradients
+   - ✅ Added shadow effects with blue and purple glows
+   - ✅ Removed blue tint from background image
+   - ✅ Attempted to create consistent button styling with gradients
+   - ✅ Used inline styles for button hover effects
+   - ⚠️ Encountered issues with CSS specificity and styling overrides
+
 1. **Project Planning**: 
    - ✅ Project goals and scope defined
    - ✅ System architecture designed
@@ -197,6 +207,14 @@ The current state of the project is:
 
 As we progress through the foundation phase, we've identified several implementation-specific issues:
 
+1. **Button Gradient Consistency Issues**:
+   - Challenge: Buttons had inconsistent gradients that needed to be standardized
+   - Symptoms: "View My Work" button had blue-to-purple gradient, "Get In Touch" button had blue-to-lighter-blue gradient
+   - Goal: Make both buttons have the same gradient for visual consistency
+   - Mitigation: Applied the primary-gradient class and inline styles with !important to both buttons
+   - Status: ✅ Resolved - Both buttons now have the same blue-to-purple gradient
+   - Update (4/10/2025): Standardized on the blue-to-purple gradient for both buttons to match the gradient text effect used in headings
+
 1. **Accessibility Issues in Components**:
    - Challenge: Ensuring proper accessibility for interactive components
    - Symptoms: ESLint warnings about missing ARIA roles and keyboard navigation
@@ -336,4 +354,4 @@ Feature priorities evolved based on the core objectives of showcasing Azure expe
 4. Integrate Azure services
 
 ---
-*This document was updated on 4/9/2025 at 10:52 AM as part of the Memory Bank update for the Portfolio Enhancement Project.*
+*This document was updated on 4/9/2025 at 7:52 PM as part of the Memory Bank update for the Portfolio Enhancement Project.*

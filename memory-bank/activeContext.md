@@ -55,7 +55,27 @@ While the primary focus is on architecture improvements, we're also addressing:
 
 ## Recent Changes
 
-1. **Implemented foundation components for the design system** (4/9/2025):
+1. **Updated portfolio site with design elements from cline.bot** (4/9/2025):
+   - Added blue-to-purple gradient text effect for headings and name in hero section
+   - Implemented glass card effect with backdrop filter for hero container and contact cards
+   - Enhanced background with subtle gradients and adjusted image brightness
+   - Updated buttons with gradient styles and hover effects
+   - Added shadow effects with blue and purple glows
+   - Attempted to create consistent button styling with gradients
+   - Removed blue tint from bear-coding.png background image
+   - Used inline styles with onmouseover/onmouseout for button hover effects
+   - Encountered issues with CSS specificity and styling overrides
+   - Cleaned up unused CSS selectors
+
+2. **Fixed button gradient consistency issue** (4/10/2025):
+   - Identified issue where buttons had inconsistent gradients
+   - Initial state: "View My Work" button had blue-to-purple gradient, "Get In Touch" button had blue-to-lighter-blue gradient
+   - Goal: Make both buttons have the same gradient for visual consistency
+   - Solution: Standardized both buttons to use the blue-to-purple gradient
+   - Implementation: Applied the primary-gradient class and inline styles with !important to both buttons
+   - Result: Both buttons now have the same blue-to-purple gradient for visual consistency
+
+2. **Implemented foundation components for the design system** (4/9/2025):
    - Created a comprehensive design tokens system in TypeScript
    - Implemented theme CSS file with variables for consistent styling
    - Added utility CSS classes to complement Tailwind's utilities
@@ -452,4 +472,4 @@ We've gained several insights during the implementation phase:
 8. **Documentation Importance**: As this project itself is a showcase of skills, thorough documentation of both the code and the architectural decisions is crucial.
 
 ---
-*This document was updated on 4/9/2025 at 10:52 AM as part of the Memory Bank update for the Portfolio Enhancement Project.*
+*This document was updated on 4/9/2025 at 7:52 PM as part of the Memory Bank update for the Portfolio Enhancement Project.*
