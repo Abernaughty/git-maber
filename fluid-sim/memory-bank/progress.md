@@ -20,6 +20,7 @@ Implementation complete - Optimal configuration values determined, UI issues fix
 - Removed test splat code that was causing a flash in the center of the screen on page load
 - Added maber.io logo to the center of the background, behind the fluid effect
 - Created a separate Git branch (reflective-logo) for future work on implementing a reflective effect
+- Fixed deployment issue by adding the images directory to git tracking for Azure deployment
 
 ## In Progress
 - Browser compatibility testing

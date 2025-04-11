@@ -59,6 +59,7 @@ const config = {
 7. Removed the test splat that was creating a flash in the center of the screen on page load
 8. Added the maber.io logo to the center of the background, behind the fluid effect
 9. Created a separate Git branch (reflective-logo) for future work on implementing a reflective effect between the logo and fluid
+10. Fixed deployment issue by adding the images directory to git tracking, ensuring logo files are included in the Azure deployment
 
 ## Next Steps
 1. Test the implementation across different browsers and devices
