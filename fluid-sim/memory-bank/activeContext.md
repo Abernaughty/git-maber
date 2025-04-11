@@ -1,7 +1,7 @@
 # Active Context: Fluid Simulation Cursor Effect
 
 ## Current Focus
-Testing and optimizing a WebGL-based fluid simulation that creates a colorful smoke trail following cursor movements. We have found optimal configuration values that provide the desired visual effect.
+Finalizing and deploying a WebGL-based fluid simulation that creates a colorful smoke trail following cursor movements. We have found optimal configuration values that provide the desired visual effect and have fixed UI issues like the initial center flash.
 
 ## Project Directory
 C:/Users/maber/Documents/GitHub/git-maber/fluid-sim/
@@ -64,10 +64,10 @@ const config = {
 3. Consider adding additional visual effects or features
 4. Create documentation for users
 5. Explore potential enhancements like custom color schemes or interaction modes
-6. Deploy to Azure Static Web App using the provided configuration
+6. Monitor Azure Static Web App deployment for any issues
 
 ## Deployment Information
-The project is configured for deployment to Azure Static Web App with the following setup:
+The project has been successfully deployed to Azure Static Web App with the following setup:
 
 1. **Configuration File**: `staticwebapp.config.json` in the project root contains:
    - Route configuration for proper URL handling
@@ -75,7 +75,12 @@ The project is configured for deployment to Azure Static Web App with the follow
    - Security headers for better protection
 
 2. **Azure Static Web App Setup**:
-   - Build preset: Select "Custom" when creating the Static Web App
+   - Build preset: "Custom"
    - App location: `/fluid-sim` (the folder containing the project)
-   - API location: Leave empty (no backend API)
-   - Output location: Leave empty (no build step needed)
+   - API location: Empty (no backend API)
+   - Output location: Empty (no build step needed)
+
+3. **Deployment Process**:
+   - GitHub Actions workflow automatically deploys changes when pushed to main branch
+   - Workflow file: `.github/workflows/azure-static-web-apps-yellow-rock-0a0307d10.yml`
+   - Deployment triggers on every push to the main branch
