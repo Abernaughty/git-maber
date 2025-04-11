@@ -6,7 +6,7 @@
 
 body {
     overflow: hidden;
-    background-color: #800000; /* Dark red background to match the fluid simulation config */
+    background-color: #000000; /* Deep black background */
 }
 
 #fluid-canvas {

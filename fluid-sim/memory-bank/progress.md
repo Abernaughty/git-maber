@@ -54,7 +54,7 @@ const config = {
     SPLAT_FORCE: 6e3,          // Controls the energy of fluid movement
     SHADING: true,
     COLOR_UPDATE_SPEED: 10,
-    BACK_COLOR: { r: 0.5, g: 0, b: 0 }, // Dark red background
+    BACK_COLOR: { r: 0, g: 0, b: 0 }, // Deep black background
     TRANSPARENT: true
 };
 ```
