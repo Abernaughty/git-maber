@@ -56,6 +56,7 @@ const config = {
 4. Color generation creates the vibrant, changing colors of the trail
 5. WebGL context and extension handling is crucial for cross-browser compatibility
 6. Dissipation parameters behave counter-intuitively - values above 1 increase dissipation rate
+7. Removed the test splat that was creating a flash in the center of the screen on page load
 
 ## Next Steps
 1. Test the implementation across different browsers and devices

@@ -17,6 +17,7 @@ Testing phase complete - Optimal configuration values determined, implementation
 - Created UI controls for adjusting simulation parameters
 - Tested and optimized configuration values for optimal visual effect
 - Discovered optimal parameter settings for fluid dissipation and movement
+- Removed test splat code that was causing a flash in the center of the screen on page load
 
 ## In Progress
 - Browser compatibility testing

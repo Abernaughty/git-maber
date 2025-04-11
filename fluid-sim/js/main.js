@@ -49,15 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fluidSim = new FluidSimulation(canvas, config);
         console.log('Fluid simulation initialized');
         
-        // Create a test splat
-        console.log('Creating test splat');
-        setTimeout(() => {
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const pointer = fluidSim.pointers[0];
-            fluidSim.updatePointerDownData(pointer, -1, centerX, centerY);
-            fluidSim.updatePointerMoveData(pointer, centerX + 50, centerY + 50);
-        }, 1000);
+        // No test splat - only respond to actual mouse movements
         
         // Handle window resize
         window.addEventListener('resize', () => {
