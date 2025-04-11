@@ -63,3 +63,18 @@ const config = {
 3. Consider adding additional visual effects or features
 4. Create documentation for users
 5. Explore potential enhancements like custom color schemes or interaction modes
+6. Deploy to Azure Static Web App using the provided configuration
+
+## Deployment Information
+The project is configured for deployment to Azure Static Web App with the following setup:
+
+1. **Configuration File**: `staticwebapp.config.json` in the project root contains:
+   - Route configuration for proper URL handling
+   - MIME type settings for shader files (.vert and .frag)
+   - Security headers for better protection
+
+2. **Azure Static Web App Setup**:
+   - Build preset: Select "Custom" when creating the Static Web App
+   - App location: `/fluid-sim` (the folder containing the project)
+   - API location: Leave empty (no backend API)
+   - Output location: Leave empty (no build step needed)
