@@ -18,6 +18,8 @@ Implementation complete - Optimal configuration values determined, UI issues fix
 - Tested and optimized configuration values for optimal visual effect
 - Discovered optimal parameter settings for fluid dissipation and movement
 - Removed test splat code that was causing a flash in the center of the screen on page load
+- Added maber.io logo to the center of the background, behind the fluid effect
+- Created a separate Git branch (reflective-logo) for future work on implementing a reflective effect
 
 ## In Progress
 - Browser compatibility testing
@@ -29,6 +31,7 @@ Implementation complete - Optimal configuration values determined, UI issues fix
 3. Consider adding additional visual effects or features
 4. Create documentation for users
 5. Monitor Azure Static Web App deployment for any issues
+6. Implement reflective effect between the logo and fluid (in the reflective-logo branch)
 
 ## Deployment Configuration
 - Added `staticwebapp.config.json` for Azure Static Web App deployment
