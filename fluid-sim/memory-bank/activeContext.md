@@ -1,7 +1,7 @@
 # Active Context: Fluid Simulation Cursor Effect
 
 ## Current Focus
-Finalizing and deploying a WebGL-based fluid simulation that creates a colorful smoke trail following cursor movements. We have found optimal configuration values that provide the desired visual effect and have fixed UI issues like the initial center flash.
+Finalizing and deploying a WebGL-based fluid simulation that creates a colorful smoke trail following cursor movements. We have found optimal configuration values that provide the desired visual effect and have fixed UI issues like the initial center flash. We've also added the maber.io logo to the center of the background, behind the fluid effect.
 
 ## Project Directory
 C:/Users/maber/Documents/GitHub/git-maber/fluid-sim/
@@ -57,6 +57,8 @@ const config = {
 5. WebGL context and extension handling is crucial for cross-browser compatibility
 6. Dissipation parameters behave counter-intuitively - values above 1 increase dissipation rate
 7. Removed the test splat that was creating a flash in the center of the screen on page load
+8. Added the maber.io logo to the center of the background, behind the fluid effect
+9. Created a separate Git branch (reflective-logo) for future work on implementing a reflective effect between the logo and fluid
 
 ## Next Steps
 1. Test the implementation across different browsers and devices
@@ -65,6 +67,7 @@ const config = {
 4. Create documentation for users
 5. Explore potential enhancements like custom color schemes or interaction modes
 6. Monitor Azure Static Web App deployment for any issues
+7. Implement reflective effect between the logo and fluid (in the reflective-logo branch)
 
 ## Deployment Information
 The project has been successfully deployed to Azure Static Web App with the following setup:
