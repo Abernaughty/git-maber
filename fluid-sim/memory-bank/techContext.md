@@ -19,6 +19,7 @@
 ## Dependencies
 - No external libraries required
 - Self-contained implementation using native WebGL API
+- Logo image assets stored in the images directory
 
 ## WebGL Features Used
 - Framebuffer objects (FBOs)
@@ -95,3 +96,8 @@ The fluid simulation behavior is controlled by several key parameters:
 - Modern browsers with WebGL support (Chrome, Firefox, Safari, Edge)
 - Fallback options for browsers with limited WebGL support
 - Mobile browser considerations for touch events
+
+## Deployment Considerations
+- Azure Static Web App deployment requires all assets to be tracked in git
+- Image files in the images directory must be committed to the repository
+- Relative paths in HTML/CSS (e.g., "images/maber-logo.png") resolve relative to the deployed URL
