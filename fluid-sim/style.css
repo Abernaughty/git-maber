@@ -61,21 +61,22 @@ body {
     height: 100%;
 }
 
-.portfolio-link {
+.nav-link, .portfolio-link {
     display: flex;
     align-items: center;
     height: 100%;
+    margin-left: 15px;
 }
 
-.header-portfolio {
+.header-nav-img, .header-portfolio {
     height: 54px;
     width: auto;
-    margin-right: 15px;
     transition: transform 0.3s ease;
     object-fit: contain;
 }
 
-.header-portfolio:hover {
+
+.header-nav-img:hover, .header-portfolio:hover {
     transform: scale(1.05);
 }
 
