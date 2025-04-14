@@ -57,6 +57,28 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.height = window.innerHeight;
         });
         
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        console.log('Menu elements:', { 
+            menuToggle: menuToggle, 
+            mobileMenu: mobileMenu 
+        });
+        
+        if (menuToggle && mobileMenu) {
+            console.log('Adding click event listener to hamburger menu');
+            
+            menuToggle.addEventListener('click', () => {
+                console.log('Hamburger menu clicked');
+                menuToggle.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                console.log('Menu active state:', mobileMenu.classList.contains('active'));
+            });
+        } else {
+            console.error('Mobile menu elements not found');
+        }
+        
         console.log('Setup complete');
     } catch (error) {
         console.error('Error in main.js:', error);

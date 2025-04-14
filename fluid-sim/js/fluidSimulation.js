@@ -389,6 +389,16 @@ class FluidSimulation {
         
         // Window resize
         window.addEventListener('resize', this.onResize.bind(this));
+        
+        // Orientation change for mobile devices
+        window.addEventListener('orientationchange', () => {
+            // Small delay to allow the browser to complete the rotation
+            setTimeout(() => {
+                this.canvas.width = this.canvas.clientWidth;
+                this.canvas.height = this.canvas.clientHeight;
+                this.initFramebuffers();
+            }, 100);
+        });
     }
     
     onMouseDown(e) {
@@ -467,8 +477,8 @@ class FluidSimulation {
         pointer.id = id;
         pointer.down = true;
         pointer.moved = false;
-        pointer.texcoordX = x / this.canvas.width;
-        pointer.texcoordY = 1.0 - y / this.canvas.height;
+        pointer.texcoordX = x / this.canvas.clientWidth;
+        pointer.texcoordY = 1.0 - y / this.canvas.clientHeight;
         pointer.prevTexcoordX = pointer.texcoordX;
         pointer.prevTexcoordY = pointer.texcoordY;
         pointer.deltaX = 0;
@@ -482,21 +492,21 @@ class FluidSimulation {
     updatePointerMoveData(pointer, x, y) {
         pointer.prevTexcoordX = pointer.texcoordX;
         pointer.prevTexcoordY = pointer.texcoordY;
-        pointer.texcoordX = x / this.canvas.width;
-        pointer.texcoordY = 1.0 - y / this.canvas.height;
+        pointer.texcoordX = x / this.canvas.clientWidth;
+        pointer.texcoordY = 1.0 - y / this.canvas.clientHeight;
         pointer.deltaX = this.correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX);
         pointer.deltaY = this.correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY);
         pointer.moved = Math.abs(pointer.deltaX) > 0 || Math.abs(pointer.deltaY) > 0;
     }
     
     correctDeltaX(delta) {
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
         if (aspectRatio < 1) delta *= aspectRatio;
         return delta;
     }
     
     correctDeltaY(delta) {
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
         if (aspectRatio > 1) delta /= aspectRatio;
         return delta;
     }
@@ -518,7 +528,7 @@ class FluidSimulation {
             
             // Velocity splat
             this.gl.uniform1i(this.splatProgram.uniforms.uTarget, this.velocity.read.attach(0));
-            this.gl.uniform1f(this.splatProgram.uniforms.aspectRatio, this.canvas.width / this.canvas.height);
+            this.gl.uniform1f(this.splatProgram.uniforms.aspectRatio, this.canvas.clientWidth / this.canvas.clientHeight);
             this.gl.uniform2f(this.splatProgram.uniforms.point, x, y);
             this.gl.uniform3f(this.splatProgram.uniforms.color, dx, dy, 0.0);
             
@@ -542,7 +552,7 @@ class FluidSimulation {
     }
     
     correctRadius(radius) {
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
         if (aspectRatio > 1) {
             radius *= aspectRatio;
         }
