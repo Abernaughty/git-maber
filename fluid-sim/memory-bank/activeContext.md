@@ -60,6 +60,10 @@ const config = {
 8. Added the maber.io logo to the center of the background, behind the fluid effect
 9. Created a separate Git branch (reflective-logo) for future work on implementing a reflective effect between the logo and fluid
 10. Fixed deployment issue by adding the images directory to git tracking, ensuring logo files are included in the Azure deployment
+11. Optimized maber-logo.png file, reducing its size from 2.5MB to 947KB for better performance
+12. Added favicon.ico to provide a browser tab icon for the site
+13. Removed an earlier Canvas 2D prototype (landing-page directory) that was superseded by the current WebGL implementation
+14. Successfully merged remote changes and pushed local updates to the GitHub repository
 
 ## Next Steps
 1. Test the implementation across different browsers and devices
