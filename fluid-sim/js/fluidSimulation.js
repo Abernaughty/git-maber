@@ -424,6 +424,7 @@ class FluidSimulation {
             const x = touch.clientX - rect.left;
             const y = touch.clientY - rect.top;
             
+            console.log(`Touch start at client (${touch.clientX}, ${touch.clientY}), canvas (${x}, ${y})`);
             this.updatePointerDownData(pointer, touch.identifier, x, y);
         }
     }
@@ -436,7 +437,7 @@ class FluidSimulation {
             const pointer = this.pointers[i];
             const touch = touches[i];
             
-            if (pointer.id === touch.identifier) {
+            if (pointer && pointer.id === touch.identifier) {
                 const rect = this.canvas.getBoundingClientRect();
                 const x = touch.clientX - rect.left;
                 const y = touch.clientY - rect.top;
@@ -458,8 +459,10 @@ class FluidSimulation {
     }
     
     onResize() {
-        this.canvas.width = this.canvas.clientWidth;
-        this.canvas.height = this.canvas.clientHeight;
+        console.log('Resizing canvas');
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        console.log(`New canvas size: ${this.canvas.width}x${this.canvas.height}`);
         this.initFramebuffers();
     }
     
@@ -467,13 +470,15 @@ class FluidSimulation {
         pointer.id = id;
         pointer.down = true;
         pointer.moved = false;
-        pointer.texcoordX = x / this.canvas.width;
-        pointer.texcoordY = 1.0 - y / this.canvas.height;
+        pointer.texcoordX = x / this.canvas.clientWidth;
+        pointer.texcoordY = 1.0 - y / this.canvas.clientHeight;
         pointer.prevTexcoordX = pointer.texcoordX;
         pointer.prevTexcoordY = pointer.texcoordY;
         pointer.deltaX = 0;
         pointer.deltaY = 0;
         pointer.color = this.generateColor();
+        
+        console.log(`Pointer down at (${x}, ${y}), texcoord: (${pointer.texcoordX}, ${pointer.texcoordY})`);
         
         // Create an initial splat
         this.splat(pointer.texcoordX, pointer.texcoordY, pointer.deltaX, pointer.deltaY, pointer.color);
@@ -482,21 +487,25 @@ class FluidSimulation {
     updatePointerMoveData(pointer, x, y) {
         pointer.prevTexcoordX = pointer.texcoordX;
         pointer.prevTexcoordY = pointer.texcoordY;
-        pointer.texcoordX = x / this.canvas.width;
-        pointer.texcoordY = 1.0 - y / this.canvas.height;
+        pointer.texcoordX = x / this.canvas.clientWidth;
+        pointer.texcoordY = 1.0 - y / this.canvas.clientHeight;
         pointer.deltaX = this.correctDeltaX(pointer.texcoordX - pointer.prevTexcoordX);
         pointer.deltaY = this.correctDeltaY(pointer.texcoordY - pointer.prevTexcoordY);
         pointer.moved = Math.abs(pointer.deltaX) > 0 || Math.abs(pointer.deltaY) > 0;
+        
+        if (pointer.moved) {
+            console.log(`Pointer moved to (${x}, ${y}), texcoord: (${pointer.texcoordX}, ${pointer.texcoordY}), delta: (${pointer.deltaX}, ${pointer.deltaY})`);
+        }
     }
     
     correctDeltaX(delta) {
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
         if (aspectRatio < 1) delta *= aspectRatio;
         return delta;
     }
     
     correctDeltaY(delta) {
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
         if (aspectRatio > 1) delta /= aspectRatio;
         return delta;
     }
@@ -518,7 +527,7 @@ class FluidSimulation {
             
             // Velocity splat
             this.gl.uniform1i(this.splatProgram.uniforms.uTarget, this.velocity.read.attach(0));
-            this.gl.uniform1f(this.splatProgram.uniforms.aspectRatio, this.canvas.width / this.canvas.height);
+            this.gl.uniform1f(this.splatProgram.uniforms.aspectRatio, this.canvas.clientWidth / this.canvas.clientHeight);
             this.gl.uniform2f(this.splatProgram.uniforms.point, x, y);
             this.gl.uniform3f(this.splatProgram.uniforms.color, dx, dy, 0.0);
             
@@ -542,7 +551,7 @@ class FluidSimulation {
     }
     
     correctRadius(radius) {
-        const aspectRatio = this.canvas.width / this.canvas.height;
+        const aspectRatio = this.canvas.clientWidth / this.canvas.clientHeight;
         if (aspectRatio > 1) {
             radius *= aspectRatio;
         }

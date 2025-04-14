@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fluid Simulation</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="images/bear-icon.png" type="image/png">
+    <link rel="stylesheet" href="style.css?v=1.1">
     
     <!-- Shader Scripts -->
     <script id="base-vertex-shader" type="x-shader/x-vertex">
@@ -248,7 +249,14 @@
             <img src="images/bear-icon.png" alt="Bear Icon" class="header-icon">
             <img src="images/maber-logo.png" alt="maber.io" class="header-logo">
         </div>
-        <div class="header-right">
+        <div class="mobile-menu-toggle">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="header-right mobile-menu">
             <a href="https://blackjack.maber.io" class="nav-link" target="_blank">
                 <img src="images/Blackjack.png" alt="Blackjack" class="header-nav-img">
             </a>
@@ -265,7 +273,7 @@
     </div>
     <canvas id="fluid-canvas"></canvas>
 
-    <script src="js/fluidSimulation.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/fluidSimulation.js?v=1.1"></script>
+    <script src="js/main.js?v=1.1"></script>
 </body>
 </html>
