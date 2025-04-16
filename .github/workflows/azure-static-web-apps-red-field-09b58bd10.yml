@@ -45,23 +45,29 @@ jobs:
         run: npm install -g pnpm
       
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          cd ./PokeData
+          pnpm install
+          cd ..
         
       - name: Verify package installation
         run: |
+          cd ./PokeData
           echo "Verifying package installation..."
-          ls -la node_modules/rollup-plugin-svelte || echo "rollup-plugin-svelte not found in root node_modules"
-          find node_modules -name "rollup-plugin-svelte" | grep . || echo "rollup-plugin-svelte not found in any node_modules"
+          ls -la node_modules/rollup-plugin-svelte || echo "rollup-plugin-svelte not found in PokeData node_modules"
+          ls -la node_modules/@rollup/plugin-commonjs || echo "@rollup/plugin-commonjs not found in PokeData node_modules"
+          cd ..
       
       - name: Install missing packages if needed
         run: |
-          if [ ! -d "node_modules/rollup-plugin-svelte" ]; then
-            echo "Installing missing rollup-plugin-svelte package..."
-            npm install --no-save rollup-plugin-svelte@7.0.0
-          fi
+          cd ./PokeData
+          echo "Installing required rollup plugins..."
+          npm install --no-save @rollup/plugin-commonjs@17.0.0 @rollup/plugin-node-resolve@11.0.0 @rollup/plugin-replace@6.0.2 rollup-plugin-svelte@7.0.0 rollup-plugin-css-only@3.1.0 rollup-plugin-livereload@2.0.0 rollup-plugin-terser@7.0.0
+          cd ..
       
       - name: Debug Environment Variables
         run: |
+          cd ./PokeData
           echo "Checking environment variables (safely)..."
           echo "API_BASE_URL exists: ${{ secrets.API_BASE_URL != '' }}"
           echo "API_KEY exists: ${{ secrets.API_KEY != '' }}"
@@ -81,13 +87,17 @@ jobs:
           
           # Run the debug script with environment variables
           echo "Running Node.js environment check..."
+          cd ..
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
           API_SUBSCRIPTION_KEY: ${{ secrets.API_SUBSCRIPTION_KEY }}
       
       - name: Execute Environment Debug Script
-        run: node debug-env.js
+        run: |
+          cd ./PokeData
+          node debug-env.js
+          cd ..
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
@@ -95,10 +105,12 @@ jobs:
       
       - name: Debug Rollup Config
         run: |
+          cd ./PokeData
           echo "Checking Rollup configuration..."
           grep -A 20 "replace(" rollup.config.js || echo "replace plugin not found in rollup.config.js"
           echo "Checking for environment variable usage in apiConfig.js..."
           grep -A 10 "process.env" src/data/apiConfig.js || echo "process.env not found in apiConfig.js"
+          cd ..
           
       - name: Build And Deploy
         id: builddeploy
