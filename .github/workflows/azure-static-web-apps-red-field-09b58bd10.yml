@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd ./PokeData
-          pnpm install
+          pnpm install --no-frozen-lockfile
           cd ..
         
       - name: Verify package installation
