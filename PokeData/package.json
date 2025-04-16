@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Pokémon Card Price Checker built with Svelte",
   "private": true,
+  "type": "commonjs",
   "scripts": {
     "build": "npx rollup -c rollup.config.cjs",
     "dev": "npx rollup -c rollup.config.cjs -w",
