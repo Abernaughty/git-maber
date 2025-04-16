@@ -1,13 +1,13 @@
 // API Configuration
 export const API_CONFIG = {
   // Base URL for the API
-  baseUrl: 'https://maber-apim-test.azure-api.net/pokedata-api/v0',
+  baseUrl: process.env.API_BASE_URL || 'https://maber-apim-test.azure-api.net/pokedata-api/v0',
   
   // API key for authentication
-  apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNzMxNzE0MiwianRpIjoiNjJkNWU1ZjktNTI5ZC00NGIyLTlkMTgtOTY3NWQ3ZTU3NWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjJlZGY1N2Y2LWU5OTYtNGNhMy1iZDk5LTFlZDY3MDRkMzJhOSIsIm5iZiI6MTczNzMxNzE0MiwidG9rZW5fdHlwZSI6ImFwaSJ9.y4JduoyU_gG1aiBy4w6frD3h3m-AEoxw_7f6vExYay4',
+  apiKey: process.env.API_KEY || '',
   
   // Subscription key for API Management
-  subscriptionKey: '1c3e73f4352b415c98eb89f91541c4e4',
+  subscriptionKey: process.env.API_SUBSCRIPTION_KEY || '',
   
   // Endpoints
   endpoints: {

@@ -48,7 +48,13 @@ If you prefer to set up manually, this project uses pnpm for package management.
    pnpm install
    ```
 
-3. Start the application:
+3. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   Then edit the `.env` file to add your API credentials.
+
+4. Start the application:
    ```bash
    pnpm start
    ```
@@ -99,6 +105,30 @@ pnpm start
 - `pnpm start` - Start production server
 - `pnpm clean` - Clean installation files
 - `pnpm prod-install` - Install production dependencies only
+
+## Environment Variables
+
+This project uses environment variables to manage API credentials and configuration. The following variables are required:
+
+- `API_BASE_URL` - The base URL for the API
+- `API_KEY` - Your JWT token for API authentication
+- `API_SUBSCRIPTION_KEY` - Your API Management subscription key
+
+To set up your environment:
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit the `.env` file and add your credentials:
+   ```
+   API_BASE_URL=https://maber-apim-test.azure-api.net/pokedata-api/v0
+   API_KEY=your_jwt_token_here
+   API_SUBSCRIPTION_KEY=your_subscription_key_here
+   ```
+
+**Important:** Never commit your `.env` file to version control. It contains sensitive credentials.
 
 ## Project Structure
 
