@@ -147,7 +147,10 @@ For instructions on deploying this application to Azure Static Web Apps, see [Az
 
 ## Debugging
 
-If you encounter issues with API credentials or environment variables, see the [Debugging Guide](docs/debugging-guide.md) for detailed troubleshooting steps.
+If you encounter issues with API credentials or environment variables:
+
+- For immediate diagnostics, see the [Quick Debug Guide](docs/quick-debug-guide.md)
+- For comprehensive troubleshooting, see the [Debugging Guide](docs/debugging-guide.md)
 
 ## License
 
