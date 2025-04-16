@@ -61,7 +61,17 @@ After deploying to Azure:
 
 ## Common Issues and Solutions
 
-### 1. GitHub Secrets Not Available During Build
+### 1. Node.js Version Compatibility
+
+**Symptoms**:
+- GitHub Actions logs show: `ERROR: This version of pnpm requires at least Node.js v18.12`
+- Workflow fails during the `pnpm install` step
+
+**Solutions**:
+- The workflow has been updated to use Node.js v18 instead of v14
+- If you're still seeing this error, check that the workflow file is using the correct Node.js version
+
+### 2. GitHub Secrets Not Available During Build
 
 **Symptoms**:
 - GitHub Actions logs show `API_KEY exists: false`
