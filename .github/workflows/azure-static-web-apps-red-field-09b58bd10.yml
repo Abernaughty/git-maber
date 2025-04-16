@@ -62,7 +62,7 @@ jobs:
         run: |
           cd ./PokeData
           echo "Installing required rollup plugins..."
-          npm install --no-save @rollup/plugin-commonjs@17.0.0 @rollup/plugin-node-resolve@11.0.0 @rollup/plugin-replace@6.0.2 rollup-plugin-svelte@7.0.0 rollup-plugin-css-only@3.1.0 rollup-plugin-livereload@2.0.0 rollup-plugin-terser@7.0.0
+          npm install @rollup/plugin-commonjs@17.0.0 @rollup/plugin-node-resolve@11.0.0 @rollup/plugin-replace@6.0.2 rollup-plugin-svelte@7.0.0 rollup-plugin-css-only@3.1.0 rollup-plugin-livereload@2.0.0 rollup-plugin-terser@7.0.0 dotenv@16.5.0 svelte@3.38.3 rollup@2.30.0
           cd ..
       
       - name: Debug Environment Variables
@@ -112,6 +112,16 @@ jobs:
           grep -A 10 "process.env" src/data/apiConfig.js || echo "process.env not found in apiConfig.js"
           cd ..
           
+      - name: Prepare custom build script
+        run: |
+          cd ./PokeData
+          echo '#!/bin/bash' > build-app.sh
+          echo 'export NODE_PATH="$PWD/node_modules"' >> build-app.sh
+          echo 'npx rollup -c' >> build-app.sh
+          chmod +x build-app.sh
+          cat build-app.sh
+          cd ..
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -123,7 +133,7 @@ jobs:
           app_location: "./PokeData" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "public" # Built app content directory - optional
-          app_build_command: "npx rollup -c" # Use npx directly
+          app_build_command: "./build-app.sh" # Use custom build script
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
         env:
