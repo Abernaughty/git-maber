@@ -46,6 +46,19 @@ jobs:
       
       - name: Install dependencies
         run: pnpm install
+        
+      - name: Verify package installation
+        run: |
+          echo "Verifying package installation..."
+          ls -la node_modules/rollup-plugin-svelte || echo "rollup-plugin-svelte not found in root node_modules"
+          find node_modules -name "rollup-plugin-svelte" | grep . || echo "rollup-plugin-svelte not found in any node_modules"
+      
+      - name: Install missing packages if needed
+        run: |
+          if [ ! -d "node_modules/rollup-plugin-svelte" ]; then
+            echo "Installing missing rollup-plugin-svelte package..."
+            npm install --no-save rollup-plugin-svelte@7.0.0
+          fi
       
       - name: Debug Environment Variables
         run: |
@@ -86,6 +99,16 @@ jobs:
           grep -A 20 "replace(" rollup.config.js || echo "replace plugin not found in rollup.config.js"
           echo "Checking for environment variable usage in apiConfig.js..."
           grep -A 10 "process.env" src/data/apiConfig.js || echo "process.env not found in apiConfig.js"
+          
+      - name: Modify build script if needed
+        run: |
+          # Create a custom build script that uses npx explicitly
+          echo "Creating custom build script..."
+          echo '#!/bin/bash' > build.sh
+          echo 'npx rollup -c' >> build.sh
+          chmod +x build.sh
+          echo "Custom build script created:"
+          cat build.sh
       
       - name: Build And Deploy
         id: builddeploy
@@ -98,6 +121,7 @@ jobs:
           app_location: "./PokeData" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "public" # Built app content directory - optional
+          app_build_command: "./build.sh" # Use our custom build script
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
         env:
