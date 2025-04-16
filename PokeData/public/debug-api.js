@@ -9,7 +9,8 @@
  * 2. debugApiCredentials()
  */
 
-function debugApiCredentials() {
+// Make sure the function is added to the global window object
+window.debugApiCredentials = function() {
   console.log('=== API Credentials Debug Tool ===');
   console.log('Running at:', new Date().toISOString());
   

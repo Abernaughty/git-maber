@@ -19,11 +19,19 @@ Once the app is running, open it in your browser and:
 3. Run the following commands:
 
 ```javascript
-// Load the debug script
-fetch('/debug-api.js').then(r => r.text()).then(t => eval(t))
-
-// Run the diagnostic function
-debugApiCredentials()
+// Load the debug script and run the diagnostic function in one step
+fetch('/debug-api.js')
+  .then(r => r.text())
+  .then(t => {
+    eval(t);
+    return debugApiCredentials();
+  })
+  .then(result => {
+    console.log('Debug results summary:', result);
+  })
+  .catch(err => {
+    console.error('Debug error:', err);
+  });
 ```
 
 ### 3. Interpret the Results
