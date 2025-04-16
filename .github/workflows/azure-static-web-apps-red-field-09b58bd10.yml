@@ -114,8 +114,7 @@ jobs:
         run: |
           cd ./PokeData
           echo '#!/bin/bash' > build-app.sh
-          echo 'export NODE_PATH="/usr/local/lib/node_modules:$PWD/node_modules"' >> build-app.sh
-          echo 'npx rollup -c rollup.config.cjs' >> build-app.sh
+          echo 'node build.js' >> build-app.sh
           chmod +x build-app.sh
           cat build-app.sh
           cd ..
