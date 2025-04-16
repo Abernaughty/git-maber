@@ -1,4 +1,4 @@
-name: Azure Static Web App CI/CD
+name: Azure Static Web Apps CI/CD
 
 on:
   push:
@@ -8,83 +8,51 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-  workflow_dispatch:  # Add this to enable manual triggering
 
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    permissions:
+       id-token: write
+       contents: read
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: true
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+          lfs: false
+
+      - name: Install OIDC Client from Core Package
+        run: npm install @actions/core@1.6.0 @actions/http-client
+
+      - name: Get Id Token
+        uses: actions/github-script@v6
+        id: idtoken
         with:
-          node-version: '18'
-      
-      - name: Install pnpm
-        run: npm install -g pnpm
-      
-      - name: Install dependencies
-        run: pnpm install
-      
-      - name: Debug Environment Variables
+          script: |
+            const coredemo = require('@actions/core')
+            return await coredemo.getIDToken()
+          result-encoding: string
+
+      # 👇 Add this step to correctly build your project in Portfolio subdirectory
+      - name: Install and Build
         run: |
-          echo "Checking environment variables (safely)..."
-          echo "API_BASE_URL exists: ${{ secrets.API_BASE_URL != '' }}"
-          echo "API_KEY exists: ${{ secrets.API_KEY != '' }}"
-          echo "API_SUBSCRIPTION_KEY exists: ${{ secrets.API_SUBSCRIPTION_KEY != '' }}"
-          
-          # Create a temporary debug script
-          echo "console.log('GitHub Actions Environment Check');" > debug-env.js
-          echo "const apiBaseUrl = process.env.API_BASE_URL || 'not-set';" >> debug-env.js
-          echo "const apiKey = process.env.API_KEY || 'not-set';" >> debug-env.js
-          echo "const apiSubKey = process.env.API_SUBSCRIPTION_KEY || 'not-set';" >> debug-env.js
-          echo "console.log('API_BASE_URL exists:', apiBaseUrl !== 'not-set');" >> debug-env.js
-          echo "console.log('API_BASE_URL length:', apiBaseUrl.length);" >> debug-env.js
-          echo "console.log('API_KEY exists:', apiKey !== 'not-set');" >> debug-env.js
-          echo "console.log('API_KEY length:', apiKey.length);" >> debug-env.js
-          echo "console.log('API_SUBSCRIPTION_KEY exists:', apiSubKey !== 'not-set');" >> debug-env.js
-          echo "console.log('API_SUBSCRIPTION_KEY length:', apiSubKey.length);" >> debug-env.js
-          
-          # Run the debug script with environment variables
-          echo "Running Node.js environment check..."
-        env:
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-          API_SUBSCRIPTION_KEY: ${{ secrets.API_SUBSCRIPTION_KEY }}
-      
-      - name: Execute Environment Debug Script
-        run: node debug-env.js
-        env:
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-          API_SUBSCRIPTION_KEY: ${{ secrets.API_SUBSCRIPTION_KEY }}
-      
-      - name: Debug Rollup Config
-        run: |
-          echo "Checking Rollup configuration..."
-          grep -A 20 "replace(" rollup.config.js || echo "replace plugin not found in rollup.config.js"
-          echo "Checking for environment variable usage in apiConfig.js..."
-          grep -A 10 "process.env" src/data/apiConfig.js || echo "process.env not found in apiConfig.js"
-      
+          cd Portfolio
+          npm install
+          npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          app_location: "/" # App source code path
-          output_location: "public" # Built app content directory
-        env:
-          # Pass environment variables to the build process
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-          API_SUBSCRIPTION_KEY: ${{ secrets.API_SUBSCRIPTION_KEY }}
-          NODE_ENV: 'production'
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_THANKFUL_BUSH_0957CA310 }}
+          action: "upload"
+          app_location: "./Portfolio" 
+          api_location: ""
+          output_location: "build"
+          github_id_token: ${{ steps.idtoken.outputs.result }}
+          skip_api_build: true
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -95,5 +63,4 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
