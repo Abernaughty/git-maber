@@ -8,7 +8,6 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
-  workflow_dispatch:  # Add this to enable manual triggering
 
 jobs:
   build_and_deploy_job:
@@ -23,10 +22,8 @@ jobs:
         with:
           submodules: true
           lfs: false
-      
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
-      
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
@@ -35,37 +32,8 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'
-      
-      - name: Install pnpm
-        run: npm install -g pnpm
-      
-      - name: Install dependencies
-        run: |
-          cd ./PokeData
-          pnpm install --no-frozen-lockfile
-          cd ..
-        
-      - name: Verify package installation
-        run: |
-          cd ./PokeData
-          echo "Verifying package installation..."
-          ls -la node_modules/rollup-plugin-svelte || echo "rollup-plugin-svelte not found in PokeData node_modules"
-          ls -la node_modules/@rollup/plugin-commonjs || echo "@rollup/plugin-commonjs not found in PokeData node_modules"
-          cd ..
-      
-      - name: Install missing packages globally
-        run: |
-          echo "Installing required rollup plugins globally..."
-          npm install -g @rollup/plugin-commonjs@17.0.0 @rollup/plugin-node-resolve@11.0.0 @rollup/plugin-replace@6.0.2 rollup-plugin-svelte@7.0.0 rollup-plugin-css-only@3.1.0 rollup-plugin-livereload@2.0.0 rollup-plugin-terser@7.0.0 dotenv@16.5.0 svelte@3.38.3 rollup@2.30.0
-      
       - name: Debug Environment Variables
         run: |
-          cd ./PokeData
           echo "Checking environment variables (safely)..."
           echo "API_BASE_URL exists: ${{ secrets.API_BASE_URL != '' }}"
           echo "API_KEY exists: ${{ secrets.API_KEY != '' }}"
@@ -85,17 +53,13 @@ jobs:
           
           # Run the debug script with environment variables
           echo "Running Node.js environment check..."
-          cd ..
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
           API_SUBSCRIPTION_KEY: ${{ secrets.API_SUBSCRIPTION_KEY }}
       
       - name: Execute Environment Debug Script
-        run: |
-          cd ./PokeData
-          node debug-env.js
-          cd ..
+        run: node debug-env.js
         env:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
@@ -103,22 +67,10 @@ jobs:
       
       - name: Debug Rollup Config
         run: |
-          cd ./PokeData
           echo "Checking Rollup configuration..."
-          grep -A 20 "replace(" rollup.config.cjs || echo "replace plugin not found in rollup.config.cjs"
+          grep -A 20 "replace(" rollup.config.js || echo "replace plugin not found in rollup.config.js"
           echo "Checking for environment variable usage in apiConfig.js..."
           grep -A 10 "process.env" src/data/apiConfig.js || echo "process.env not found in apiConfig.js"
-          cd ..
-          
-      - name: Prepare custom build script
-        run: |
-          cd ./PokeData
-          echo '#!/bin/bash' > build-app.sh
-          echo 'node build.js' >> build-app.sh
-          chmod +x build-app.sh
-          cat build-app.sh
-          cd ..
-
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
@@ -130,15 +82,8 @@ jobs:
           app_location: "./PokeData" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "public" # Built app content directory - optional
-          app_build_command: "./build-app.sh" # Use custom build script
           github_id_token: ${{ steps.idtoken.outputs.result }}
           ###### End of Repository/Build Configurations ######
-        env:
-          # Pass environment variables to the build process
-          API_BASE_URL: ${{ secrets.API_BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-          API_SUBSCRIPTION_KEY: ${{ secrets.API_SUBSCRIPTION_KEY }}
-          NODE_ENV: 'production'
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
