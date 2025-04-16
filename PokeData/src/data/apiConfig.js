@@ -1,3 +1,24 @@
+// Environment indicator
+export const ENVIRONMENT = process.env.NODE_ENV || 'development';
+
+// Check for missing credentials and log warnings
+const checkCredentials = () => {
+  if (!process.env.API_KEY) {
+    console.warn('API_KEY not found in environment variables. API authentication may fail.');
+  }
+  
+  if (!process.env.API_SUBSCRIPTION_KEY) {
+    console.warn('API_SUBSCRIPTION_KEY not found in environment variables. API calls may fail.');
+  }
+  
+  if (ENVIRONMENT === 'production' && (!process.env.API_KEY || !process.env.API_SUBSCRIPTION_KEY)) {
+    console.error('Missing API credentials in production environment!');
+  }
+};
+
+// Run credential check
+checkCredentials();
+
 // API Configuration
 export const API_CONFIG = {
   // Base URL for the API
@@ -8,6 +29,9 @@ export const API_CONFIG = {
   
   // Subscription key for API Management
   subscriptionKey: process.env.API_SUBSCRIPTION_KEY || '',
+  
+  // Current environment
+  environment: ENVIRONMENT,
   
   // Endpoints
   endpoints: {

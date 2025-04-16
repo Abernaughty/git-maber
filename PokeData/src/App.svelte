@@ -1,11 +1,15 @@
 <script>
   import { onMount } from 'svelte';
-  import { API_CONFIG } from './data/apiConfig';
+  import { API_CONFIG, ENVIRONMENT } from './data/apiConfig';
   import { pokeDataService } from './services/pokeDataService';
   import { dbService } from './services/storage/db';
   import SearchableSelect from './components/SearchableSelect.svelte';
   import CardSearchSelect from './components/CardSearchSelect.svelte';
   import CardVariantSelector from './components/CardVariantSelector.svelte';
+  
+  // Build information
+  const buildTime = process.env.BUILD_TIME || new Date().toISOString();
+  const isProduction = ENVIRONMENT === 'production';
   
   // Reference to CardSearchSelect component
   let cardSearchComponent;
@@ -371,6 +375,11 @@
 <main>
   <header>
     <h1>Pokémon Card Price Checker</h1>
+    {#if !isProduction}
+      <div class="env-indicator development">
+        DEVELOPMENT
+      </div>
+    {/if}
   </header>
   <div class="form-container">
     <div class="form-group">
@@ -476,6 +485,7 @@
     padding: 1rem;
     border-radius: 8px 8px 0 0;
     margin-bottom: 1.5rem;
+    position: relative;
   }
   
   h1 {
@@ -484,6 +494,22 @@
     margin: 0;
     text-align: center;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .env-indicator {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+  }
+  
+  .env-indicator.development {
+    background-color: #f39c12; /* Orange for development */
   }
   
   .form-container {

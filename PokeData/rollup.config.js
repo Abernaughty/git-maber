@@ -53,7 +53,9 @@ export default {
 				'process.env.NODE_ENV': JSON.stringify(production ? 'production' : 'development'),
 				'process.env.API_BASE_URL': JSON.stringify(API_BASE_URL),
 				'process.env.API_KEY': JSON.stringify(API_KEY),
-				'process.env.API_SUBSCRIPTION_KEY': JSON.stringify(API_SUBSCRIPTION_KEY)
+				'process.env.API_SUBSCRIPTION_KEY': JSON.stringify(API_SUBSCRIPTION_KEY),
+				// Add a timestamp for cache busting in development
+				'process.env.BUILD_TIME': JSON.stringify(new Date().toISOString())
 			}
 		}),
 		svelte({

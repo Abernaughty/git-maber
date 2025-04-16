@@ -141,6 +141,10 @@ To set up your environment:
   - `images/` - Images
   - `mock/` - Mock data for development
 
+## Deployment
+
+For instructions on deploying this application to Azure Static Web Apps, see [Azure Deployment Guide](docs/azure-deployment.md).
+
 ## License
 
 Private
