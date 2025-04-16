@@ -3,7 +3,7 @@ node_modules/
 .pnpm-store/
 
 # Production build files
-/public/build/
+# /public/build/ - Temporarily allowing build files for Azure deployment
 
 # Environment variables
 .env
