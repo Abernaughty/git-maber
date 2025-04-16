@@ -145,6 +145,10 @@ To set up your environment:
 
 For instructions on deploying this application to Azure Static Web Apps, see [Azure Deployment Guide](docs/azure-deployment.md).
 
+## Debugging
+
+If you encounter issues with API credentials or environment variables, see the [Debugging Guide](docs/debugging-guide.md) for detailed troubleshooting steps.
+
 ## License
 
 Private
