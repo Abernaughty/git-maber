@@ -1,11 +1,12 @@
-import svelte from 'rollup-plugin-svelte';
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import livereload from 'rollup-plugin-livereload';
-import { terser } from 'rollup-plugin-terser';
-import css from 'rollup-plugin-css-only';
-import replace from '@rollup/plugin-replace';
-import dotenv from 'dotenv';
+// Use CommonJS require() instead of ESM imports
+const svelte = require('rollup-plugin-svelte');
+const commonjs = require('@rollup/plugin-commonjs');
+const resolve = require('@rollup/plugin-node-resolve');
+const livereload = require('rollup-plugin-livereload');
+const { terser } = require('rollup-plugin-terser');
+const css = require('rollup-plugin-css-only');
+const replace = require('@rollup/plugin-replace');
+const dotenv = require('dotenv');
 
 // Load environment variables from .env file
 dotenv.config();
@@ -38,7 +39,8 @@ function serve() {
 	};
 }
 
-export default {
+// Use CommonJS module.exports instead of export default
+module.exports = {
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,
