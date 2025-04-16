@@ -4,8 +4,8 @@
   "description": "Pokémon Card Price Checker built with Svelte",
   "private": true,
   "scripts": {
-    "build": "npx rollup -c",
-    "dev": "npx rollup -c -w",
+    "build": "npx rollup -c rollup.config.cjs",
+    "dev": "npx rollup -c rollup.config.cjs -w",
     "start": "sirv public --no-clear --port 3000",
     "prod-install": "pnpm install --prod",
     "clean": "rimraf node_modules .pnpm-store pnpm-lock.yaml",

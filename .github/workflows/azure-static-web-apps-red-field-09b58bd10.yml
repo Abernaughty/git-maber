@@ -107,7 +107,7 @@ jobs:
         run: |
           cd ./PokeData
           echo "Checking Rollup configuration..."
-          grep -A 20 "replace(" rollup.config.js || echo "replace plugin not found in rollup.config.js"
+          grep -A 20 "replace(" rollup.config.cjs || echo "replace plugin not found in rollup.config.cjs"
           echo "Checking for environment variable usage in apiConfig.js..."
           grep -A 10 "process.env" src/data/apiConfig.js || echo "process.env not found in apiConfig.js"
           cd ..
@@ -117,7 +117,7 @@ jobs:
           cd ./PokeData
           echo '#!/bin/bash' > build-app.sh
           echo 'export NODE_PATH="$PWD/node_modules"' >> build-app.sh
-          echo 'npx rollup -c' >> build-app.sh
+          echo 'npx rollup -c rollup.config.cjs' >> build-app.sh
           chmod +x build-app.sh
           cat build-app.sh
           cd ..
