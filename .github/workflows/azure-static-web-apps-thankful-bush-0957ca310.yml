@@ -41,7 +41,6 @@ jobs:
           cd Portfolio
           npm install
           npm run build
-
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
