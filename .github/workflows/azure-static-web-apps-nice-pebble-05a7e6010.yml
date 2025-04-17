@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - Blackjack
+      - Blackjack/**
       - .github/workflows/azure-static-web-apps-nice-pebble-05a7e6010.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
     paths:
-      - Blackjack
+      - Blackjack/**
       - .github/workflows/azure-static-web-apps-nice-pebble-05a7e6010.yml
 
 jobs:

@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - Blackjack
+      - Portfolio/**
       - .github/workflows/azure-static-web-apps-thankful-bush-0957ca310.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
     paths:
-      - Blackjack
+      - Portfolio/**
       - .github/workflows/azure-static-web-apps-thankful-bush-0957ca310.yml
 
 jobs:

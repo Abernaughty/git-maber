@@ -5,14 +5,14 @@ on:
     branches:
       - main
     paths:
-      - PokeData
+      - PokeData/**
       - .github/workflows/azure-static-web-apps-red-field-09b58bd10.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
     paths:
-      - PokeData
+      - PokeData/**
       - .github/workflows/azure-static-web-apps-red-field-09b58bd10.yml
 
 jobs:
