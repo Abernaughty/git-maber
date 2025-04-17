@@ -1,7 +1,7 @@
 // Use CommonJS require() instead of ESM imports
 const svelte = require('rollup-plugin-svelte');
 const commonjs = require('@rollup/plugin-commonjs');
-const resolve = require('@rollup/plugin-node-resolve');
+const { nodeResolve } = require('@rollup/plugin-node-resolve');
 const livereload = require('rollup-plugin-livereload');
 const { terser } = require('rollup-plugin-terser');
 const css = require('rollup-plugin-css-only');
@@ -28,7 +28,7 @@ function serve() {
 	return {
 		writeBundle() {
 			if (server) return;
-			server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+			server = require('child_process').spawn('pnpm', ['start', '--', '--dev'], {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});
@@ -66,7 +66,7 @@ module.exports = {
 			}
 		}),
 		css({ output: 'bundle.css' }),
-		resolve({
+		nodeResolve({
 			browser: true,
 			dedupe: ['svelte']
 		}),
