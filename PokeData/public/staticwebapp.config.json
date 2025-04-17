@@ -5,11 +5,19 @@
       "statusCode": 404
     },
     {
-      "route": "*/livereload.js*",
+      "route": "*/livereload.js",
       "statusCode": 404
     },
     {
-      "route": "*/livereload/*",
+      "route": "/*/livereload.js",
+      "statusCode": 404
+    },
+    {
+      "route": "*/livereload",
+      "statusCode": 404
+    },
+    {
+      "route": "/livereload/*",
       "statusCode": 404
     },
     {
