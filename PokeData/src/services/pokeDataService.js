@@ -2,26 +2,6 @@ import { fetchWithProxy } from '../corsProxy';
 import { API_CONFIG } from '../data/apiConfig';
 import { dbService } from './storage/db';
 
-// Debug API configuration on service initialization
-console.log('=== PokeDataService Initialization ===');
-console.log('API_CONFIG loaded with:');
-console.log('- baseUrl:', API_CONFIG.baseUrl);
-console.log('- apiKey length:', API_CONFIG.apiKey ? API_CONFIG.apiKey.length : 0);
-console.log('- subscriptionKey length:', API_CONFIG.subscriptionKey ? API_CONFIG.subscriptionKey.length : 0);
-console.log('- environment:', API_CONFIG.environment);
-
-// Debug headers that will be used
-const debugHeaders = API_CONFIG.getHeaders();
-console.log('Headers that will be used for API calls:');
-Object.entries(debugHeaders).forEach(([key, value]) => {
-  // Mask the actual values for security
-  const maskedValue = typeof value === 'string' && value.length > 8 
-    ? value.substring(0, 4) + '...' + value.substring(value.length - 4) 
-    : value;
-  console.log(`- ${key}: ${maskedValue}`);
-});
-console.log('=====================================');
-
 /**
  * Helper function to sort sets by release date in descending order
  * @param {Array} sets - Array of set objects

@@ -1,58 +1,13 @@
-// Environment indicator
-export const ENVIRONMENT = process.env.NODE_ENV || 'development';
-
-// Enhanced debugging for API credentials
-const debugCredentials = () => {
-  // Log environment
-  console.log('Current environment:', ENVIRONMENT);
-  
-  // Debug API_KEY
-  if (!process.env.API_KEY) {
-    console.warn('API_KEY not found in environment variables. API authentication will fail.');
-  } else {
-    console.log('API_KEY is present with length:', process.env.API_KEY.length);
-    console.log('API_KEY first 4 chars:', process.env.API_KEY.substring(0, 4) + '...');
-  }
-  
-  // Debug API_SUBSCRIPTION_KEY
-  if (!process.env.API_SUBSCRIPTION_KEY) {
-    console.warn('API_SUBSCRIPTION_KEY not found in environment variables. API calls will fail.');
-  } else {
-    console.log('API_SUBSCRIPTION_KEY is present with length:', process.env.API_SUBSCRIPTION_KEY.length);
-    console.log('API_SUBSCRIPTION_KEY first 4 chars:', process.env.API_SUBSCRIPTION_KEY.substring(0, 4) + '...');
-  }
-  
-  // Debug API_BASE_URL
-  if (!process.env.API_BASE_URL) {
-    console.warn('API_BASE_URL not found, using fallback.');
-  } else {
-    console.log('API_BASE_URL:', process.env.API_BASE_URL);
-  }
-  
-  // Log build time to verify new deployment
-  console.log('Build timestamp:', process.env.BUILD_TIME || 'Not available');
-  
-  if (ENVIRONMENT === 'production' && (!process.env.API_KEY || !process.env.API_SUBSCRIPTION_KEY)) {
-    console.error('Missing API credentials in production environment!');
-  }
-};
-
-// Run enhanced debugging
-debugCredentials();
-
 // API Configuration
 export const API_CONFIG = {
   // Base URL for the API
-  baseUrl: process.env.API_BASE_URL || 'https://maber-apim-test.azure-api.net/pokedata-api/v0',
+  baseUrl: 'https://maber-apim-test.azure-api.net/pokedata-api/v0',
   
   // API key for authentication
-  apiKey: process.env.API_KEY || '',
+  apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNzMxNzE0MiwianRpIjoiNjJkNWU1ZjktNTI5ZC00NGIyLTlkMTgtOTY3NWQ3ZTU3NWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjJlZGY1N2Y2LWU5OTYtNGNhMy1iZDk5LTFlZDY3MDRkMzJhOSIsIm5iZiI6MTczNzMxNzE0MiwidG9rZW5fdHlwZSI6ImFwaSJ9.y4JduoyU_gG1aiBy4w6frD3h3m-AEoxw_7f6vExYay4',
   
   // Subscription key for API Management
-  subscriptionKey: process.env.API_SUBSCRIPTION_KEY || '',
-  
-  // Current environment
-  environment: ENVIRONMENT,
+  subscriptionKey: '1c3e73f4352b415c98eb89f91541c4e4',
   
   // Endpoints
   endpoints: {
