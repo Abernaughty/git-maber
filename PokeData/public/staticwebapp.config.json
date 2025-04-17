@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "route": "/livereload.js*",
+      "statusCode": 404
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*.{png,jpg,gif,ico}", "/*.css", "/*.js"]
+  }
+}
