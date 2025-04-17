@@ -1,27 +1,21 @@
 {
   "routes": [
     {
-      "route": "/livereload.js*",
+      "route": "/livereload.js",
       "statusCode": 404
     },
     {
-      "route": "*/livereload.js",
+      "route": "/*.js",
+      "headers": {
+        "cache-control": "max-age=3600"
+      }
+    },
+    {
+      "route": "/livereload",
       "statusCode": 404
     },
     {
-      "route": "/*/livereload.js",
-      "statusCode": 404
-    },
-    {
-      "route": "*/livereload",
-      "statusCode": 404
-    },
-    {
-      "route": "/livereload/*",
-      "statusCode": 404
-    },
-    {
-      "route": "/sockjs-node/*",
+      "route": "/sockjs-node",
       "statusCode": 404
     }
   ],
