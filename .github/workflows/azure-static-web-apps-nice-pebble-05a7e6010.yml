@@ -11,6 +11,9 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - main
+    paths:
+      - Blackjack
+      - .github/workflows/azure-static-web-apps-nice-pebble-05a7e6010.yml
 
 jobs:
   build_and_deploy_job:

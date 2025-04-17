@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - PokeData
+      - .github/workflows/azure-static-web-apps-red-field-09b58bd10.yml
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:

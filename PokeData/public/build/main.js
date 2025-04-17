@@ -1,5 +1,5 @@
 
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35731/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 function noop() { }
 function add_location(element, file, line, column, char) {
     element.__svelte_meta = {
@@ -1146,7 +1146,7 @@ const pokeDataService = {
       console.error('Error fetching sets:', error);
       // Return the fallback list which already has IDs
       console.log('Using hard-coded fallback set list due to API error');
-      const { setList } = await import('./setList-0890c5ed.js');
+      const { setList } = await import('./setList-0a5c4c54.js');
       return sortSetsByReleaseDate(setList);
     }
   },
@@ -4755,7 +4755,7 @@ function instance$3($$self, $$props, $$invalidate) {
 			// Fallback to imported data
 			console.log("Using fallback set list");
 
-			const { setList } = await import('./setList-0890c5ed.js');
+			const { setList } = await import('./setList-0a5c4c54.js');
 			$$invalidate(5, availableSets = setList);
 		}
 
