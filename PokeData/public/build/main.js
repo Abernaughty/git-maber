@@ -1,5 +1,5 @@
 
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 function noop() { }
 function add_location(element, file, line, column, char) {
     element.__svelte_meta = {
@@ -576,7 +576,7 @@ const API_CONFIG = {
   getHeaders() {
     return {
       //'Authorization': `Bearer ${this.apiKey}`,
-      'Ocp-Apim-Subscription-Key': this.subscriptionKey,
+      //'Ocp-Apim-Subscription-Key': this.subscriptionKey,
       'Content-Type': 'application/json'
     };
   },
@@ -1146,7 +1146,7 @@ const pokeDataService = {
       console.error('Error fetching sets:', error);
       // Return the fallback list which already has IDs
       console.log('Using hard-coded fallback set list due to API error');
-      const { setList } = await import('./setList-dcf6ea8f.js');
+      const { setList } = await import('./setList-0890c5ed.js');
       return sortSetsByReleaseDate(setList);
     }
   },
@@ -4755,7 +4755,7 @@ function instance$3($$self, $$props, $$invalidate) {
 			// Fallback to imported data
 			console.log("Using fallback set list");
 
-			const { setList } = await import('./setList-dcf6ea8f.js');
+			const { setList } = await import('./setList-0890c5ed.js');
 			$$invalidate(5, availableSets = setList);
 		}
 

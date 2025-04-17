@@ -20,7 +20,7 @@ export const API_CONFIG = {
   getHeaders() {
     return {
       //'Authorization': `Bearer ${this.apiKey}`,
-      'Ocp-Apim-Subscription-Key': this.subscriptionKey,
+      //'Ocp-Apim-Subscription-Key': this.subscriptionKey,
       'Content-Type': 'application/json'
     };
   },
