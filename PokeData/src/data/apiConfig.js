@@ -19,7 +19,7 @@ export const API_CONFIG = {
   // Headers function to get standard headers
   getHeaders() {
     return {
-      'Authorization': `Bearer ${this.apiKey}`,
+      //'Authorization': `Bearer ${this.apiKey}`,
       'Ocp-Apim-Subscription-Key': this.subscriptionKey,
       'Content-Type': 'application/json'
     };

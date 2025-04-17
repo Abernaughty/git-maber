@@ -1,5 +1,5 @@
 
-(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35730/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+(function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
 function noop() { }
 function add_location(element, file, line, column, char) {
     element.__svelte_meta = {
@@ -554,51 +554,16 @@ class SvelteComponentDev extends SvelteComponent {
     $inject_state() { }
 }
 
-// Environment indicator
-const ENVIRONMENT = "development" ;
-
-// Enhanced debugging for API credentials
-const debugCredentials = () => {
-  // Log environment
-  console.log('Current environment:', ENVIRONMENT);
-  
-  // Debug API_KEY
-  {
-    console.log('API_KEY is present with length:', process.env.API_KEY.length);
-    console.log('API_KEY first 4 chars:', process.env.API_KEY.substring(0, 4) + '...');
-  }
-  
-  // Debug API_SUBSCRIPTION_KEY
-  {
-    console.log('API_SUBSCRIPTION_KEY is present with length:', process.env.API_SUBSCRIPTION_KEY.length);
-    console.log('API_SUBSCRIPTION_KEY first 4 chars:', process.env.API_SUBSCRIPTION_KEY.substring(0, 4) + '...');
-  }
-  
-  // Debug API_BASE_URL
-  {
-    console.log('API_BASE_URL:', "https://maber-apim-test.azure-api.net/pokedata-api/v0");
-  }
-  
-  // Log build time to verify new deployment
-  console.log('Build timestamp:', "2025-04-16T20:03:00.640Z" );
-};
-
-// Run enhanced debugging
-debugCredentials();
-
 // API Configuration
 const API_CONFIG = {
   // Base URL for the API
-  baseUrl: "https://maber-apim-test.azure-api.net/pokedata-api/v0" ,
+  baseUrl: 'https://maber-apim-test.azure-api.net/pokedata-api/v0',
   
   // API key for authentication
-  apiKey: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNzMxNzE0MiwianRpIjoiNjJkNWU1ZjktNTI5ZC00NGIyLTlkMTgtOTY3NWQ3ZTU3NWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjJlZGY1N2Y2LWU5OTYtNGNhMy1iZDk5LTFlZDY3MDRkMzJhOSIsIm5iZiI6MTczNzMxNzE0MiwidG9rZW5fdHlwZSI6ImFwaSJ9.y4JduoyU_gG1aiBy4w6frD3h3m-AEoxw_7f6vExYay4" ,
+  apiKey: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNzMxNzE0MiwianRpIjoiNjJkNWU1ZjktNTI5ZC00NGIyLTlkMTgtOTY3NWQ3ZTU3NWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjJlZGY1N2Y2LWU5OTYtNGNhMy1iZDk5LTFlZDY3MDRkMzJhOSIsIm5iZiI6MTczNzMxNzE0MiwidG9rZW5fdHlwZSI6ImFwaSJ9.y4JduoyU_gG1aiBy4w6frD3h3m-AEoxw_7f6vExYay4',
   
   // Subscription key for API Management
-  subscriptionKey: "1c3e73f4352b415c98eb89f91541c4e4" ,
-  
-  // Current environment
-  environment: ENVIRONMENT,
+  subscriptionKey: '1c3e73f4352b415c98eb89f91541c4e4',
   
   // Endpoints
   endpoints: {
@@ -610,7 +575,7 @@ const API_CONFIG = {
   // Headers function to get standard headers
   getHeaders() {
     return {
-      'Authorization': `Bearer ${this.apiKey}`,
+      //'Authorization': `Bearer ${this.apiKey}`,
       'Ocp-Apim-Subscription-Key': this.subscriptionKey,
       'Content-Type': 'application/json'
     };
@@ -630,56 +595,12 @@ const API_CONFIG = {
   }
 };
 
-// Enhanced fetch with detailed debugging - relies on your API Management service to handle CORS
+// Simple direct fetch - relies on your API Management service to handle CORS
 async function fetchWithProxy(url, options = {}) {
   // Just use the standard fetch with the provided options
   try {
     console.log(`Fetching from: ${url}`);
-    
-    // Enhanced header debugging
-    if (options.headers) {
-      console.log('Headers summary:');
-      
-      // Check Authorization header
-      const authHeader = options.headers['Authorization'] || options.headers['authorization'];
-      if (authHeader) {
-        console.log('- Authorization header present:', 
-          authHeader.substring(0, 10) + '...' + 
-          (authHeader.length > 20 ? authHeader.substring(authHeader.length - 4) : ''));
-        console.log('- Authorization header length:', authHeader.length);
-        
-        // Check if it's just "Bearer " without a token
-        if (authHeader === 'Bearer ' || authHeader === 'Bearer') {
-          console.warn('⚠️ Authorization header contains "Bearer" but no token!');
-        }
-      } else {
-        console.warn('⚠️ No Authorization header found!');
-      }
-      
-      // Check Subscription Key header
-      const subKeyHeader = options.headers['Ocp-Apim-Subscription-Key'] || 
-                          options.headers['ocp-apim-subscription-key'];
-      if (subKeyHeader) {
-        console.log('- Subscription Key present:', 
-          subKeyHeader.substring(0, 4) + '...' + 
-          (subKeyHeader.length > 8 ? subKeyHeader.substring(subKeyHeader.length - 4) : ''));
-        console.log('- Subscription Key length:', subKeyHeader.length);
-      } else {
-        console.warn('⚠️ No Subscription Key header found!');
-      }
-      
-      // Log all headers for debugging
-      console.log('All headers:');
-      Object.entries(options.headers).forEach(([key, value]) => {
-        // Mask the actual values for security
-        const maskedValue = typeof value === 'string' && value.length > 8 
-          ? value.substring(0, 4) + '...' + value.substring(value.length - 4) 
-          : value;
-        console.log(`- ${key}: ${maskedValue}`);
-      });
-    } else {
-      console.warn('⚠️ No headers provided in request options!');
-    }
+    console.log('Using headers:', options.headers);
     
     const response = await fetch(url, {
       ...options,
@@ -1119,26 +1040,6 @@ const dbService = {
   }
 };
 
-// Debug API configuration on service initialization
-console.log('=== PokeDataService Initialization ===');
-console.log('API_CONFIG loaded with:');
-console.log('- baseUrl:', API_CONFIG.baseUrl);
-console.log('- apiKey length:', API_CONFIG.apiKey ? API_CONFIG.apiKey.length : 0);
-console.log('- subscriptionKey length:', API_CONFIG.subscriptionKey ? API_CONFIG.subscriptionKey.length : 0);
-console.log('- environment:', API_CONFIG.environment);
-
-// Debug headers that will be used
-const debugHeaders = API_CONFIG.getHeaders();
-console.log('Headers that will be used for API calls:');
-Object.entries(debugHeaders).forEach(([key, value]) => {
-  // Mask the actual values for security
-  const maskedValue = typeof value === 'string' && value.length > 8 
-    ? value.substring(0, 4) + '...' + value.substring(value.length - 4) 
-    : value;
-  console.log(`- ${key}: ${maskedValue}`);
-});
-console.log('=====================================');
-
 /**
  * Helper function to sort sets by release date in descending order
  * @param {Array} sets - Array of set objects
@@ -1245,7 +1146,7 @@ const pokeDataService = {
       console.error('Error fetching sets:', error);
       // Return the fallback list which already has IDs
       console.log('Using hard-coded fallback set list due to API error');
-      const { setList } = await import('./setList-f1a2e7a1.js');
+      const { setList } = await import('./setList-dcf6ea8f.js');
       return sortSetsByReleaseDate(setList);
     }
   },
@@ -1473,7 +1374,7 @@ function create_if_block(ctx) {
 			div = element("div");
 			if_block.c();
 			attr_dev(div, "class", "dropdown svelte-1o6pv8x");
-			add_location(div, file, 180, 4, 5251);
+			add_location(div, file, 180, 4, 5071);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -1588,7 +1489,7 @@ function create_if_block_1(ctx) {
 			div = element("div");
 			div.textContent = "No results found";
 			attr_dev(div, "class", "no-results svelte-1o6pv8x");
-			add_location(div, file, 182, 8, 5351);
+			add_location(div, file, 182, 8, 5169);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -1625,7 +1526,7 @@ function create_if_block_2(ctx) {
 			t1 = text(t1_value);
 			t2 = text(")");
 			attr_dev(span, "class", "secondary svelte-1o6pv8x");
-			add_location(span, file, 193, 16, 5834);
+			add_location(span, file, 193, 16, 5641);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, span, anchor);
@@ -1682,13 +1583,13 @@ function create_each_block(ctx) {
 			if (if_block) if_block.c();
 			t2 = space();
 			attr_dev(span, "class", "label svelte-1o6pv8x");
-			add_location(span, file, 190, 12, 5702);
+			add_location(span, file, 190, 12, 5512);
 
 			attr_dev(div, "class", div_class_value = "item item-" + /*index*/ ctx[28] + " " + (/*highlightedIndex*/ ctx[7] === /*index*/ ctx[28]
 			? "highlighted"
 			: "") + " svelte-1o6pv8x");
 
-			add_location(div, file, 185, 10, 5470);
+			add_location(div, file, 185, 10, 5285);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -1776,13 +1677,13 @@ function create_fragment(ctx) {
 			attr_dev(input, "placeholder", /*placeholder*/ ctx[0]);
 			attr_dev(input, "autocomplete", "off");
 			attr_dev(input, "class", "svelte-1o6pv8x");
-			add_location(input, file, 166, 4, 4893);
+			add_location(input, file, 166, 4, 4727);
 			attr_dev(span, "class", "dropdown-icon svelte-1o6pv8x");
-			add_location(span, file, 176, 4, 5148);
+			add_location(span, file, 176, 4, 4972);
 			attr_dev(div0, "class", "input-wrapper svelte-1o6pv8x");
-			add_location(div0, file, 165, 2, 4860);
+			add_location(div0, file, 165, 2, 4695);
 			attr_dev(div1, "class", "searchable-select svelte-1o6pv8x");
-			add_location(div1, file, 164, 0, 4825);
+			add_location(div1, file, 164, 0, 4661);
 		},
 		l: function claim(nodes) {
 			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2231,7 +2132,7 @@ function create_if_block$1(ctx) {
 			div = element("div");
 			if_block.c();
 			attr_dev(div, "class", "dropdown svelte-ii44bh");
-			add_location(div, file$1, 218, 4, 6365);
+			add_location(div, file$1, 218, 4, 6147);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -2346,7 +2247,7 @@ function create_if_block_1$1(ctx) {
 			div = element("div");
 			div.textContent = "No matching cards found";
 			attr_dev(div, "class", "no-results svelte-ii44bh");
-			add_location(div, file$1, 220, 8, 6465);
+			add_location(div, file$1, 220, 8, 6245);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -2383,7 +2284,7 @@ function create_if_block_2$1(ctx) {
 			t1 = text(t1_value);
 			t2 = text(")");
 			attr_dev(span, "class", "card-num svelte-ii44bh");
-			add_location(span, file$1, 232, 18, 6973);
+			add_location(span, file$1, 232, 18, 6741);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, span, anchor);
@@ -2442,15 +2343,15 @@ function create_each_block$1(ctx) {
 			if (if_block) if_block.c();
 			t2 = space();
 			attr_dev(span, "class", "card-name svelte-ii44bh");
-			add_location(span, file$1, 229, 14, 6868);
+			add_location(span, file$1, 229, 14, 6639);
 			attr_dev(div0, "class", "card-info svelte-ii44bh");
-			add_location(div0, file$1, 228, 12, 6829);
+			add_location(div0, file$1, 228, 12, 6601);
 
 			attr_dev(div1, "class", div1_class_value = "card-item card-item-" + /*index*/ ctx[26] + " " + (/*highlightedIndex*/ ctx[5] === /*index*/ ctx[26]
 			? "highlighted"
 			: "") + " svelte-ii44bh");
 
-			add_location(div1, file$1, 223, 10, 6591);
+			add_location(div1, file$1, 223, 10, 6368);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div1, anchor);
@@ -2539,13 +2440,13 @@ function create_fragment$1(ctx) {
 			attr_dev(input, "placeholder", /*placeholder*/ ctx[0]);
 			attr_dev(input, "autocomplete", "off");
 			attr_dev(input, "class", "svelte-ii44bh");
-			add_location(input, file$1, 204, 4, 6016);
+			add_location(input, file$1, 204, 4, 5812);
 			attr_dev(span, "class", "icon svelte-ii44bh");
-			add_location(span, file$1, 214, 4, 6271);
+			add_location(span, file$1, 214, 4, 6057);
 			attr_dev(div0, "class", "input-wrapper svelte-ii44bh");
-			add_location(div0, file$1, 203, 2, 5983);
+			add_location(div0, file$1, 203, 2, 5780);
 			attr_dev(div1, "class", "card-search svelte-ii44bh");
-			add_location(div1, file$1, 202, 0, 5954);
+			add_location(div1, file$1, 202, 0, 5752);
 		},
 		l: function claim(nodes) {
 			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3061,27 +2962,27 @@ function create_if_block$2(ctx) {
 			button2 = element("button");
 			button2.textContent = "Cancel";
 			attr_dev(h3, "class", "svelte-1j7g73e");
-			add_location(h3, file$2, 39, 8, 900);
+			add_location(h3, file$2, 39, 8, 861);
 			attr_dev(button0, "class", "close-button svelte-1j7g73e");
-			add_location(button0, file$2, 40, 8, 942);
+			add_location(button0, file$2, 40, 8, 902);
 			attr_dev(div0, "class", "modal-header svelte-1j7g73e");
-			add_location(div0, file$2, 38, 6, 864);
-			add_location(p, file$2, 44, 8, 1068);
+			add_location(div0, file$2, 38, 6, 826);
+			add_location(p, file$2, 44, 8, 1024);
 			attr_dev(div1, "class", "variants-list svelte-1j7g73e");
-			add_location(div1, file$2, 46, 8, 1197);
+			add_location(div1, file$2, 46, 8, 1151);
 			attr_dev(div2, "class", "modal-body svelte-1j7g73e");
-			add_location(div2, file$2, 43, 6, 1034);
+			add_location(div2, file$2, 43, 6, 991);
 			attr_dev(button1, "class", "confirm-button svelte-1j7g73e");
 			button1.disabled = button1_disabled_value = !/*selectedVariant*/ ctx[2];
-			add_location(button1, file$2, 75, 8, 2309);
+			add_location(button1, file$2, 75, 8, 2234);
 			attr_dev(button2, "class", "cancel-button svelte-1j7g73e");
-			add_location(button2, file$2, 87, 8, 2628);
+			add_location(button2, file$2, 87, 8, 2541);
 			attr_dev(div3, "class", "modal-footer svelte-1j7g73e");
-			add_location(div3, file$2, 74, 6, 2273);
+			add_location(div3, file$2, 74, 6, 2199);
 			attr_dev(div4, "class", "modal svelte-1j7g73e");
-			add_location(div4, file$2, 37, 4, 812);
+			add_location(div4, file$2, 37, 4, 775);
 			attr_dev(div5, "class", "overlay svelte-1j7g73e");
-			add_location(div5, file$2, 36, 2, 768);
+			add_location(div5, file$2, 36, 2, 732);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div5, anchor);
@@ -3183,7 +3084,7 @@ function create_if_block_3(ctx) {
 			span = element("span");
 			t = text(t_value);
 			attr_dev(span, "class", "variant-rarity svelte-1j7g73e");
-			add_location(span, file$2, 57, 20, 1713);
+			add_location(span, file$2, 57, 20, 1656);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, span, anchor);
@@ -3219,7 +3120,7 @@ function create_if_block_2$2(ctx) {
 			span = element("span");
 			t = text(t_value);
 			attr_dev(span, "class", "variant-type svelte-1j7g73e");
-			add_location(span, file$2, 60, 20, 1853);
+			add_location(span, file$2, 60, 20, 1793);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, span, anchor);
@@ -3258,9 +3159,9 @@ function create_if_block_1$2(ctx) {
 			if (img.src !== (img_src_value = /*variant*/ ctx[10].image_url)) attr_dev(img, "src", img_src_value);
 			attr_dev(img, "alt", img_alt_value = /*variant*/ ctx[10].name);
 			attr_dev(img, "class", "svelte-1j7g73e");
-			add_location(img, file$2, 65, 20, 2067);
+			add_location(img, file$2, 65, 20, 2002);
 			attr_dev(div, "class", "variant-thumbnail svelte-1j7g73e");
-			add_location(div, file$2, 64, 18, 2014);
+			add_location(div, file$2, 64, 18, 1950);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -3338,19 +3239,19 @@ function create_each_block$2(ctx) {
 			if (if_block2) if_block2.c();
 			t7 = space();
 			attr_dev(div0, "class", "variant-name svelte-1j7g73e");
-			add_location(div0, file$2, 53, 16, 1491);
+			add_location(div0, file$2, 53, 16, 1438);
 			attr_dev(span, "class", "variant-number svelte-1j7g73e");
-			add_location(span, file$2, 55, 18, 1601);
+			add_location(span, file$2, 55, 18, 1546);
 			attr_dev(div1, "class", "variant-info svelte-1j7g73e");
-			add_location(div1, file$2, 54, 16, 1555);
+			add_location(div1, file$2, 54, 16, 1501);
 			attr_dev(div2, "class", "variant-details svelte-1j7g73e");
-			add_location(div2, file$2, 52, 14, 1444);
+			add_location(div2, file$2, 52, 14, 1392);
 
 			attr_dev(div3, "class", div3_class_value = "variant-item " + (/*isSelected*/ ctx[6](/*variant*/ ctx[10])
 			? "selected"
 			: "") + " svelte-1j7g73e");
 
-			add_location(div3, file$2, 48, 12, 1277);
+			add_location(div3, file$2, 48, 12, 1229);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div3, anchor);
@@ -3628,49 +3529,19 @@ const file$3 = "src\\App.svelte";
 
 function get_each_context$3(ctx, list, i) {
 	const child_ctx = ctx.slice();
-	child_ctx[27] = list[i][0];
-	child_ctx[28] = list[i][1];
+	child_ctx[25] = list[i][0];
+	child_ctx[26] = list[i][1];
 	return child_ctx;
 }
 
-// (378:4) {#if !isProduction}
-function create_if_block_7(ctx) {
-	let div;
-
-	const block = {
-		c: function create() {
-			div = element("div");
-			div.textContent = "DEVELOPMENT";
-			attr_dev(div, "class", "env-indicator development svelte-l2g1ci");
-			add_location(div, file$3, 378, 6, 12854);
-		},
-		m: function mount(target, anchor) {
-			insert_dev(target, div, anchor);
-		},
-		d: function destroy(detaching) {
-			if (detaching) detach_dev(div);
-		}
-	};
-
-	dispatch_dev("SvelteRegisterBlock", {
-		block,
-		id: create_if_block_7.name,
-		type: "if",
-		source: "(378:4) {#if !isProduction}",
-		ctx
-	});
-
-	return block;
-}
-
-// (413:6) {:else}
+// (404:6) {:else}
 function create_else_block_1(ctx) {
 	let cardsearchselect;
 	let updating_selectedCard;
 	let current;
 
 	function cardsearchselect_selectedCard_binding(value) {
-		/*cardsearchselect_selectedCard_binding*/ ctx[20](value);
+		/*cardsearchselect_selectedCard_binding*/ ctx[19](value);
 	}
 
 	let cardsearchselect_props = { cards: /*cardsInSet*/ ctx[6] };
@@ -3684,9 +3555,9 @@ function create_else_block_1(ctx) {
 			$$inline: true
 		});
 
-	/*cardsearchselect_binding*/ ctx[19](cardsearchselect);
+	/*cardsearchselect_binding*/ ctx[18](cardsearchselect);
 	binding_callbacks.push(() => bind(cardsearchselect, "selectedCard", cardsearchselect_selectedCard_binding));
-	cardsearchselect.$on("select", /*handleCardSelect*/ ctx[13]);
+	cardsearchselect.$on("select", /*handleCardSelect*/ ctx[12]);
 
 	const block = {
 		c: function create() {
@@ -3718,7 +3589,7 @@ function create_else_block_1(ctx) {
 			current = false;
 		},
 		d: function destroy(detaching) {
-			/*cardsearchselect_binding*/ ctx[19](null);
+			/*cardsearchselect_binding*/ ctx[18](null);
 			destroy_component(cardsearchselect, detaching);
 		}
 	};
@@ -3727,14 +3598,14 @@ function create_else_block_1(ctx) {
 		block,
 		id: create_else_block_1.name,
 		type: "else",
-		source: "(413:6) {:else}",
+		source: "(404:6) {:else}",
 		ctx
 	});
 
 	return block;
 }
 
-// (409:40) 
+// (400:40) 
 function create_if_block_6(ctx) {
 	let div;
 	let input;
@@ -3745,10 +3616,10 @@ function create_if_block_6(ctx) {
 			input = element("input");
 			input.disabled = true;
 			attr_dev(input, "placeholder", "No cards found for this set");
-			attr_dev(input, "class", "svelte-l2g1ci");
-			add_location(input, file$3, 410, 10, 13842);
-			attr_dev(div, "class", "error-select svelte-l2g1ci");
-			add_location(div, file$3, 409, 8, 13804);
+			attr_dev(input, "class", "svelte-18i9rx1");
+			add_location(input, file$3, 401, 10, 13151);
+			attr_dev(div, "class", "error-select svelte-18i9rx1");
+			add_location(div, file$3, 400, 8, 13114);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -3766,14 +3637,14 @@ function create_if_block_6(ctx) {
 		block,
 		id: create_if_block_6.name,
 		type: "if",
-		source: "(409:40) ",
+		source: "(400:40) ",
 		ctx
 	});
 
 	return block;
 }
 
-// (405:31) 
+// (396:31) 
 function create_if_block_5(ctx) {
 	let div;
 	let input;
@@ -3784,10 +3655,10 @@ function create_if_block_5(ctx) {
 			input = element("input");
 			input.disabled = true;
 			attr_dev(input, "placeholder", "Loading cards...");
-			attr_dev(input, "class", "svelte-l2g1ci");
-			add_location(input, file$3, 406, 10, 13689);
-			attr_dev(div, "class", "loading-select svelte-l2g1ci");
-			add_location(div, file$3, 405, 8, 13649);
+			attr_dev(input, "class", "svelte-18i9rx1");
+			add_location(input, file$3, 397, 10, 13002);
+			attr_dev(div, "class", "loading-select svelte-18i9rx1");
+			add_location(div, file$3, 396, 8, 12963);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -3805,14 +3676,14 @@ function create_if_block_5(ctx) {
 		block,
 		id: create_if_block_5.name,
 		type: "if",
-		source: "(405:31) ",
+		source: "(396:31) ",
 		ctx
 	});
 
 	return block;
 }
 
-// (401:6) {#if !selectedSet}
+// (392:6) {#if !selectedSet}
 function create_if_block_4(ctx) {
 	let div;
 	let input;
@@ -3823,10 +3694,10 @@ function create_if_block_4(ctx) {
 			input = element("input");
 			input.disabled = true;
 			attr_dev(input, "placeholder", "Select a set first");
-			attr_dev(input, "class", "svelte-l2g1ci");
-			add_location(input, file$3, 402, 10, 13541);
-			attr_dev(div, "class", "disabled-select svelte-l2g1ci");
-			add_location(div, file$3, 401, 8, 13500);
+			attr_dev(input, "class", "svelte-18i9rx1");
+			add_location(input, file$3, 393, 10, 12858);
+			attr_dev(div, "class", "disabled-select svelte-18i9rx1");
+			add_location(div, file$3, 392, 8, 12818);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -3844,14 +3715,14 @@ function create_if_block_4(ctx) {
 		block,
 		id: create_if_block_4.name,
 		type: "if",
-		source: "(401:6) {#if !selectedSet}",
+		source: "(392:6) {#if !selectedSet}",
 		ctx
 	});
 
 	return block;
 }
 
-// (427:4) {#if error}
+// (418:4) {#if error}
 function create_if_block_3$1(ctx) {
 	let p;
 	let t;
@@ -3860,8 +3731,8 @@ function create_if_block_3$1(ctx) {
 		c: function create() {
 			p = element("p");
 			t = text(/*error*/ ctx[4]);
-			attr_dev(p, "class", "error svelte-l2g1ci");
-			add_location(p, file$3, 427, 6, 14322);
+			attr_dev(p, "class", "error svelte-18i9rx1");
+			add_location(p, file$3, 418, 6, 13614);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, p, anchor);
@@ -3879,14 +3750,14 @@ function create_if_block_3$1(ctx) {
 		block,
 		id: create_if_block_3$1.name,
 		type: "if",
-		source: "(427:4) {#if error}",
+		source: "(418:4) {#if error}",
 		ctx
 	});
 
 	return block;
 }
 
-// (432:4) {#if priceData !== null && priceData !== undefined && typeof priceData === 'object'}
+// (423:4) {#if priceData !== null && priceData !== undefined && typeof priceData === 'object'}
 function create_if_block$3(ctx) {
 	let div;
 	let h2;
@@ -3944,16 +3815,16 @@ function create_if_block$3(ctx) {
 			h3.textContent = "Prices:";
 			t12 = space();
 			if_block1.c();
-			attr_dev(h2, "class", "svelte-l2g1ci");
-			add_location(h2, file$3, 434, 8, 14634);
-			add_location(strong0, file$3, 435, 11, 14722);
-			add_location(p0, file$3, 435, 8, 14719);
-			add_location(strong1, file$3, 436, 11, 14832);
-			add_location(p1, file$3, 436, 8, 14829);
-			attr_dev(h3, "class", "svelte-l2g1ci");
-			add_location(h3, file$3, 443, 8, 15244);
-			attr_dev(div, "class", "results svelte-l2g1ci");
-			add_location(div, file$3, 432, 6, 14528);
+			attr_dev(h2, "class", "svelte-18i9rx1");
+			add_location(h2, file$3, 425, 8, 13919);
+			add_location(strong0, file$3, 426, 11, 14006);
+			add_location(p0, file$3, 426, 8, 14003);
+			add_location(strong1, file$3, 427, 11, 14115);
+			add_location(p1, file$3, 427, 8, 14112);
+			attr_dev(h3, "class", "svelte-18i9rx1");
+			add_location(h3, file$3, 434, 8, 14520);
+			attr_dev(div, "class", "results svelte-18i9rx1");
+			add_location(div, file$3, 423, 6, 13815);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, div, anchor);
@@ -4017,14 +3888,14 @@ function create_if_block$3(ctx) {
 		block,
 		id: create_if_block$3.name,
 		type: "if",
-		source: "(432:4) {#if priceData !== null && priceData !== undefined && typeof priceData === 'object'}",
+		source: "(423:4) {#if priceData !== null && priceData !== undefined && typeof priceData === 'object'}",
 		ctx
 	});
 
 	return block;
 }
 
-// (440:8) {#if (priceData && priceData.rarity) || (selectedCard && selectedCard.rarity)}
+// (431:8) {#if (priceData && priceData.rarity) || (selectedCard && selectedCard.rarity)}
 function create_if_block_2$3(ctx) {
 	let p;
 	let strong;
@@ -4039,8 +3910,8 @@ function create_if_block_2$3(ctx) {
 			strong.textContent = "Rarity:";
 			t1 = space();
 			t2 = text(t2_value);
-			add_location(strong, file$3, 440, 13, 15093);
-			add_location(p, file$3, 440, 10, 15090);
+			add_location(strong, file$3, 431, 13, 14372);
+			add_location(p, file$3, 431, 10, 14369);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, p, anchor);
@@ -4060,14 +3931,14 @@ function create_if_block_2$3(ctx) {
 		block,
 		id: create_if_block_2$3.name,
 		type: "if",
-		source: "(440:8) {#if (priceData && priceData.rarity) || (selectedCard && selectedCard.rarity)}",
+		source: "(431:8) {#if (priceData && priceData.rarity) || (selectedCard && selectedCard.rarity)}",
 		ctx
 	});
 
 	return block;
 }
 
-// (448:8) {:else}
+// (439:8) {:else}
 function create_else_block$2(ctx) {
 	let ul;
 	let each_value = Object.entries(/*priceData*/ ctx[2].pricing || {});
@@ -4086,8 +3957,8 @@ function create_else_block$2(ctx) {
 				each_blocks[i].c();
 			}
 
-			attr_dev(ul, "class", "svelte-l2g1ci");
-			add_location(ul, file$3, 448, 10, 15512);
+			attr_dev(ul, "class", "svelte-18i9rx1");
+			add_location(ul, file$3, 439, 10, 14783);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, ul, anchor);
@@ -4131,14 +4002,14 @@ function create_else_block$2(ctx) {
 		block,
 		id: create_else_block$2.name,
 		type: "else",
-		source: "(448:8) {:else}",
+		source: "(439:8) {:else}",
 		ctx
 	});
 
 	return block;
 }
 
-// (446:8) {#if !priceData?.pricing || Object.keys(priceData.pricing || {}).length === 0}
+// (437:8) {#if !priceData?.pricing || Object.keys(priceData.pricing || {}).length === 0}
 function create_if_block_1$3(ctx) {
 	let p;
 
@@ -4146,8 +4017,8 @@ function create_if_block_1$3(ctx) {
 		c: function create() {
 			p = element("p");
 			p.textContent = "No pricing data available for this card.";
-			attr_dev(p, "class", "no-prices svelte-l2g1ci");
-			add_location(p, file$3, 446, 10, 15418);
+			attr_dev(p, "class", "no-prices svelte-18i9rx1");
+			add_location(p, file$3, 437, 10, 14691);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, p, anchor);
@@ -4162,28 +4033,28 @@ function create_if_block_1$3(ctx) {
 		block,
 		id: create_if_block_1$3.name,
 		type: "if",
-		source: "(446:8) {#if !priceData?.pricing || Object.keys(priceData.pricing || {}).length === 0}",
+		source: "(437:8) {#if !priceData?.pricing || Object.keys(priceData.pricing || {}).length === 0}",
 		ctx
 	});
 
 	return block;
 }
 
-// (450:12) {#each Object.entries(priceData.pricing || {}) as [market, price]}
+// (441:12) {#each Object.entries(priceData.pricing || {}) as [market, price]}
 function create_each_block$3(ctx) {
 	let li;
 	let span0;
-	let t0_value = /*market*/ ctx[27] + "";
+	let t0_value = /*market*/ ctx[25] + "";
 	let t0;
 	let t1;
 	let t2;
 	let span1;
 	let t3;
-	let t4_value = formatPrice(/*price*/ ctx[28]?.value) + "";
+	let t4_value = formatPrice(/*price*/ ctx[26]?.value) + "";
 	let t4;
 	let t5;
 	let span2;
-	let t6_value = (/*price*/ ctx[28]?.currency || "USD") + "";
+	let t6_value = (/*price*/ ctx[26]?.currency || "USD") + "";
 	let t6;
 	let t7;
 
@@ -4201,14 +4072,14 @@ function create_each_block$3(ctx) {
 			span2 = element("span");
 			t6 = text(t6_value);
 			t7 = space();
-			attr_dev(span0, "class", "market svelte-l2g1ci");
-			add_location(span0, file$3, 451, 16, 15634);
-			attr_dev(span1, "class", "price svelte-l2g1ci");
-			add_location(span1, file$3, 452, 16, 15690);
-			attr_dev(span2, "class", "currency svelte-l2g1ci");
-			add_location(span2, file$3, 453, 16, 15764);
-			attr_dev(li, "class", "svelte-l2g1ci");
-			add_location(li, file$3, 450, 14, 15612);
+			attr_dev(span0, "class", "market svelte-18i9rx1");
+			add_location(span0, file$3, 442, 16, 14902);
+			attr_dev(span1, "class", "price svelte-18i9rx1");
+			add_location(span1, file$3, 443, 16, 14957);
+			attr_dev(span2, "class", "currency svelte-18i9rx1");
+			add_location(span2, file$3, 444, 16, 15030);
+			attr_dev(li, "class", "svelte-18i9rx1");
+			add_location(li, file$3, 441, 14, 14881);
 		},
 		m: function mount(target, anchor) {
 			insert_dev(target, li, anchor);
@@ -4225,9 +4096,9 @@ function create_each_block$3(ctx) {
 			append_dev(li, t7);
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*priceData*/ 4 && t0_value !== (t0_value = /*market*/ ctx[27] + "")) set_data_dev(t0, t0_value);
-			if (dirty & /*priceData*/ 4 && t4_value !== (t4_value = formatPrice(/*price*/ ctx[28]?.value) + "")) set_data_dev(t4, t4_value);
-			if (dirty & /*priceData*/ 4 && t6_value !== (t6_value = (/*price*/ ctx[28]?.currency || "USD") + "")) set_data_dev(t6, t6_value);
+			if (dirty & /*priceData*/ 4 && t0_value !== (t0_value = /*market*/ ctx[25] + "")) set_data_dev(t0, t0_value);
+			if (dirty & /*priceData*/ 4 && t4_value !== (t4_value = formatPrice(/*price*/ ctx[26]?.value) + "")) set_data_dev(t4, t4_value);
+			if (dirty & /*priceData*/ 4 && t6_value !== (t6_value = (/*price*/ ctx[26]?.currency || "USD") + "")) set_data_dev(t6, t6_value);
 		},
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(li);
@@ -4238,7 +4109,7 @@ function create_each_block$3(ctx) {
 		block,
 		id: create_each_block$3.name,
 		type: "each",
-		source: "(450:12) {#each Object.entries(priceData.pricing || {}) as [market, price]}",
+		source: "(441:12) {#each Object.entries(priceData.pricing || {}) as [market, price]}",
 		ctx
 	});
 
@@ -4250,35 +4121,33 @@ function create_fragment$3(ctx) {
 	let header;
 	let h1;
 	let t1;
-	let t2;
 	let div2;
 	let div0;
 	let label0;
-	let t4;
+	let t3;
 	let searchableselect;
 	let updating_value;
-	let t5;
+	let t4;
 	let div1;
 	let label1;
-	let t7;
+	let t6;
 	let current_block_type_index;
-	let if_block1;
-	let t8;
+	let if_block0;
+	let t7;
 	let button;
-	let t9_value = (/*isLoading*/ ctx[3] ? "Loading..." : "Get Price") + "";
-	let t9;
+	let t8_value = (/*isLoading*/ ctx[3] ? "Loading..." : "Get Price") + "";
+	let t8;
 	let button_disabled_value;
+	let t9;
 	let t10;
 	let t11;
-	let t12;
 	let cardvariantselector;
 	let current;
 	let mounted;
 	let dispose;
-	let if_block0 = !/*isProduction*/ ctx[10] && create_if_block_7(ctx);
 
 	function searchableselect_value_binding(value) {
-		/*searchableselect_value_binding*/ ctx[18](value);
+		/*searchableselect_value_binding*/ ctx[17](value);
 	}
 
 	let searchableselect_props = {
@@ -4298,7 +4167,7 @@ function create_fragment$3(ctx) {
 		});
 
 	binding_callbacks.push(() => bind(searchableselect, "value", searchableselect_value_binding));
-	searchableselect.$on("select", /*handleSetSelect*/ ctx[12]);
+	searchableselect.$on("select", /*handleSetSelect*/ ctx[11]);
 	const if_block_creators = [create_if_block_4, create_if_block_5, create_if_block_6, create_else_block_1];
 	const if_blocks = [];
 
@@ -4310,21 +4179,21 @@ function create_fragment$3(ctx) {
 	}
 
 	current_block_type_index = select_block_type(ctx);
-	if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-	let if_block2 = /*error*/ ctx[4] && create_if_block_3$1(ctx);
-	let if_block3 = /*priceData*/ ctx[2] !== null && /*priceData*/ ctx[2] !== undefined && typeof /*priceData*/ ctx[2] === "object" && create_if_block$3(ctx);
+	if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+	let if_block1 = /*error*/ ctx[4] && create_if_block_3$1(ctx);
+	let if_block2 = /*priceData*/ ctx[2] !== null && /*priceData*/ ctx[2] !== undefined && typeof /*priceData*/ ctx[2] === "object" && create_if_block$3(ctx);
 
 	cardvariantselector = new CardVariantSelector({
 			props: {
-				variants: /*cardVariants*/ ctx[11],
+				variants: /*cardVariants*/ ctx[10],
 				isVisible: /*showVariantSelector*/ ctx[9]
 			},
 			$$inline: true
 		});
 
-	cardvariantselector.$on("select", /*handleVariantSelect*/ ctx[14]);
-	cardvariantselector.$on("confirm", /*handleVariantConfirm*/ ctx[15]);
-	cardvariantselector.$on("close", /*closeVariantSelector*/ ctx[16]);
+	cardvariantselector.$on("select", /*handleVariantSelect*/ ctx[13]);
+	cardvariantselector.$on("confirm", /*handleVariantConfirm*/ ctx[14]);
+	cardvariantselector.$on("close", /*closeVariantSelector*/ ctx[15]);
 
 	const block = {
 		c: function create() {
@@ -4333,50 +4202,48 @@ function create_fragment$3(ctx) {
 			h1 = element("h1");
 			h1.textContent = "Pokémon Card Price Checker";
 			t1 = space();
-			if (if_block0) if_block0.c();
-			t2 = space();
 			div2 = element("div");
 			div0 = element("div");
 			label0 = element("label");
 			label0.textContent = "Select Set:";
-			t4 = space();
+			t3 = space();
 			create_component(searchableselect.$$.fragment);
-			t5 = space();
+			t4 = space();
 			div1 = element("div");
 			label1 = element("label");
 			label1.textContent = "Card Name:";
+			t6 = space();
+			if_block0.c();
 			t7 = space();
-			if_block1.c();
-			t8 = space();
 			button = element("button");
-			t9 = text(t9_value);
+			t8 = text(t8_value);
+			t9 = space();
+			if (if_block1) if_block1.c();
 			t10 = space();
 			if (if_block2) if_block2.c();
 			t11 = space();
-			if (if_block3) if_block3.c();
-			t12 = space();
 			create_component(cardvariantselector.$$.fragment);
-			attr_dev(h1, "class", "svelte-l2g1ci");
-			add_location(h1, file$3, 376, 4, 12786);
-			attr_dev(header, "class", "svelte-l2g1ci");
-			add_location(header, file$3, 375, 2, 12772);
+			attr_dev(h1, "class", "svelte-18i9rx1");
+			add_location(h1, file$3, 372, 4, 12242);
+			attr_dev(header, "class", "svelte-18i9rx1");
+			add_location(header, file$3, 371, 2, 12229);
 			attr_dev(label0, "for", "setSelect");
-			attr_dev(label0, "class", "svelte-l2g1ci");
-			add_location(label0, file$3, 385, 6, 13022);
-			attr_dev(div0, "class", "form-group svelte-l2g1ci");
-			add_location(div0, file$3, 384, 4, 12990);
+			attr_dev(label0, "class", "svelte-18i9rx1");
+			add_location(label0, file$3, 376, 6, 12356);
+			attr_dev(div0, "class", "form-group svelte-18i9rx1");
+			add_location(div0, file$3, 375, 4, 12325);
 			attr_dev(label1, "for", "cardName");
-			attr_dev(label1, "class", "svelte-l2g1ci");
-			add_location(label1, file$3, 397, 6, 13354);
-			attr_dev(div1, "class", "form-group svelte-l2g1ci");
-			add_location(div1, file$3, 396, 4, 13322);
+			attr_dev(label1, "class", "svelte-18i9rx1");
+			add_location(label1, file$3, 388, 6, 12676);
+			attr_dev(div1, "class", "form-group svelte-18i9rx1");
+			add_location(div1, file$3, 387, 4, 12645);
 			button.disabled = button_disabled_value = /*isLoading*/ ctx[3] || !/*selectedCard*/ ctx[8];
-			attr_dev(button, "class", "svelte-l2g1ci");
-			add_location(button, file$3, 422, 4, 14160);
-			attr_dev(div2, "class", "form-container svelte-l2g1ci");
-			add_location(div2, file$3, 383, 2, 12956);
-			attr_dev(main, "class", "svelte-l2g1ci");
-			add_location(main, file$3, 374, 0, 12762);
+			attr_dev(button, "class", "svelte-18i9rx1");
+			add_location(button, file$3, 413, 4, 13457);
+			attr_dev(div2, "class", "form-container svelte-18i9rx1");
+			add_location(div2, file$3, 374, 2, 12292);
+			attr_dev(main, "class", "svelte-18i9rx1");
+			add_location(main, file$3, 370, 0, 12220);
 		},
 		l: function claim(nodes) {
 			throw new Error_1("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -4385,32 +4252,30 @@ function create_fragment$3(ctx) {
 			insert_dev(target, main, anchor);
 			append_dev(main, header);
 			append_dev(header, h1);
-			append_dev(header, t1);
-			if (if_block0) if_block0.m(header, null);
-			append_dev(main, t2);
+			append_dev(main, t1);
 			append_dev(main, div2);
 			append_dev(div2, div0);
 			append_dev(div0, label0);
-			append_dev(div0, t4);
+			append_dev(div0, t3);
 			mount_component(searchableselect, div0, null);
-			append_dev(div2, t5);
+			append_dev(div2, t4);
 			append_dev(div2, div1);
 			append_dev(div1, label1);
-			append_dev(div1, t7);
+			append_dev(div1, t6);
 			if_blocks[current_block_type_index].m(div1, null);
-			append_dev(div2, t8);
+			append_dev(div2, t7);
 			append_dev(div2, button);
-			append_dev(button, t9);
+			append_dev(button, t8);
+			append_dev(div2, t9);
+			if (if_block1) if_block1.m(div2, null);
 			append_dev(div2, t10);
 			if (if_block2) if_block2.m(div2, null);
-			append_dev(div2, t11);
-			if (if_block3) if_block3.m(div2, null);
-			append_dev(main, t12);
+			append_dev(main, t11);
 			mount_component(cardvariantselector, main, null);
 			current = true;
 
 			if (!mounted) {
-				dispose = listen_dev(button, "click", /*fetchCardPrice*/ ctx[17], false, false, false);
+				dispose = listen_dev(button, "click", /*fetchCardPrice*/ ctx[16], false, false, false);
 				mounted = true;
 			}
 		},
@@ -4438,49 +4303,49 @@ function create_fragment$3(ctx) {
 				});
 
 				check_outros();
-				if_block1 = if_blocks[current_block_type_index];
+				if_block0 = if_blocks[current_block_type_index];
 
-				if (!if_block1) {
-					if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-					if_block1.c();
+				if (!if_block0) {
+					if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+					if_block0.c();
 				} else {
-					if_block1.p(ctx, dirty);
+					if_block0.p(ctx, dirty);
 				}
 
-				transition_in(if_block1, 1);
-				if_block1.m(div1, null);
+				transition_in(if_block0, 1);
+				if_block0.m(div1, null);
 			}
 
-			if ((!current || dirty & /*isLoading*/ 8) && t9_value !== (t9_value = (/*isLoading*/ ctx[3] ? "Loading..." : "Get Price") + "")) set_data_dev(t9, t9_value);
+			if ((!current || dirty & /*isLoading*/ 8) && t8_value !== (t8_value = (/*isLoading*/ ctx[3] ? "Loading..." : "Get Price") + "")) set_data_dev(t8, t8_value);
 
 			if (!current || dirty & /*isLoading, selectedCard*/ 264 && button_disabled_value !== (button_disabled_value = /*isLoading*/ ctx[3] || !/*selectedCard*/ ctx[8])) {
 				prop_dev(button, "disabled", button_disabled_value);
 			}
 
 			if (/*error*/ ctx[4]) {
+				if (if_block1) {
+					if_block1.p(ctx, dirty);
+				} else {
+					if_block1 = create_if_block_3$1(ctx);
+					if_block1.c();
+					if_block1.m(div2, t10);
+				}
+			} else if (if_block1) {
+				if_block1.d(1);
+				if_block1 = null;
+			}
+
+			if (/*priceData*/ ctx[2] !== null && /*priceData*/ ctx[2] !== undefined && typeof /*priceData*/ ctx[2] === "object") {
 				if (if_block2) {
 					if_block2.p(ctx, dirty);
 				} else {
-					if_block2 = create_if_block_3$1(ctx);
+					if_block2 = create_if_block$3(ctx);
 					if_block2.c();
-					if_block2.m(div2, t11);
+					if_block2.m(div2, null);
 				}
 			} else if (if_block2) {
 				if_block2.d(1);
 				if_block2 = null;
-			}
-
-			if (/*priceData*/ ctx[2] !== null && /*priceData*/ ctx[2] !== undefined && typeof /*priceData*/ ctx[2] === "object") {
-				if (if_block3) {
-					if_block3.p(ctx, dirty);
-				} else {
-					if_block3 = create_if_block$3(ctx);
-					if_block3.c();
-					if_block3.m(div2, null);
-				}
-			} else if (if_block3) {
-				if_block3.d(1);
-				if_block3 = null;
 			}
 
 			const cardvariantselector_changes = {};
@@ -4490,23 +4355,22 @@ function create_fragment$3(ctx) {
 		i: function intro(local) {
 			if (current) return;
 			transition_in(searchableselect.$$.fragment, local);
-			transition_in(if_block1);
+			transition_in(if_block0);
 			transition_in(cardvariantselector.$$.fragment, local);
 			current = true;
 		},
 		o: function outro(local) {
 			transition_out(searchableselect.$$.fragment, local);
-			transition_out(if_block1);
+			transition_out(if_block0);
 			transition_out(cardvariantselector.$$.fragment, local);
 			current = false;
 		},
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(main);
-			if (if_block0) if_block0.d();
 			destroy_component(searchableselect);
 			if_blocks[current_block_type_index].d();
+			if (if_block1) if_block1.d();
 			if (if_block2) if_block2.d();
-			if (if_block3) if_block3.d();
 			destroy_component(cardvariantselector);
 			mounted = false;
 			dispose();
@@ -4568,12 +4432,7 @@ function filterValidPrices(pricing) {
 function instance$3($$self, $$props, $$invalidate) {
 	let { $$slots: slots = {}, $$scope } = $$props;
 	validate_slots("App", slots, []);
-	const buildTime = "2025-04-16T20:03:00.640Z" ;
-	const isProduction = ENVIRONMENT === "production";
-
-	// Reference to CardSearchSelect component
 	let cardSearchComponent;
-
 	let selectedSet = null;
 	let cardName = "";
 	let priceData = null;
@@ -4896,7 +4755,7 @@ function instance$3($$self, $$props, $$invalidate) {
 			// Fallback to imported data
 			console.log("Using fallback set list");
 
-			const { setList } = await import('./setList-f1a2e7a1.js');
+			const { setList } = await import('./setList-dcf6ea8f.js');
 			$$invalidate(5, availableSets = setList);
 		}
 
@@ -4934,14 +4793,11 @@ function instance$3($$self, $$props, $$invalidate) {
 	$$self.$capture_state = () => ({
 		onMount,
 		API_CONFIG,
-		ENVIRONMENT,
 		pokeDataService,
 		dbService,
 		SearchableSelect,
 		CardSearchSelect,
 		CardVariantSelector,
-		buildTime,
-		isProduction,
 		cardSearchComponent,
 		selectedSet,
 		cardName,
@@ -4979,7 +4835,7 @@ function instance$3($$self, $$props, $$invalidate) {
 		if ("cardsInSet" in $$props) $$invalidate(6, cardsInSet = $$props.cardsInSet);
 		if ("isLoadingCards" in $$props) $$invalidate(7, isLoadingCards = $$props.isLoadingCards);
 		if ("selectedCard" in $$props) $$invalidate(8, selectedCard = $$props.selectedCard);
-		if ("cardVariants" in $$props) $$invalidate(11, cardVariants = $$props.cardVariants);
+		if ("cardVariants" in $$props) $$invalidate(10, cardVariants = $$props.cardVariants);
 		if ("showVariantSelector" in $$props) $$invalidate(9, showVariantSelector = $$props.showVariantSelector);
 		if ("selectedVariant" in $$props) selectedVariant = $$props.selectedVariant;
 	};
@@ -4999,7 +4855,6 @@ function instance$3($$self, $$props, $$invalidate) {
 		isLoadingCards,
 		selectedCard,
 		showVariantSelector,
-		isProduction,
 		cardVariants,
 		handleSetSelect,
 		handleCardSelect,
@@ -5026,46 +4881,6 @@ class App extends SvelteComponentDev {
 		});
 	}
 }
-
-// Environment Variables Debug Script
-// Include this file in your application to debug environment variables
-// IMPORTANT: Remove this file before deploying to production!
-
-(function() {
-  console.log('=== Environment Variables Debug ===');
-  console.log('Running debug check at:', new Date().toISOString());
-  
-  // Check Node environment
-  console.log('NODE_ENV:', "development" );
-  
-  // Check API configuration
-  console.log('API_BASE_URL exists:', !!"https://maber-apim-test.azure-api.net/pokedata-api/v0");
-  {
-    console.log('API_BASE_URL:', "https://maber-apim-test.azure-api.net/pokedata-api/v0");
-  }
-  
-  // Safely check API credentials
-  console.log('API_KEY exists:', !!"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNzMxNzE0MiwianRpIjoiNjJkNWU1ZjktNTI5ZC00NGIyLTlkMTgtOTY3NWQ3ZTU3NWMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjJlZGY1N2Y2LWU5OTYtNGNhMy1iZDk5LTFlZDY3MDRkMzJhOSIsIm5iZiI6MTczNzMxNzE0MiwidG9rZW5fdHlwZSI6ImFwaSJ9.y4JduoyU_gG1aiBy4w6frD3h3m-AEoxw_7f6vExYay4");
-  {
-    console.log('API_KEY length:', process.env.API_KEY.length);
-    console.log('API_KEY first 4 chars:', process.env.API_KEY.substring(0, 4) + '...');
-  }
-  
-  console.log('API_SUBSCRIPTION_KEY exists:', !!"1c3e73f4352b415c98eb89f91541c4e4");
-  {
-    console.log('API_SUBSCRIPTION_KEY length:', process.env.API_SUBSCRIPTION_KEY.length);
-    console.log('API_SUBSCRIPTION_KEY first 4 chars:', process.env.API_SUBSCRIPTION_KEY.substring(0, 4) + '...');
-  }
-  
-  // Check build information
-  console.log('BUILD_TIME:', "2025-04-16T20:03:00.640Z" );
-  
-  console.log('=== End Environment Debug ===');
-})();
-
-console.log('Application starting...');
-console.log('Build environment:', "development" );
-console.log('Build timestamp:', "2025-04-16T20:03:00.640Z" );
 
 const app = new App({
   target: document.body
