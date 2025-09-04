@@ -13,7 +13,7 @@ export async function getProjects(): Promise<Project[]> {
       id: '1',
       title: 'Blackjack Game',
       description:
-        'A classic Blackjack card game implementation with both Python GUI and web versions.',
+        'Full-featured Blackjack implementation with both desktop (Python/Tkinter) and web versions. Features include persistent balance tracking, authentic Vegas-style game rules, custom card graphics, responsive design, and cross-platform compatibility. Demonstrates proficiency in both traditional desktop GUI and modern web development.',
       techStack: ['Python', 'Tkinter', 'HTML', 'CSS', 'JavaScript'],
       imageUrl: '/images/projects/blackjack.png',
       liveUrl: 'https://blackjack.maber.io',
@@ -29,7 +29,7 @@ export async function getProjects(): Promise<Project[]> {
       techStack: ['Svelte', 'TypeScript', 'Azure Functions', 'Cosmos DB', 'Azure Static Web Apps', 'API Management', 'GitHub Actions', 'Rollup', 'PNPM'],
       imageUrl: '/images/projects/pokedata.png',
       liveUrl: 'https://pokedata.maber.io',
-      sourceUrl: 'https://github.com/Abernaughty/PokeData',
+      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/PokeData',
       featured: true,
       createdAt: '2025-02-10T00:00:00.000Z'
     },
@@ -37,8 +37,8 @@ export async function getProjects(): Promise<Project[]> {
       id: '3',
       title: 'Portfolio Website',
       description:
-        'Personal portfolio website built with Svelte and SvelteKit to showcase projects and skills.',
-      techStack: ['Svelte', 'SvelteKit', 'TypeScript', 'CSS', 'TailwindCSS'],
+        'Modern portfolio built with SvelteKit and TypeScript, featuring a comprehensive design system with reusable components, TailwindCSS integration, and full test coverage using Vitest. Implements SSR for optimal performance, accessibility-first design (WCAG 2.1 AA), and showcases clean architecture patterns with Svelte stores for state management.',
+      techStack: ['Svelte', 'SvelteKit', 'TypeScript', 'CSS', 'TailwindCSS', 'Vitest', 'PostCSS', 'ESLint', 'Prettier'],
       imageUrl: '/images/projects/portfolio.png',
       liveUrl: 'https://dev.maber.io',
       sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/Portfolio',

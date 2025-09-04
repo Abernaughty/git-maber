@@ -48,7 +48,7 @@
 
   <div class="glass-card-dark hero-container hero-gradient-container">
     <h1>Hello, I'm <span class="purple-blue-gradient-text">Mike Abernathy</span></h1>
-    <p class="tagline">Aspiring Developer | Building Creative Solutions</p>
+    <p class="tagline">Full-Stack Developer | Cloud Solutions Engineer</p>
     <div class="cta-buttons">
       <a href="#projects" class="hero-gradient-outline-button">
         View My Work
@@ -67,14 +67,16 @@
     <div class="about-content">
       <div class="about-text">
         <p>
-          Hello! I'm an aspiring developer passionate about creating web applications and solving
-          problems through code. This portfolio showcases some of my projects and skills as I
-          continue to learn and grow in this field.
+          I'm a Full-Stack Developer with expertise in cloud architecture and modern web technologies. 
+          I specialize in building scalable, performant applications using Azure cloud services, 
+          TypeScript, and modern frameworks like SvelteKit. My experience spans from serverless 
+          architectures to comprehensive design systems, with a focus on clean code, testing, and accessibility.
         </p>
         <p>
-          I'm constantly learning new technologies and techniques to improve my development skills.
-          Feel free to explore my projects and get in touch if you'd like to collaborate or have any
-          questions.
+          I'm passionate about creating efficient solutions that deliver exceptional user experiences. 
+          My projects demonstrate proficiency in cloud-native development, API design, performance optimization, 
+          and modern development practices. I'm always exploring new technologies and best practices to 
+          deliver high-quality software solutions.
         </p>
       </div>
     </div>
@@ -124,11 +126,14 @@
       <div class="skill-category">
         <h3>Frontend</h3>
         <ul class="skill-list">
-          <li>HTML5</li>
-          <li>CSS3</li>
-          <li>JavaScript</li>
-          <li>Svelte</li>
+          <li>TypeScript</li>
+          <li>JavaScript (ES6+)</li>
+          <li>Svelte/SvelteKit</li>
+          <li>HTML5 & CSS3</li>
           <li>TailwindCSS</li>
+          <li>Responsive Design</li>
+          <li>Component Architecture</li>
+          <li>WebGL/Canvas API</li>
         </ul>
       </div>
 
@@ -136,18 +141,41 @@
         <h3>Backend</h3>
         <ul class="skill-list">
           <li>Node.js</li>
-          <li>Express</li>
+          <li>Express.js</li>
+          <li>TypeScript</li>
           <li>RESTful APIs</li>
+          <li>Azure Functions</li>
+          <li>Serverless Architecture</li>
+          <li>API Design & Documentation</li>
+          <li>Database Design</li>
         </ul>
       </div>
 
       <div class="skill-category">
-        <h3>Tools & Others</h3>
+        <h3>Cloud & DevOps</h3>
         <ul class="skill-list">
-          <li>Git</li>
-          <li>VS Code</li>
-          <li>Responsive Design</li>
+          <li>Azure Static Web Apps</li>
+          <li>Azure Cosmos DB</li>
           <li>Azure API Management</li>
+          <li>Azure Functions</li>
+          <li>GitHub Actions</li>
+          <li>CI/CD Pipelines</li>
+          <li>Cloud Architecture</li>
+          <li>Infrastructure as Code</li>
+        </ul>
+      </div>
+
+      <div class="skill-category">
+        <h3>Development Practices</h3>
+        <ul class="skill-list">
+          <li>Test-Driven Development</li>
+          <li>Vitest/Testing Library</li>
+          <li>Accessibility (WCAG 2.1)</li>
+          <li>Performance Optimization</li>
+          <li>Git Version Control</li>
+          <li>ESLint/Prettier</li>
+          <li>Code Review</li>
+          <li>Agile Methodologies</li>
         </ul>
       </div>
     </div>
@@ -168,14 +196,14 @@
         </div>
         <div class="contact-method">
           <h3>GitHub</h3>
-          <a href="https://github.com/git-maber" target="_blank" rel="noopener noreferrer"
-            >github.com/git-maber</a
+          <a href="https://github.com/Abernaughty" target="_blank" rel="noopener noreferrer"
+            >github.com/Abernaughty</a
           >
         </div>
         <div class="contact-method">
           <h3>LinkedIn</h3>
-          <a href="https://linkedin.com/in/mikeabernathy" target="_blank" rel="noopener noreferrer"
-            >linkedin.com/in/mikeabernathy</a
+          <a href="https://www.linkedin.com/in/michael-abernathy-674a96217/" target="_blank" rel="noopener noreferrer"
+            >linkedin.com/in/michael-abernathy-674a96217</a
           >
         </div>
       </div>
