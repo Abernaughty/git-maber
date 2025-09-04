@@ -47,7 +47,7 @@
   <div class="hero-background-image"></div>
 
   <div class="glass-card-dark hero-container hero-gradient-container">
-    <h1>Hello, I'm <span class="purple-blue-gradient-text">Mike Abernathy</span></h1>
+    <h1><span class="purple-blue-gradient-text">Mike Abernathy</span></h1>
     <p class="tagline">Full-Stack Developer | Cloud Solutions Engineer</p>
     <div class="cta-buttons">
       <a href="#projects" class="hero-gradient-outline-button">
