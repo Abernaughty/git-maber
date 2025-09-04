@@ -25,11 +25,11 @@ export async function getProjects(): Promise<Project[]> {
       id: '2',
       title: 'PokeData',
       description:
-        'Pokémon card price tracking and data visualization application for trading card collectors.',
-      techStack: ['Svelte', 'JavaScript', 'IndexedDB', 'API Integration'],
+        'Enterprise-grade Pokémon card pricing platform featuring real-time data from multiple sources. Built with cloud-first architecture supporting 555+ card sets with sub-second response times. Includes advanced search capabilities, PSA/CGC graded pricing, and intelligent caching with 167x performance optimization achieved through serverless architecture.',
+      techStack: ['Svelte', 'TypeScript', 'Azure Functions', 'Cosmos DB', 'Azure Static Web Apps', 'API Management', 'GitHub Actions', 'Rollup', 'PNPM'],
       imageUrl: '/images/projects/pokedata.png',
       liveUrl: 'https://pokedata.maber.io',
-      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/PokeData',
+      sourceUrl: 'https://github.com/Abernaughty/PokeData',
       featured: true,
       createdAt: '2025-02-10T00:00:00.000Z'
     },
