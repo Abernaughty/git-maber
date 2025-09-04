@@ -206,6 +206,15 @@
             >linkedin.com/in/michael-abernathy-674a96217</a
           >
         </div>
+        <div class="contact-method">
+          <h3>Resume</h3>
+          <a href="https://maberstorageacct.blob.core.windows.net/resume/Michael%20Abernathy%20-%20Resume.pdf" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             download="Michael_Abernathy_Resume.pdf"
+            >Download Resume (PDF)</a
+          >
+        </div>
       </div>
     </div>
   </div>
