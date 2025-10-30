@@ -292,7 +292,7 @@
   }
   
   /* Hero gradient text */
-  .hero-gradient-text {
+  .purple-blue-gradient-text {
     background-image: var(--hero-gradient);
     background-clip: text;
     -webkit-background-clip: text;
@@ -384,7 +384,7 @@
 
   .skills-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: var(--space-lg);
   }
   
@@ -426,7 +426,7 @@
   .contact-methods {
     display: flex;
     justify-content: center;
-    flex-wrap: nowrap; /* Prevent wrapping */
+    flex-wrap: wrap; /* Allow wrapping by default */
     gap: var(--space-lg);
     margin-top: var(--space-lg);
   }
@@ -481,7 +481,12 @@
     margin-top: var(--space-md);
   }
 
-  @media (max-width: 768px) {
+  /* Mobile-first responsive breakpoints */
+  @media (max-width: 480px) {
+    .hero-container {
+      padding: 2rem 1rem;
+    }
+
     .cta-buttons {
       flex-direction: column;
       align-items: center;
@@ -493,7 +498,54 @@
     }
 
     .contact-methods {
-      flex-wrap: wrap; /* Allow wrapping on small screens */
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .contact-method {
+      width: 100%;
+      max-width: 280px;
+    }
+
+    .skills-container {
+      grid-template-columns: 1fr;
+      gap: var(--space-md);
+    }
+
+    .section-container {
+      padding: var(--space-lg);
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .hero-container {
+      padding: 2.5rem 1.5rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .about-content {
+      flex-direction: column;
+    }
+
+    .contact-methods {
+      justify-content: space-around;
+      gap: var(--space-sm);
+    }
+
+    .skills-container {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+  }
+
+  @media (min-width: 769px) {
+    .contact-methods {
+      flex-wrap: wrap;
     }
   }
 </style>

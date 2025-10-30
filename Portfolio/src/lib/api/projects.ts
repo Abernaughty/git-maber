@@ -23,13 +23,23 @@ export async function getProjects(): Promise<Project[]> {
     },
     {
       id: '2',
-      title: 'PokeData',
+      title: 'Pokemon Card Price Checker (PCPC)',
       description:
-        'Enterprise-grade Pokémon card pricing platform featuring real-time data from multiple sources. Built with cloud-first architecture supporting 555+ card sets with sub-second response times. Includes advanced search capabilities, PSA/CGC graded pricing, and intelligent caching with 167x performance optimization achieved through serverless architecture.',
-      techStack: ['Svelte', 'TypeScript', 'Azure Functions', 'Cosmos DB', 'Azure Static Web Apps', 'API Management', 'GitHub Actions', 'Rollup', 'PNPM'],
-      imageUrl: '/images/projects/pokedata.png',
-      liveUrl: 'https://pokedata.maber.io',
-      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/PokeData',
+        'Enterprise-grade Pokémon card pricing platform (monorepo) with Svelte frontend and Azure Functions backend. Uses Azure API Management, Cosmos DB (Serverless), and Azure Static Web Apps. Features real-time pricing from multiple sources, advanced search, and intelligent caching. Infrastructure as Code via Terraform and an accelerated DevContainer workflow (95% faster).',
+      techStack: [
+        'Svelte',
+        'TypeScript',
+        'Rollup',
+        'Azure Functions',
+        'Azure API Management',
+        'Cosmos DB',
+        'Azure Static Web Apps',
+        'Terraform',
+        'Azure DevOps'
+      ],
+      imageUrl: '/images/projects/pcpc.png',
+      liveUrl: 'https://pcpc.maber.io',
+      sourceUrl: 'https://github.com/Abernaughty/PCPC',
       featured: true,
       createdAt: '2025-02-10T00:00:00.000Z'
     },
