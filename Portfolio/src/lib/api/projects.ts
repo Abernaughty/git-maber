@@ -11,18 +11,6 @@ export async function getProjects(): Promise<Project[]> {
   return [
     {
       id: '1',
-      title: 'Blackjack Game',
-      description:
-        'Full-featured Blackjack implementation with both desktop (Python/Tkinter) and web versions. Features include persistent balance tracking, authentic Vegas-style game rules, custom card graphics, responsive design, and cross-platform compatibility. Demonstrates proficiency in both traditional desktop GUI and modern web development.',
-      techStack: ['Python', 'Tkinter', 'HTML', 'CSS', 'JavaScript'],
-      imageUrl: '/images/projects/blackjack.png',
-      liveUrl: 'https://blackjack.maber.io',
-      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/Blackjack',
-      featured: true,
-      createdAt: '2024-12-15T00:00:00.000Z'
-    },
-    {
-      id: '2',
       title: 'Pokemon Card Price Checker (PCPC)',
       description:
         'Enterprise-grade Pokémon card pricing platform (monorepo) with Svelte frontend and Azure Functions backend. Uses Azure API Management, Cosmos DB (Serverless), and Azure Static Web Apps. Features real-time pricing from multiple sources, advanced search, and intelligent caching. Infrastructure as Code via Terraform and an accelerated DevContainer workflow.',
@@ -42,6 +30,18 @@ export async function getProjects(): Promise<Project[]> {
       sourceUrl: 'https://github.com/Abernaughty/PCPC',
       featured: true,
       createdAt: '2025-02-10T00:00:00.000Z'
+    },
+    {
+      id: '2',
+      title: 'Blackjack Game',
+      description:
+        'Full-featured Blackjack implementation with both desktop (Python/Tkinter) and web versions. Features include persistent balance tracking, authentic Vegas-style game rules, custom card graphics, responsive design, and cross-platform compatibility. Demonstrates proficiency in both traditional desktop GUI and modern web development.',
+      techStack: ['Python', 'Tkinter', 'HTML', 'CSS', 'JavaScript'],
+      imageUrl: '/images/projects/blackjack.png',
+      liveUrl: 'https://blackjack.maber.io',
+      sourceUrl: 'https://github.com/Abernaughty/git-maber/tree/main/Blackjack',
+      featured: true,
+      createdAt: '2024-12-15T00:00:00.000Z'
     },
     {
       id: '3',
