@@ -25,7 +25,7 @@ export async function getProjects(): Promise<Project[]> {
       id: '2',
       title: 'Pokemon Card Price Checker (PCPC)',
       description:
-        'Enterprise-grade Pokémon card pricing platform (monorepo) with Svelte frontend and Azure Functions backend. Uses Azure API Management, Cosmos DB (Serverless), and Azure Static Web Apps. Features real-time pricing from multiple sources, advanced search, and intelligent caching. Infrastructure as Code via Terraform and an accelerated DevContainer workflow (95% faster).',
+        'Enterprise-grade Pokémon card pricing platform (monorepo) with Svelte frontend and Azure Functions backend. Uses Azure API Management, Cosmos DB (Serverless), and Azure Static Web Apps. Features real-time pricing from multiple sources, advanced search, and intelligent caching. Infrastructure as Code via Terraform and an accelerated DevContainer workflow.',
       techStack: [
         'Svelte',
         'TypeScript',
