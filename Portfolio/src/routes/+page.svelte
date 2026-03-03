@@ -192,7 +192,7 @@
       <div class="contact-methods">
         <div class="contact-method">
           <h3>Email</h3>
-          <a href="mailto:mike@maber.io">mike@maber.io</a>
+          <a href="mailto:jobs@maber.io">jobs@maber.io</a>
         </div>
         <div class="contact-method">
           <h3>GitHub</h3>
